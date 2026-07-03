@@ -132,6 +132,12 @@ const router = createRouter({
             component: () => import('@/views/login/LoginView.vue')
         },
         {
+            path: '/user/resetpassword',
+            name: '重置密码',
+            meta: {title: '重置密码', permiss: '1'},
+            component: () => import('@/views/user/ResetPassword.vue')
+        },
+        {
             path: '/404',
             name: '404',
             meta: {title: '404'},
