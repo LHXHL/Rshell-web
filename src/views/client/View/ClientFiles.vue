@@ -414,15 +414,15 @@ const sortedContent = computed(() => {
 })
 
 // 方法
-// const formatFileSize = (bytes) => {
-//   if (!bytes || bytes === 0) return '0 B'
-//
-//   const k = 1024
-//   const sizes = ['B', 'KB', 'MB', 'GB', 'TB']
-//   const i = Math.floor(Math.log(bytes) / Math.log(k))
-//
-//   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
-// }
+const formatFileSize = (bytes) => {
+  if (!bytes || bytes === 0) return '0 B'
+
+  const k = 1024
+  const sizes = ['B', 'KB', 'MB', 'GB', 'TB']
+  const i = Math.floor(Math.log(bytes) / Math.log(k))
+
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
+}
 
 const formatDateTime = (dateString) => {
   if (!dateString) return '-'
@@ -627,8 +627,12 @@ const handleFileChange = async (file) => {
     })
 
     if (res.data.status === 200) {
-      ElMessage.success(`${file.name} 开始上传`)
-      await refreshCurrentFolder()
+      const info = res.data.data || {}
+      const sizeStr = info.size ? formatFileSize(info.size) : ''
+      const chunksStr = info.chunks ? `(${info.chunks} chunks)` : ''
+      ElMessage.success(`${file.name} 已加入上传队列 ${chunksStr} ${sizeStr}，请查看 Shell 标签页查看上传进度`)
+      // 延迟刷新，等客户端处理完后再更新文件树
+      setTimeout(() => refreshCurrentFolder(), 2000)
     }
   } catch (error) {
     ElMessage.error('上传失败')
