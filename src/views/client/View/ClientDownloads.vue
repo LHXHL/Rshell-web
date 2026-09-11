@@ -6,10 +6,10 @@
         <div class="header-left">
           <h2 class="header-title">
             <i class="el-icon-download"></i>
-            下载文件管理
+            {{ t('dl.title') }}
           </h2>
           <p class="header-description">
-            管理从目标主机下载的文件
+            {{ t('dl.subtitle') }}
           </p>
         </div>
         <div class="header-right">
@@ -20,7 +20,7 @@
               class="refresh-btn"
           >
             <i class="el-icon-refresh"></i>
-            刷新列表
+            {{ t('common.refresh') }}
           </el-button>
 <!--          <el-button-->
 <!--              v-if="selectedFiles.length > 0"-->
@@ -41,15 +41,15 @@
         <div class="table-header">
           <div class="table-title">
             <i class="el-icon-files"></i>
-            <span>下载文件列表</span>
+            <span>{{ t('dl.list') }}</span>
             <el-tag size="small" type="info" class="count-tag">
-              {{ DownloadsTableData.length }} 个文件
+              {{ t('files.totalItems', { n: DownloadsTableData.length }) }}
             </el-tag>
           </div>
           <div class="table-actions">
             <el-input
                 v-model="searchKeyword"
-                placeholder="搜索文件名或路径..."
+                :placeholder="t('dl.searchPh')"
                 clearable
                 size="small"
                 style="width: 200px; margin-right: 10px;"
@@ -62,17 +62,17 @@
             <el-dropdown @command="handleSortCommand">
               <el-button size="small">
                 <i class="el-icon-sort"></i>
-                排序
+                {{ t('files.sortBy') }}
                 <i class="el-icon-arrow-down el-icon--right"></i>
               </el-button>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item command="name_asc">文件名 A-Z</el-dropdown-item>
-                  <el-dropdown-item command="name_desc">文件名 Z-A</el-dropdown-item>
-                  <el-dropdown-item command="size_asc">文件大小 ↑</el-dropdown-item>
-                  <el-dropdown-item command="size_desc">文件大小 ↓</el-dropdown-item>
-                  <el-dropdown-item command="progress_asc">进度 ↑</el-dropdown-item>
-                  <el-dropdown-item command="progress_desc">进度 ↓</el-dropdown-item>
+                  <el-dropdown-item command="name_asc">{{ t('dl.nameAZ') }}</el-dropdown-item>
+                  <el-dropdown-item command="name_desc">{{ t('dl.nameZA') }}</el-dropdown-item>
+                  <el-dropdown-item command="size_asc">{{ t('dl.sizeUp') }}</el-dropdown-item>
+                  <el-dropdown-item command="size_desc">{{ t('dl.sizeDown') }}</el-dropdown-item>
+                  <el-dropdown-item command="progress_asc">{{ t('dl.progUp') }}</el-dropdown-item>
+                  <el-dropdown-item command="progress_desc">{{ t('dl.progDown') }}</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
@@ -83,10 +83,10 @@
       <!-- 空状态 -->
       <el-empty
           v-if="filteredTableData.length === 0 && !loading"
-          :description="searchKeyword ? '未找到相关文件' : '暂无下载文件'"
+          :description="searchKeyword ? t('dl.noMatch') : t('dl.empty')"
           :image-size="100"
       >
-        <el-button v-if="searchKeyword" @click="searchKeyword = ''">清空搜索</el-button>
+        <el-button v-if="searchKeyword" @click="searchKeyword = ''">{{ t('dl.clearSearch') }}</el-button>
       </el-empty>
 
       <!-- 文件表格 -->
@@ -105,7 +105,7 @@
 
           <el-table-column
               prop="fileName"
-              label="文件名"
+:label="t('files.colName')"
               width="300"
               sortable="custom"
           >
@@ -124,7 +124,7 @@
                         effect="plain"
                         class="complete-tag"
                     >
-                      已完成
+                      {{ t('dl.done') }}
                     </el-tag>
                   </div>
                   <div class="file-format" v-if="getFileFormat(row.fileName)">
@@ -137,7 +137,7 @@
 
           <el-table-column
               prop="filePath"
-              label="文件路径"
+:label="t('dl.filePath')"
               min-width="250"
               show-overflow-tooltip
           >
@@ -151,7 +151,7 @@
 
           <el-table-column
               prop="fileSize"
-              label="文件大小"
+:label="t('files.colSize')"
               width="120"
               sortable="custom"
           >
@@ -162,7 +162,7 @@
 
           <el-table-column
               prop="downloadPart"
-              label="下载进度"
+:label="t('dl.progress')"
               width="200"
               sortable="custom"
           >
@@ -182,7 +182,7 @@
           </el-table-column>
 
           <el-table-column
-              label="操作"
+:label="t('common.actions')"
               width="180"
               fixed="right"
           >
@@ -197,7 +197,7 @@
                     class="download-btn"
                 >
                   <i class="el-icon-download"></i>
-                  {{ Number(row.downloadPart) === 100 ? '下载' : '等待完成' }}
+                  {{ Number(row.downloadPart) === 100 ? t('files.download') : t('dl.waitComplete') }}
                 </el-button>
               </div>
             </template>
@@ -208,17 +208,17 @@
         <div class="stats-info">
           <el-space>
             <span class="stat-item">
-              <span class="stat-label">文件总数：</span>
+              <span class="stat-label">{{ t('dl.totalFiles') }}:</span>
               <span class="stat-value">{{ DownloadsTableData.length }}</span>
             </span>
             <el-divider direction="vertical" />
             <span class="stat-item">
-              <span class="stat-label">已完成：</span>
+              <span class="stat-label">{{ t('dl.done') }}:</span>
               <span class="stat-value success">{{ completedCount }}</span>
             </span>
             <el-divider direction="vertical" />
             <span class="stat-item">
-              <span class="stat-label">进行中：</span>
+              <span class="stat-label">{{ t('dl.inProgress') }}:</span>
               <span class="stat-value warning">{{ downloadingCount }}</span>
             </span>
 <!--            <el-divider direction="vertical" />-->
@@ -234,7 +234,7 @@
     <!-- 文件预览对话框 -->
     <el-dialog
         v-model="previewVisible"
-        :title="`预览文件 - ${previewFile?.fileName}`"
+        :title="`${t('dl.previewFile')} - ${previewFile?.fileName}`"
         width="80%"
         top="5vh"
     >
@@ -254,8 +254,8 @@
         </div>
         <div v-else class="preview-not-supported">
           <i class="el-icon-document"></i>
-          <p>暂不支持预览此文件类型</p>
-          <p>请下载后查看</p>
+          <p>{{ t('dl.noPreview') }}</p>
+          <p>{{ t('dl.downloadToView') }}</p>
         </div>
       </div>
     </el-dialog>
@@ -263,27 +263,27 @@
     <!-- 文件信息对话框 -->
     <el-dialog
         v-model="infoVisible"
-        :title="`文件信息 - ${currentFile?.fileName}`"
+        :title="`${t('files.fileInfo')} - ${currentFile?.fileName}`"
         width="500px"
     >
       <el-descriptions :column="1" border>
-        <el-descriptions-item label="文件名">
+        <el-descriptions-item :label="t('files.colName')">
           {{ currentFile?.fileName }}
         </el-descriptions-item>
-        <el-descriptions-item label="完整路径">
+        <el-descriptions-item :label="t('dl.fullPath')">
           {{ currentFile?.filePath }}
         </el-descriptions-item>
-        <el-descriptions-item label="文件大小">
+        <el-descriptions-item :label="t('files.colSize')">
           {{ formatFileSize(currentFile?.fileSize) }}
         </el-descriptions-item>
-        <el-descriptions-item label="下载进度">
+        <el-descriptions-item :label="t('dl.progress')">
           <el-progress :percentage="Number(currentFile?.downloadPart)" :show-text="false" />
           {{ Number(currentFile?.downloadPart) }}%
         </el-descriptions-item>
-        <el-descriptions-item label="文件类型">
-          {{ getFileFormat(currentFile?.fileName) || '未知' }}
+        <el-descriptions-item :label="t('credentials.type')">
+          {{ getFileFormat(currentFile?.fileName) || t('dl.unknown') }}
         </el-descriptions-item>
-        <el-descriptions-item label="创建时间" v-if="currentFile?.createTime">
+        <el-descriptions-item :label="t('files.colModified')" v-if="currentFile?.createTime">
           {{ formatTime(currentFile.createTime) }}
         </el-descriptions-item>
       </el-descriptions>
@@ -292,23 +292,23 @@
     <!-- 批量下载确认 -->
     <el-dialog
         v-model="batchDialogVisible"
-        title="批量下载确认"
+        :title="t('dl.batchTitle')"
         width="500px"
     >
       <div class="batch-dialog-content">
         <el-alert
-            title="注意"
+            :title="t('common.notice')"
             type="info"
             :closable="false"
             show-icon
         >
-          将批量下载 {{ selectedFiles.length }} 个文件，总计 {{ formatFileSize(selectedTotalSize) }}
+          {{ t('dl.batchBody', { n: selectedFiles.length, size: formatFileSize(selectedTotalSize) }) }}
         </el-alert>
 
         <div class="batch-file-list">
           <el-table :data="selectedFiles" height="200">
-            <el-table-column property="fileName" label="文件名" />
-            <el-table-column property="fileSize" label="大小" width="100">
+            <el-table-column property="fileName" :label="t('files.colName')" />
+            <el-table-column property="fileSize" :label="t('files.colSize')" width="100">
               <template #default="{ row }">
                 {{ formatFileSize(row.fileSize) }}
               </template>
@@ -317,17 +317,17 @@
         </div>
 
         <div class="batch-actions">
-          <el-checkbox v-model="compressFiles" label="压缩为ZIP文件下载" />
+          <el-checkbox v-model="compressFiles" :label="t('dl.compressZip')" />
         </div>
       </div>
       <template #footer>
-        <el-button @click="batchDialogVisible = false">取消</el-button>
+        <el-button @click="batchDialogVisible = false">{{ t('common.cancel') }}</el-button>
         <el-button
             type="primary"
             @click="confirmBatchDownload"
             :loading="batchDownloading"
         >
-          开始下载
+          {{ t('dl.startDownload') }}
         </el-button>
       </template>
     </el-dialog>
@@ -335,6 +335,8 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute } from "vue-router"
 import ClientAPI from "@/api/clients"
@@ -515,16 +517,16 @@ const getProgressStatus = (percentage: number) => {
 }
 
 const estimateTime = (file: any) => {
-  if (Number(file.downloadPart) >= 100) return '已完成'
-  if (!file.fileSize || !file.downloadSpeed) return '计算中...'
+  if (Number(file.downloadPart) >= 100) return t('dl.done')
+  if (!file.fileSize || !file.downloadSpeed) return t('dl.calculating')
 
   const remainingBytes = file.fileSize * (1 - Number(file.downloadPart) / 100)
   const remainingSeconds = remainingBytes / file.downloadSpeed
   return remainingSeconds > 3600
-      ? `${Math.ceil(remainingSeconds / 3600)}小时`
+      ? `${Math.ceil(remainingSeconds / 3600)}${t('dl.hour')}`
       : remainingSeconds > 60
-          ? `${Math.ceil(remainingSeconds / 60)}分钟`
-          : `${Math.ceil(remainingSeconds)}秒`
+          ? `${Math.ceil(remainingSeconds / 60)}${t('dl.minute')}`
+          : `${Math.ceil(remainingSeconds)}${t('dl.second')}`
 }
 
 // 主要方法
@@ -540,7 +542,7 @@ const fetchDownloadsInfo = async () => {
   } catch (error) {
     console.error('获取下载信息失败:', error)
     if (!loading.value) {
-      ElMessage.error('获取下载信息失败')
+      ElMessage.error(t('dl.loadFailed'))
     }
   }
 }
@@ -549,28 +551,28 @@ const refreshList = async () => {
   loading.value = true
   await fetchDownloadsInfo()
   loading.value = false
-  ElMessage.success('列表已刷新')
+  ElMessage.success(t('socks.refreshed'))
 }
 
 const handleDownload = async (row: any) => {
   if (Number(row.downloadPart) < 100) {
-    ElMessage.warning('文件尚未下载完成，请等待')
+    ElMessage.warning(t('dl.notReady'))
     return
   }
 
   try {
     await ElMessageBox.confirm(
-        `是否下载文件 "${row.fileName}"？`,
-        '下载确认',
+        t('files.downloadConfirm', { name: row.fileName }),
+        t('files.downloadTitle'),
         {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+          confirmButtonText: t('common.confirm'),
+          cancelButtonText: t('common.cancel'),
           type: 'warning',
         }
     )
 
     row.downloading = true
-    ElMessage.info('开始下载文件...')
+    ElMessage.info(t('dl.starting'))
 
     const res = await ClientAPI.download_downloaded_file({ uid, filePath: row.filePath })
 
@@ -594,16 +596,16 @@ const handleDownload = async (row: any) => {
       document.body.removeChild(link)
       window.URL.revokeObjectURL(url)
 
-      ElMessage.success('文件下载成功')
+      ElMessage.success(t('dl.downloadOk'))
     } else {
-      ElMessage.error('下载失败，请稍后重试')
+      ElMessage.error(t('dl.retryLater'))
     }
   } catch (error: any) {
     if (error !== 'cancel') {
       console.error('下载失败:', error)
-      ElMessage.error(`下载失败: ${error.message || '未知错误'}`)
+      ElMessage.error(t('shell.execFailedWith', { msg: error.message || t('shell.unknownErr') }))
     } else {
-      ElMessage.info('已取消下载')
+      ElMessage.info(t('dl.cancelled'))
     }
   } finally {
     row.downloading = false
@@ -688,11 +690,11 @@ const handleSortChange = ({ column, prop, order }: any) => {
 const handleDelete = async (row: any) => {
   try {
     await ElMessageBox.confirm(
-        `确定要删除文件记录 "${row.fileName}" 吗？此操作不会删除服务器上的文件。`,
-        '确认删除',
+        t('dl.deleteRecordConfirm', { name: row.fileName }),
+        t('listener.deleteTitle'),
         {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+          confirmButtonText: t('common.confirm'),
+          cancelButtonText: t('common.cancel'),
           type: 'warning',
         }
     )
@@ -700,10 +702,10 @@ const handleDelete = async (row: any) => {
     // 调用删除API
     // await ClientAPI.delete_file_record({ uid, filePath: row.filePath })
     await fetchDownloadsInfo()
-    ElMessage.success('文件记录已删除')
+    ElMessage.success(t('dl.recordDeleted'))
   } catch (error: any) {
     if (error !== 'cancel') {
-      ElMessage.error('删除失败')
+      ElMessage.error(t('common.deleteFailed'))
     }
   }
 }
@@ -711,7 +713,7 @@ const handleDelete = async (row: any) => {
 // 批量下载
 const handleBatchDownload = () => {
   if (selectedFiles.value.length === 0) {
-    ElMessage.warning('请先选择要下载的文件')
+    ElMessage.warning(t('dl.pickFirst'))
     return
   }
 
@@ -737,10 +739,10 @@ const confirmBatchDownload = async () => {
     }
 
     batchDialogVisible.value = false
-    ElMessage.success('批量下载完成')
+    ElMessage.success(t('dl.batchDone'))
   } catch (error) {
     console.error('批量下载失败:', error)
-    ElMessage.error('批量下载失败')
+    ElMessage.error(t('dl.batchFailed'))
   } finally {
     batchDownloading.value = false
   }
@@ -749,7 +751,7 @@ const confirmBatchDownload = async () => {
 // 过滤表格数据
 const filterTableData = () => {
   // 搜索功能已经在计算属性中实现
-  ElMessage.info(`找到 ${filteredTableData.value.length} 个文件`)
+  ElMessage.info(t('dl.foundFiles', { n: filteredTableData.value.length }))
 }
 
 // 初始化
