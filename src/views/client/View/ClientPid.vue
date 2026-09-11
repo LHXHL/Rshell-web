@@ -8,7 +8,7 @@
             <i class="el-icon-s-operation"></i>
           </div>
           <div class="stats-text">
-            <div class="stats-label">总进程数</div>
+            <div class="stats-label">{{ t('pid.total') }}</div>
             <div class="stats-value">{{ softwareStats.total }}</div>
           </div>
         </div>
@@ -20,7 +20,7 @@
             <i class="el-icon-shield"></i>
           </div>
           <div class="stats-text">
-            <div class="stats-label">杀毒软件</div>
+            <div class="stats-label">{{ t('pid.av') }}</div>
             <div class="stats-value">{{ softwareStats.antivirus }}</div>
           </div>
         </div>
@@ -30,7 +30,7 @@
             <i class="el-icon-monitor"></i>
           </div>
           <div class="stats-text">
-            <div class="stats-label">监控软件</div>
+            <div class="stats-label">{{ t('pid.monitor') }}</div>
             <div class="stats-value">{{ softwareStats.monitor }}</div>
           </div>
         </div>
@@ -40,7 +40,7 @@
             <i class="el-icon-cloudy"></i>
           </div>
           <div class="stats-text">
-            <div class="stats-label">云安全</div>
+            <div class="stats-label">{{ t('pid.cloud') }}</div>
             <div class="stats-value">{{ softwareStats.cloud }}</div>
           </div>
         </div>
@@ -50,7 +50,7 @@
             <i class="el-icon-setting"></i>
           </div>
           <div class="stats-text">
-            <div class="stats-label">管理软件</div>
+            <div class="stats-label">{{ t('pid.mgmt') }}</div>
             <div class="stats-value">{{ softwareStats.management }}</div>
           </div>
         </div>
@@ -60,7 +60,7 @@
             <i class="el-icon-question"></i>
           </div>
           <div class="stats-text">
-            <div class="stats-label">未知软件</div>
+            <div class="stats-label">{{ t('pid.unknown') }}</div>
             <div class="stats-value">{{ softwareStats.unknown }}</div>
           </div>
         </div>
@@ -74,56 +74,56 @@
               size="small"
               @click="filterType = 'all'"
           >
-            全部
+            {{ t('pid.all') }}
           </el-button>
           <el-button
               :type="filterType === 'antivirus' ? 'primary' : ''"
               size="small"
               @click="filterType = 'antivirus'"
           >
-            杀毒软件
+            {{ t('pid.av') }}
           </el-button>
           <el-button
               :type="filterType === 'monitor' ? 'primary' : ''"
               size="small"
               @click="filterType = 'monitor'"
           >
-            监控软件
+            {{ t('pid.monitor') }}
           </el-button>
           <el-button
               :type="filterType === 'cloud' ? 'primary' : ''"
               size="small"
               @click="filterType = 'cloud'"
           >
-            云安全
+            {{ t('pid.cloud') }}
           </el-button>
           <el-button
               :type="filterType === 'management' ? 'primary' : ''"
               size="small"
               @click="filterType = 'management'"
           >
-            管理软件
+            {{ t('pid.mgmt') }}
           </el-button>
           <el-button
               :type="filterType === 'security' ? 'primary' : ''"
               size="small"
               @click="filterType = 'security'"
           >
-            安全软件
+            {{ t('pid.security') }}
           </el-button>
           <el-button
               :type="filterType === 'normal' ? 'primary' : ''"
               size="small"
               @click="filterType = 'normal'"
           >
-            普通进程
+            {{ t('pid.normal') }}
           </el-button>
         </el-button-group>
 
         <div class="filter-right">
           <el-switch
               v-model="showOnlySecuritySoftware"
-              active-text="只显示安全软件"
+              :active-text="t('pid.onlySecurity')"
               size="small"
               style="margin-right: 16px;"
           />
@@ -133,7 +133,7 @@
               @click="exportProcessList"
               :loading="exporting"
           >
-            导出列表
+            {{ t('pid.export') }}
           </el-button>
         </div>
       </div>
@@ -170,7 +170,7 @@
                     </el-tag>
                   </div>
                   <div class="tooltip-processes" v-if="row.softwareInfo.processes && row.softwareInfo.processes.length > 0">
-                    <div class="tooltip-subtitle">相关进程：</div>
+                    <div class="tooltip-subtitle">{{ t('pid.relatedProcesses') }}:</div>
                     <div class="process-list">
                       <el-tag
                           v-for="process in row.softwareInfo.processes.slice(0, 5)"
@@ -182,13 +182,13 @@
                         {{ process }}
                       </el-tag>
                       <div v-if="row.softwareInfo.processes.length > 5" class="more-processes">
-                        等 {{ row.softwareInfo.processes.length }} 个进程
+                        {{ t('pid.moreProcesses', { n: row.softwareInfo.processes.length }) }}
                       </div>
                     </div>
                   </div>
                   <div class="tooltip-url" v-if="row.softwareInfo.url">
                     <a :href="row.softwareInfo.url" target="_blank" @click.stop>
-                      官网：{{ row.softwareInfo.url }}
+                      {{ t('pid.officialSite') }} {{ row.softwareInfo.url }}
                     </a>
                   </div>
                 </div>
@@ -205,7 +205,7 @@
           </div>
           <div class="process-extra" v-if="row.softwareInfo?.category === 'antivirus'">
             <el-alert
-                title="检测到杀毒软件"
+                :title="t('pid.avDetected')"
                 type="warning"
                 :closable="false"
                 show-icon
@@ -237,7 +237,7 @@
                   class="software-link"
                   @click.stop
               >
-                <i class="el-icon-link"></i> 官网
+                <i class="el-icon-link"></i> {{ t('pid.officialSite') }}
               </a>
             </div>
           </div>
@@ -261,7 +261,7 @@
               size="small"
               @click.stop="showAntivirusWarning(row)"
           >
-            警告
+            {{ t('pid.warn') }}
           </el-button>
           <el-button
               type="danger"
@@ -278,20 +278,20 @@
     <!-- 杀毒软件警告对话框 -->
     <el-dialog
         v-model="warningDialogVisible"
-        title="杀毒软件警告"
+        :title="t('pid.avWarning')"
         width="500px"
     >
       <div class="warning-dialog-content">
         <el-alert
             type="warning"
-            title="注意"
+            :title="t('common.notice')"
             :description="warningMessage"
             show-icon
             :closable="false"
         />
         <div class="warning-actions">
-          <el-button type="warning" @click="handleForceKill">强制终止</el-button>
-          <el-button @click="warningDialogVisible = false">取消</el-button>
+          <el-button type="warning" @click="handleForceKill">{{ t('pid.forceKill') }}</el-button>
+          <el-button @click="warningDialogVisible = false">{{ t('common.cancel') }}</el-button>
         </div>
       </div>
     </el-dialog>
@@ -299,6 +299,8 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 import TablesView from "@/components/Common/Tables/TablesView.vue";
 import { reactive, ref, computed, watch } from "vue";
 import { useRoute } from "vue-router";
@@ -430,13 +432,13 @@ const getSoftwareTagType = (category: string) => {
 // 获取分类标签
 const getCategoryLabel = (category: string) => {
   const labelMap: Record<string, string> = {
-    antivirus: '杀毒软件',
-    monitor: '监控软件',
-    cloud: '云安全',
-    management: '管理软件',
-    unknown: '其他'
+    antivirus: t('pid.av'),
+    monitor: t('pid.monitor'),
+    cloud: t('pid.cloud'),
+    management: t('pid.mgmt'),
+    unknown: t('pid.unknown')
   };
-  return labelMap[category] || '其他';
+  return labelMap[category] || t('pid.unknown');
 };
 
 // 表格列配置 - 增加 SecuritySoftware 列
@@ -460,7 +462,7 @@ const PID_tableColumn: Table.Column[] = [
   },
   {
     prop: 'Name',
-    label: '进程名',
+    label: t('pid.procName'),
     sortable: true,
     showOverflowTooltip: true,
     width: '250px',
@@ -468,7 +470,7 @@ const PID_tableColumn: Table.Column[] = [
   },
   {
     prop: 'SecuritySoftware',
-    label: '安全软件',
+    label: t('pid.security'),
     sortable: true,
     showOverflowTooltip: true,
     width: '200px',
@@ -477,7 +479,7 @@ const PID_tableColumn: Table.Column[] = [
   },
   {
     prop: 'Arch',
-    label: '架构',
+    label: t('pid.arch'),
     sortable: true,
     showOverflowTooltip: true,
     width: '80px',
@@ -486,14 +488,14 @@ const PID_tableColumn: Table.Column[] = [
   },
   {
     prop: 'User',
-    label: '用户',
+    label: t('pid.user'),
     sortable: true,
     showOverflowTooltip: true,
     width: '240px',
     Color: 'black'
   },
   {
-    label: '操作',
+    label: t('common.actions'),
     buttons: [],
     slot: 'action',
     width: '160px',
@@ -642,8 +644,8 @@ const loadProcessList = async () => {
     tableData.value = processData(res.data.data);
     calculateStats(tableData.value);
   } catch (error) {
-    console.error('加载进程列表失败:', error);
-    ElMessage.error('加载进程列表失败');
+    console.error('failed to load process list:', error);
+    ElMessage.error(t('pid.loadFailed'));
   } finally {
     loading.value = false;
   }
@@ -657,25 +659,25 @@ const exportProcessList = async () => {
     const exportData = tableData.value.map(item => ({
       PID: item.PID,
       PPID: item.PPID,
-      进程名: item.Name,
-      安全软件: item.softwareInfo?.name || '-',
-      软件类型: item.softwareInfo ? getCategoryLabel(item.softwareInfo.category) : '-',
-      架构: item.Arch,
-      用户: item.User
+      [t('pid.procName')]: item.Name,
+      [t('pid.security')]: item.softwareInfo?.name || '-',
+      [t('pid.swType')]: item.softwareInfo ? getCategoryLabel(item.softwareInfo.category) : '-',
+      [t('pid.arch')]: item.Arch,
+      [t('pid.user')]: item.User
     }));
 
     // 转换为 CSV
-    const headers = ['PID', 'PPID', '进程名', '安全软件', '软件类型', '架构', '用户'];
+    const headers = ['PID', 'PPID', t('pid.procName'), t('pid.security'), t('pid.swType'), t('pid.arch'), t('pid.user')];
     const csvContent = [
       headers.join(','),
       ...exportData.map(item => [
         item.PID,
         item.PPID,
-        `"${item.进程名}"`,
-        `"${item.安全软件}"`,
-        `"${item.软件类型}"`,
-        `"${item.架构}"`,
-        `"${item.用户}"`
+        `"${item[t('pid.procName')]}"`,
+        `"${item[t('pid.security')]}"`,
+        `"${item[t('pid.swType')]}"`,
+        `"${item[t('pid.arch')]}"`,
+        `"${item[t('pid.user')]}"`
       ].join(','))
     ].join('\n');
 
@@ -684,16 +686,16 @@ const exportProcessList = async () => {
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
     link.setAttribute('href', url);
-    link.setAttribute('download', `进程列表_${new Date().toISOString().slice(0, 10)}.csv`);
+    link.setAttribute('download', `${t('pid.exportFile')}_${new Date().toISOString().slice(0, 10)}.csv`);
     link.style.visibility = 'hidden';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
 
-    ElMessage.success('导出成功');
+    ElMessage.success(t('pid.exportOk'));
   } catch (error) {
     console.error('导出失败:', error);
-    ElMessage.error('导出失败');
+    ElMessage.error(t('pid.exportFailed'));
   } finally {
     exporting.value = false;
   }
@@ -702,7 +704,7 @@ const exportProcessList = async () => {
 // 杀毒软件警告
 const showAntivirusWarning = (row: any) => {
   selectedProcess.value = row;
-  warningMessage.value = `检测到杀毒软件 "${row.softwareInfo.name}" 的进程 "${row.Name}" (PID: ${row.PID})。终止此类进程可能导致系统安全风险。`;
+  warningMessage.value = t('pid.avWarnBody', { av: row.softwareInfo.name, proc: row.Name, pid: row.PID });
   warningDialogVisible.value = true;
 };
 
@@ -714,11 +716,11 @@ const handleForceKill = async () => {
 
   try {
     await ClientAPI.kill_pid({ uid, pid: selectedProcess.value.PID });
-    ElMessage.success('进程已强制终止');
+    ElMessage.success(t('pid.forceKilled'));
     await loadProcessList();
   } catch (error) {
     console.error('终止进程失败:', error);
-    ElMessage.error('终止进程失败');
+    ElMessage.error(t('pid.killFailed'));
   }
 };
 
@@ -731,23 +733,23 @@ const handleKill = (row: any) => {
   }
 
   ElMessageBox.confirm(
-      `是否终止进程 "${row.Name}" (PID: ${row.PID})？`,
-      '警告',
+      t('pid.killConfirm', { proc: row.Name, pid: row.PID }),
+      t('pid.warn'),
       {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: t('common.confirm'),
+        cancelButtonText: t('common.cancel'),
         type: 'warning',
         beforeClose: async (action, instance, done) => {
           if (action === 'confirm') {
             instance.confirmButtonLoading = true;
             try {
               await ClientAPI.kill_pid({ uid, pid: row.PID });
-              ElMessage.success('进程已终止');
+              ElMessage.success(t('pid.killed'));
               await loadProcessList();
               done();
             } catch (error) {
               console.error('终止进程失败:', error);
-              ElMessage.error('终止进程失败');
+              ElMessage.error(t('pid.killFailed'));
               instance.confirmButtonLoading = false;
             }
           } else {
