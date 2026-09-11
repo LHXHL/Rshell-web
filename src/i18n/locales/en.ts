@@ -197,6 +197,41 @@ export default {
     selectFirst: 'Select content to copy first',
     pasteFailed: 'Paste failed'
   },
+  scr: {
+    capturing: 'Capturing...',
+    capture: 'Capture Screen',
+    empty: 'No screenshots yet — click the button above to capture',
+    preview: 'Screenshot Preview',
+    listFailed: 'Failed to load screenshots',
+    cmdSent: 'Screenshot command sent',
+    cmdSendFailed: 'Failed to send the screenshot command'
+  },
+  cred: {
+    add: 'Add Credential',
+    dumping: 'Dumping...',
+    dump: 'Dump Credentials',
+    domain: 'Domain',
+    domainPh: 'Domain or IP',
+    secretPh: 'Password or NTLM hash',
+    plaintext: 'Plaintext',
+    dumpCmdSent: 'Credential dump command sent',
+    dumpFailed: 'Credential dump failed',
+    userPwdRequired: 'Username and password cannot be empty',
+    added: 'Credential added'
+  },
+  sens: {
+    resultsTitle: 'Sensitive Search Results',
+    refreshing: 'Refreshing...',
+    empty: 'No search results',
+    lines: 'Lines',
+    lineUnit: 'lines',
+    contentPreview: 'Content Preview',
+    detailTitle: 'Search Result Details',
+    searchTime: 'Searched at:',
+    loadFailed: 'Failed to load search results',
+    emptyContent: '(empty)',
+    deleteConfirm: 'Delete this search result?'
+  },
   clients: {
     title: 'Client Management',
     actionTitle: 'Client Actions',

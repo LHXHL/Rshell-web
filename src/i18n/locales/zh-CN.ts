@@ -197,6 +197,41 @@ export default {
     selectFirst: '请先选中要复制的内容',
     pasteFailed: '粘贴失败'
   },
+  scr: {
+    capturing: '截图中...',
+    capture: '截取屏幕',
+    empty: '暂无截图，点击上方按钮截取',
+    preview: '截图预览',
+    listFailed: '获取截图列表失败',
+    cmdSent: '截图指令已发送',
+    cmdSendFailed: '发送截图指令失败'
+  },
+  cred: {
+    add: '添加凭据',
+    dumping: '转储中...',
+    dump: '窃取凭据',
+    domain: '域名',
+    domainPh: '域名或IP',
+    secretPh: '密码或 NTLM hash',
+    plaintext: '明文',
+    dumpCmdSent: '凭据窃取命令已发送',
+    dumpFailed: '凭据窃取失败',
+    userPwdRequired: '用户名和密码不能为空',
+    added: '凭据已添加'
+  },
+  sens: {
+    resultsTitle: '敏感信息搜索结果',
+    refreshing: '刷新中...',
+    empty: '暂无搜索结果',
+    lines: '条数',
+    lineUnit: '行',
+    contentPreview: '内容预览',
+    detailTitle: '搜索结果详情',
+    searchTime: '搜索时间:',
+    loadFailed: '加载搜索结果失败',
+    emptyContent: '(空)',
+    deleteConfirm: '确定要删除该搜索结果吗？'
+  },
   clients: {
     title: '客户端管理',
     actionTitle: '客户端操作',

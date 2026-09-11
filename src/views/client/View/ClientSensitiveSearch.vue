@@ -2,15 +2,15 @@
   <div class="sensitive-container">
     <el-card shadow="never" class="toolbar-card">
       <div class="toolbar-content">
-        <h2 class="toolbar-title">敏感信息搜索结果</h2>
+        <h2 class="toolbar-title">{{ t('sens.resultsTitle') }}</h2>
         <el-button type="primary" @click="loadResults" :loading="loading">
-          {{ loading ? '刷新中...' : '刷新' }}
+          {{ loading ? t('sens.refreshing') : t('common.refresh') }}
         </el-button>
       </div>
     </el-card>
 
     <div v-if="results.length === 0 && !loading" class="empty-state">
-      <el-empty description="暂无搜索结果" />
+      <el-empty :description="t('sens.empty')" />
     </div>
 
     <div v-loading="loading" class="results-list" v-else>
@@ -24,35 +24,35 @@
             <div class="result-actions">
               <el-button size="small" type="primary" @click="viewContent(item)">
                 <el-icon><View /></el-icon>
-                查看
+                {{ t('clients.view') }}
               </el-button>
               <el-button size="small" type="danger" @click="deleteResult(item.id)">
                 <el-icon><Delete /></el-icon>
-                删除
+                {{ t('common.delete') }}
               </el-button>
             </div>
           </div>
           <div class="result-preview" v-if="item.searchPath">
-            <el-tag size="small" type="info">路径</el-tag>
+            <el-tag size="small" type="info">{{ t('files.path') }}</el-tag>
             <code>{{ item.searchPath }}</code>
           </div>
           <div class="result-preview">
-            <el-tag size="small" type="success">条数</el-tag>
-            <code>{{ countLines(item.content) }} 行</code>
+            <el-tag size="small" type="success">{{ t('sens.lines') }}</el-tag>
+            <code>{{ countLines(item.content) }} {{ t('sens.lineUnit') }}</code>
           </div>
           <div class="result-preview">
-            <el-tag size="small" type="warning">内容预览</el-tag>
+            <el-tag size="small" type="warning">{{ t('sens.contentPreview') }}</el-tag>
             <pre class="preview-text">{{ previewText(item.content) }}</pre>
           </div>
         </el-card>
       </div>
     </div>
 
-    <el-dialog v-model="detailVisible" title="搜索结果详情" width="90%" top="5vh" class="detail-dialog">
+    <el-dialog v-model="detailVisible" :title="t('sens.detailTitle')" width="90%" top="5vh" class="detail-dialog">
       <div class="detail-content">
         <div class="detail-meta" v-if="currentItem">
-          <el-tag>搜索时间: {{ formatTime(currentItem.createdAt) }}</el-tag>
-          <el-tag v-if="currentItem.searchPath" type="info">路径: {{ currentItem.searchPath }}</el-tag>
+          <el-tag>{{ t('sens.searchTime') }} {{ formatTime(currentItem.createdAt) }}</el-tag>
+          <el-tag v-if="currentItem.searchPath" type="info">{{ t('files.path') }}: {{ currentItem.searchPath }}</el-tag>
         </div>
         <pre class="detail-text">{{ currentContent }}</pre>
       </div>
@@ -61,6 +61,8 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 import { ref, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import ClientAPI from '@/api/clients'
@@ -102,7 +104,7 @@ const loadResults = async () => {
       results.value = res.data.data || []
     }
   } catch {
-    ElMessage.error('加载搜索结果失败')
+    ElMessage.error(t('sens.loadFailed'))
   } finally {
     loading.value = false
   }
@@ -110,30 +112,30 @@ const loadResults = async () => {
 
 const viewContent = async (item) => {
   currentItem.value = item
-  currentContent.value = '加载中...'
+  currentContent.value = t('common.loading')
   detailVisible.value = true
   try {
     const res = await ClientAPI.getSensitiveResultContent(item.id)
     if (res.data.status === 200) {
-      currentContent.value = res.data.data || '(空)'
+      currentContent.value = res.data.data || t('sens.emptyContent')
     } else {
-      currentContent.value = '加载失败'
+      currentContent.value = t('common.fetchError')
     }
   } catch {
-    currentContent.value = '加载失败'
+    currentContent.value = t('common.fetchError')
   }
 }
 
 const deleteResult = async (id) => {
   try {
-    await ElMessageBox.confirm('确定要删除该搜索结果吗？', '提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
+    await ElMessageBox.confirm(t('sens.deleteConfirm'), t('common.notice'), {
+      confirmButtonText: t('common.confirm'),
+      cancelButtonText: t('common.cancel'),
       type: 'warning',
     })
     const res = await ClientAPI.deleteSensitiveResult(id)
     if (res.data.status === 200) {
-      ElMessage.success('已删除')
+      ElMessage.success(t('common.deleted'))
       loadResults()
     }
   } catch {

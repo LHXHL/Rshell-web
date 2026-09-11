@@ -2,15 +2,15 @@
   <div class="screenshot-container">
     <el-card shadow="never" class="toolbar-card">
       <div class="toolbar-content">
-        <h2 class="toolbar-title">屏幕截图</h2>
+        <h2 class="toolbar-title">{{ t('cside.screenTitle') }}</h2>
         <el-button type="primary" @click="captureScreenshot" :loading="capturing" :disabled="capturing">
-          {{ capturing ? '截图中...' : '截取屏幕' }}
+          {{ capturing ? t('scr.capturing') : t('scr.capture') }}
         </el-button>
       </div>
     </el-card>
 
     <div v-if="screenshots.length === 0 && !loading" class="empty-state">
-      <el-empty description="暂无截图，点击上方按钮截取" />
+      <el-empty :description="t('scr.empty')" />
     </div>
 
     <div v-loading="loading" class="screenshot-grid" v-else>
@@ -25,13 +25,15 @@
       </div>
     </div>
 
-    <el-dialog v-model="previewVisible" title="截图预览" width="90%" top="5vh">
+    <el-dialog v-model="previewVisible" :title="t('scr.preview')" width="90%" top="5vh">
       <img v-if="previewId" :src="getImageUrl(previewId)" class="preview-image" alt="screenshot preview" />
     </el-dialog>
   </div>
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 import { ref, computed, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import ClientAPI from '@/api/clients'
@@ -60,7 +62,7 @@ const fetchScreenshots = async () => {
       screenshots.value = res.data.data
     }
   } catch {
-    ElMessage.error('获取截图列表失败')
+    ElMessage.error(t('scr.listFailed'))
   } finally {
     loading.value = false
   }
@@ -70,10 +72,10 @@ const captureScreenshot = async () => {
   capturing.value = true
   try {
     await ClientAPI.captureScreenshot({ uid: route.query.uid })
-    ElMessage.success('截图指令已发送')
+    ElMessage.success(t('scr.cmdSent'))
     setTimeout(fetchScreenshots, 3000)
   } catch {
-    ElMessage.error('发送截图指令失败')
+    ElMessage.error(t('scr.cmdSendFailed'))
   } finally {
     capturing.value = false
   }
