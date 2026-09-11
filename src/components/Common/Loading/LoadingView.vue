@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-const { t } = useI18n()
 import './LoadingCss.css'
 
+const { t } = useI18n()
 const props = defineProps({
   message: {
     type: String,
-    default() {
-      return t('common.loading')
-    }
+    default: ''
   }
 })
 </script>
@@ -23,7 +21,7 @@ const props = defineProps({
         <div class="dot"></div>
         <div class="dot"></div>
       </div>
-      <div class="message">{{ props.message }}</div>
+      <div class="message">{{ props.message || t('common.loading') }}</div>
     </div>
   </div>
 </template>
