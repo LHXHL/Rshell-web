@@ -3,13 +3,13 @@
     <el-card class="settings-card">
       <template #header>
         <div class="card-header">
-          <span class="card-title">系统设置</span>
+          <span class="card-title">{{ t('settings.title') }}</span>
         </div>
       </template>
 
       <!-- 背景图片设置 -->
       <div class="background-section">
-        <h3 class="section-title">背景图片设置</h3>
+        <h3 class="section-title">{{ t('settings.background') }}</h3>
         <div class="background-upload">
           <el-upload
             class="upload-demo"
@@ -21,15 +21,15 @@
           >
             <el-button type="primary">
               <el-icon><Upload /></el-icon>
-              上传背景图片
+              {{ t('settings.uploadBg') }}
             </el-button>
           </el-upload>
           <el-button v-if="backgroundImage" @click="clearBackground" class="clear-btn">
             <el-icon><Delete /></el-icon>
-            清除背景
+            {{ t('settings.clearBg') }}
           </el-button>
         </div>
-        <p class="background-tip">支持 JPG、PNG 格式，建议尺寸 1920x1080</p>
+        <p class="background-tip">{{ t('settings.bgTip') }}</p>
         <div v-if="backgroundImage" class="background-preview">
           <el-image
             :src="backgroundImage"
@@ -43,36 +43,36 @@
 
       <!-- 通知设置 -->
       <div class="background-section">
-        <h3 class="section-title">上线提醒配置</h3>
+        <h3 class="section-title">{{ t('settings.notifyTitle') }}</h3>
         <el-tabs v-model="activeNotificationTab">
-          <el-tab-pane label="企业微信" name="wecom">
+          <el-tab-pane :label="t('settings.wecom')" name="wecom">
             <el-form label-width="120px" :model="notifications.wecom">
-              <el-form-item label="启用提醒">
+              <el-form-item :label="t('settings.enableNotify')">
                 <el-switch v-model="notifications.wecom.enabled" />
               </el-form-item>
               <el-form-item label="Webhook KEY">
-                <el-input v-model="notifications.wecom.url" placeholder="请输入 Webhook KEY" clearable />
+                <el-input v-model="notifications.wecom.url" :placeholder="t('settings.webhookKeyPh')" clearable />
               </el-form-item>
             </el-form>
           </el-tab-pane>
 
-          <el-tab-pane label="钉钉" name="dingtalk">
+          <el-tab-pane :label="t('settings.dingtalk')" name="dingtalk">
             <el-form label-width="120px" :model="notifications.dingtalk">
-              <el-form-item label="启用提醒">
+              <el-form-item :label="t('settings.enableNotify')">
                 <el-switch v-model="notifications.dingtalk.enabled" />
               </el-form-item>
               <el-form-item label="Webhook URL">
-                <el-input v-model="notifications.dingtalk.webhook" placeholder="请输入 Webhook URL" clearable />
+                <el-input v-model="notifications.dingtalk.webhook" :placeholder="t('settings.webhookUrlPh')" clearable />
               </el-form-item>
-              <el-form-item label="加签 Secret">
-                <el-input v-model="notifications.dingtalk.secret" placeholder="请输入加签 Secret（可选）" clearable />
+              <el-form-item :label="t('settings.signSecret')">
+                <el-input v-model="notifications.dingtalk.secret" :placeholder="t('settings.signSecretPh')" clearable />
               </el-form-item>
             </el-form>
           </el-tab-pane>
 
           <el-tab-pane label="Telegram" name="telegram">
             <el-form label-width="120px" :model="notifications.telegram">
-              <el-form-item label="启用提醒">
+              <el-form-item :label="t('settings.enableNotify')">
                 <el-switch v-model="notifications.telegram.enabled" />
               </el-form-item>
               <el-form-item label="Bot Token">
@@ -86,23 +86,23 @@
 
           <el-tab-pane label="Email" name="email">
             <el-form label-width="120px" :model="notifications.email">
-              <el-form-item label="启用提醒">
+              <el-form-item :label="t('settings.enableNotify')">
                 <el-switch v-model="notifications.email.enabled" />
               </el-form-item>
-              <el-form-item label="SMTP 服务器">
-                <el-input v-model="notifications.email.host" placeholder="例如 smtp.qq.com" clearable />
+              <el-form-item :label="t('settings.smtpHost')">
+                <el-input v-model="notifications.email.host" :placeholder="t('settings.smtpHostPh')" clearable />
               </el-form-item>
-              <el-form-item label="SMTP 端口">
+              <el-form-item :label="t('settings.smtpPort')">
                 <el-input-number v-model="notifications.email.port" :min="1" :max="65535" />
               </el-form-item>
-              <el-form-item label="用户名">
-                <el-input v-model="notifications.email.username" placeholder="邮箱账号" clearable />
+              <el-form-item :label="t('credentials.username')">
+                <el-input v-model="notifications.email.username" :placeholder="t('settings.emailAccountPh')" clearable />
               </el-form-item>
-              <el-form-item label="密码 / 授权码">
-                <el-input v-model="notifications.email.password" type="password" placeholder="邮箱密码" show-password />
+              <el-form-item :label="t('settings.emailPwd')">
+                <el-input v-model="notifications.email.password" type="password" :placeholder="t('settings.emailPwdPh')" show-password />
               </el-form-item>
-              <el-form-item label="接收邮箱">
-                <el-input v-model="notifications.email.to" placeholder="接收提醒的邮箱地址" clearable />
+              <el-form-item :label="t('settings.emailTo')">
+                <el-input v-model="notifications.email.to" :placeholder="t('settings.emailToPh')" clearable />
               </el-form-item>
             </el-form>
           </el-tab-pane>
@@ -113,19 +113,19 @@
 
       <!-- 其他设置 -->
       <el-table :data="filteredTableData" style="width: 100%">
-        <el-table-column prop="Name" label="设置项" width="200" />
+        <el-table-column prop="Name" :label="t('settings.item')" width="200" />
 
         <!-- 可编辑值 -->
-        <el-table-column label="值">
+        <el-table-column :label="t('settings.value')">
           <template #default="{ row }">
-            <el-input v-model="row.Value" placeholder="请输入值" clearable/>
+            <el-input v-model="row.Value" :placeholder="t('settings.valuePh')" clearable/>
           </template>
         </el-table-column>
 
-        <el-table-column label="操作" width="150">
+        <el-table-column :label="t('common.actions')" width="150">
           <template #default="{ row }">
             <el-button type="primary" size="small" @click="saveSetting(row)">
-              保存
+              {{ t('common.save') }}
             </el-button>
           </template>
         </el-table-column>
@@ -133,13 +133,15 @@
 
       <!-- 全局保存按钮 -->
       <div class="save-all-btn">
-        <el-button type="success" @click="saveAll">保存全部</el-button>
+        <el-button type="success" @click="saveAll">{{ t('settings.saveAll') }}</el-button>
       </div>
     </el-card>
   </div>
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 import { ref, onMounted, computed, reactive } from "vue";
 import { useUserStore } from "@/stores/user";
 import { ElMessage } from "element-plus";
@@ -182,7 +184,7 @@ const handleBackgroundChange = (file: any) => {
     backgroundImage.value = base64;
     localStorage.setItem('backgroundImage', base64);
     applyBackground(base64);
-    ElMessage.success('背景图片设置成功');
+    ElMessage.success(t('settings.bgSaved'));
   };
 };
 
@@ -195,7 +197,7 @@ const clearBackground = () => {
   document.body.style.backgroundPosition = 'center';
   document.body.style.backgroundRepeat = 'no-repeat';
   document.body.style.backgroundAttachment = 'fixed';
-  ElMessage.success('背景图片已清除');
+  ElMessage.success(t('settings.bgCleared'));
 };
 
 const applyBackground = (bg: string) => {
@@ -234,9 +236,9 @@ const getSettingsList = async () => {
 const saveSetting = async (row: { Name: string; Value: string }) => {
   const res = await SettingsAPI.editSettings([row]); 
   if (res.status === 200) {
-    ElMessage.success("保存成功");
+    ElMessage.success(t("common.saved"));
   } else {
-    ElMessage.error("保存失败");
+    ElMessage.error(t("common.saveFailed"));
   }
 };
 
@@ -256,9 +258,9 @@ const saveAll = async () => {
 
   const res = await SettingsAPI.editSettings(toSave);
   if (res.status === 200) {
-    ElMessage.success("全部保存成功");
+    ElMessage.success(t("settings.saveAllOk"));
   } else {
-    ElMessage.error("保存失败");
+    ElMessage.error(t("common.saveFailed"));
   }
 };
 
