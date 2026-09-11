@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 import { computed, reactive, ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import type { FormInstance, FormRules } from 'element-plus'
@@ -60,9 +62,9 @@ const passwordStrength = computed(() => {
 
 const passwordStrengthText = computed(() => {
   const strength = passwordStrength.value;
-  if (strength <= 2) return '弱';
-  if (strength <= 3) return '中';
-  return '强';
+  if (strength <= 2) return t('user.strengthWeak');
+  if (strength <= 3) return t('user.strengthMid');
+  return t('user.strengthStrong');
 });
 
 const passwordStrengthColor = computed(() => {
@@ -85,9 +87,9 @@ const doPasswordsMatch = computed(() => form.new_password === form.again_passwor
 // 密码验证规则
 const validatePassword = (rule: any, value: any, callback: any) => {
   if (!value) {
-    callback(new Error('请输入原密码'));
+    callback(new Error(t('user.oldPwdRequired')));
   } else if (value.length < 6) {
-    callback(new Error('密码长度不能小于6位'));
+    callback(new Error(t('user.oldPwdMin')));
   } else {
     callback();
   }
@@ -95,11 +97,11 @@ const validatePassword = (rule: any, value: any, callback: any) => {
 
 const validateNewPassword = (rule: any, value: any, callback: any) => {
   if (!value) {
-    callback(new Error('请输入新密码'));
+    callback(new Error(t('user.newPwdRequired')));
   } else if (value.length < 8) {
-    callback(new Error('密码长度不能小于8位'));
+    callback(new Error(t('user.newPwdMin')));
   } else if (!passwordRegex.test(value)) {
-    callback(new Error('密码必须包含大小写字母和数字'));
+    callback(new Error(t('user.pwdComplexity')));
   } else {
     callback();
   }
@@ -107,9 +109,9 @@ const validateNewPassword = (rule: any, value: any, callback: any) => {
 
 const validateConfirmPassword = (rule: any, value: any, callback: any) => {
   if (!value) {
-    callback(new Error('请确认新密码'));
+    callback(new Error(t('user.confirmPwdRequired')));
   } else if (value !== form.new_password) {
-    callback(new Error('两次输入的密码不一致'));
+    callback(new Error(t('user.pwdMismatch')));
   } else {
     callback();
   }
@@ -131,7 +133,7 @@ const rules = reactive<FormRules<RuleForm>>({
 // 检查用户是否已登录
 onMounted(() => {
   if (!form.username) {
-    ElMessage.error('请先登录');
+    ElMessage.error(t('user.loginFirst'));
     setTimeout(() => {
       router.push('/login');
     }, 1500);
@@ -140,10 +142,10 @@ onMounted(() => {
 
 // 密码要求列表
 const passwordRequirements = [
-  { text: '至少8个字符', met: computed(() => form.new_password.length >= 8) },
-  { text: '至少一个大写字母', met: computed(() => /[A-Z]/.test(form.new_password)) },
-  { text: '至少一个小写字母', met: computed(() => /[a-z]/.test(form.new_password)) },
-  { text: '至少一个数字', met: computed(() => /[0-9]/.test(form.new_password)) },
+  { text: t('user.req8'), met: computed(() => form.new_password.length >= 8) },
+  { text: t('user.reqUpper'), met: computed(() => /[A-Z]/.test(form.new_password)) },
+  { text: t('user.reqLower'), met: computed(() => /[a-z]/.test(form.new_password)) },
+  { text: t('user.reqDigit'), met: computed(() => /[0-9]/.test(form.new_password)) },
 ];
 
 const resetPassword = async () => {
@@ -156,11 +158,11 @@ const resetPassword = async () => {
     });
 
     if (res.data.code === 200) {
-      ElMessage.success('密码重置成功');
+      ElMessage.success(t('user.resetOk'));
 
       // 显示成功提示框
-      await ElMessageBox.alert('密码重置成功，请使用新密码重新登录', '操作成功', {
-        confirmButtonText: '重新登录',
+      await ElMessageBox.alert(t('user.resetOkRelogin'), t('common.success'), {
+        confirmButtonText: t('user.relogin'),
         type: 'success',
         showClose: false,
         closeOnClickModal: false,
@@ -175,11 +177,11 @@ const resetPassword = async () => {
 
       router.push('/login');
     } else {
-      ElMessage.error(res.data.message || '重置密码失败，请稍后重试');
+      ElMessage.error(res.data.message || t('user.resetFailed'));
     }
   } catch (error: any) {
-    console.error('重置密码失败:', error);
-    ElMessage.error(error.response?.data?.message || '重置密码失败，请稍后重试');
+    console.error('reset password failed:', error);
+    ElMessage.error(error.response?.data?.message || t('user.resetFailed'));
   } finally {
     loading.value = false;
   }
@@ -189,11 +191,11 @@ const closeDialog = async () => {
   if (form.password || form.new_password || form.again_password) {
     try {
       await ElMessageBox.confirm(
-          '您有未保存的更改，确定要取消吗？',
-          '提示',
+          t('user.unsavedConfirm'),
+          t('common.notice'),
           {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
+            confirmButtonText: t('common.confirm'),
+            cancelButtonText: t('common.cancel'),
             type: 'warning',
           }
       );
@@ -215,8 +217,8 @@ const submitForm = (formEl: FormInstance | undefined) => {
     if (valid) {
       resetPassword();
     } else {
-      console.log('验证失败:', fields);
-      ElMessage.error('请检查表单信息');
+      console.log('validation failed:', fields);
+      ElMessage.error(t('user.checkForm'));
     }
   });
 };
@@ -249,7 +251,7 @@ const togglePasswordVisibility = (type: 'old' | 'new' | 'confirm') => {
     <!-- 主对话框 -->
     <el-dialog
         v-model="dialogFormVisible"
-        title="重置密码"
+        :title="t('nav.resetPassword')"
         width="520px"
         class="reset-password-dialog"
         :close-on-click-modal="false"
@@ -264,8 +266,8 @@ const togglePasswordVisibility = (type: 'old' | 'new' | 'confirm') => {
             <el-icon class="lock-icon"><Key /></el-icon>
           </div>
           <div class="header-content">
-            <h3 class="dialog-title">重置密码</h3>
-            <p class="dialog-subtitle">请验证身份并设置新的登录密码</p>
+            <h3 class="dialog-title">{{ t('nav.resetPassword') }}</h3>
+            <p class="dialog-subtitle">{{ t('user.resetSubtitle') }}</p>
           </div>
         </div>
       </template>
@@ -281,22 +283,22 @@ const togglePasswordVisibility = (type: 'old' | 'new' | 'confirm') => {
             @submit.prevent="submitForm(ruleFormRef)"
         >
           <!-- 用户名 -->
-          <el-form-item label="用户名" class="form-item-custom">
+          <el-form-item :label="t('login.username')" class="form-item-custom">
             <div class="username-display">
               <el-icon class="user-icon"><User /></el-icon>
               <span class="username-text">{{ form.username }}</span>
             </div>
-            <div class="form-hint">系统管理员账号</div>
+            <div class="form-hint">{{ t('user.adminAccount') }}</div>
           </el-form-item>
 
           <!-- 原密码 -->
-          <el-form-item label="原密码" prop="password" class="form-item-custom">
+          <el-form-item :label="t('user.oldPwd')" prop="password" class="form-item-custom">
             <div class="password-input-wrapper">
               <el-icon class="input-icon"><Lock /></el-icon>
               <el-input
                   v-model="form.password"
                   :type="showOldPassword ? 'text' : 'password'"
-                  placeholder="请输入当前使用的密码"
+                  :placeholder="t('user.oldPwdPh')"
                   size="large"
                   clearable
               />
@@ -307,17 +309,17 @@ const togglePasswordVisibility = (type: 'old' | 'new' | 'confirm') => {
                 <component :is="showOldPassword ? View : Hide" />
               </el-icon>
             </div>
-            <div class="form-hint">请输入您当前的登录密码</div>
+            <div class="form-hint">{{ t('user.oldPwdHint') }}</div>
           </el-form-item>
 
           <!-- 新密码 -->
-          <el-form-item label="新密码" prop="new_password" class="form-item-custom">
+          <el-form-item :label="t('user.newPwd')" prop="new_password" class="form-item-custom">
             <div class="password-input-wrapper">
               <el-icon class="input-icon"><Lock /></el-icon>
               <el-input
                   v-model="form.new_password"
                   :type="showNewPassword ? 'text' : 'password'"
-                  placeholder="请设置新的登录密码"
+                  :placeholder="t('user.newPwdPh')"
                   size="large"
                   clearable
               />
@@ -341,7 +343,7 @@ const togglePasswordVisibility = (type: 'old' | 'new' | 'confirm') => {
                 ></div>
               </div>
               <div class="strength-info">
-                <span class="strength-label">密码强度：</span>
+                <span class="strength-label">{{ t('user.strength') }}</span>
                 <span
                     class="strength-value"
                     :style="{ color: passwordStrengthColor }"
@@ -375,13 +377,13 @@ const togglePasswordVisibility = (type: 'old' | 'new' | 'confirm') => {
           </el-form-item>
 
           <!-- 确认密码 -->
-          <el-form-item label="确认密码" prop="again_password" class="form-item-custom">
+          <el-form-item :label="t('user.confirmPwd')" prop="again_password" class="form-item-custom">
             <div class="password-input-wrapper">
               <el-icon class="input-icon"><Lock /></el-icon>
               <el-input
                   v-model="form.again_password"
                   :type="showConfirmPassword ? 'text' : 'password'"
-                  placeholder="请再次输入新密码"
+                  :placeholder="t('user.confirmPwdPh')"
                   size="large"
                   clearable
               />
@@ -405,7 +407,7 @@ const togglePasswordVisibility = (type: 'old' | 'new' | 'confirm') => {
                   class="match-text"
                   :class="{ 'match-success': doPasswordsMatch }"
               >
-                {{ doPasswordsMatch ? '密码匹配成功' : '密码不匹配' }}
+                {{ doPasswordsMatch ? t('user.pwdMatch') : t('user.pwdNoMatch') }}
               </span>
             </div>
           </el-form-item>
@@ -415,10 +417,9 @@ const togglePasswordVisibility = (type: 'old' | 'new' | 'confirm') => {
         <div class="security-notice">
           <el-icon class="notice-icon"><Check /></el-icon>
           <div class="notice-content">
-            <p class="notice-title">安全提示</p>
+            <p class="notice-title">{{ t('user.secNotice') }}</p>
             <p class="notice-text">
-              为了您的账户安全，请定期更换密码，并确保密码复杂度符合要求。
-              修改密码后，您需要重新登录系统。
+              {{ t('user.secNoticeBody') }}
             </p>
           </div>
         </div>
@@ -432,7 +433,7 @@ const togglePasswordVisibility = (type: 'old' | 'new' | 'confirm') => {
               class="footer-button"
               :disabled="loading"
           >
-            取消
+            {{ t('common.cancel') }}
           </el-button>
           <el-button
               type="primary"
@@ -442,8 +443,8 @@ const togglePasswordVisibility = (type: 'old' | 'new' | 'confirm') => {
               :disabled="!isPasswordValid || !doPasswordsMatch"
           >
             <template #default>
-              <span v-if="!loading">重置密码</span>
-              <span v-else>处理中...</span>
+              <span v-if="!loading">{{ t('nav.resetPassword') }}</span>
+              <span v-else>{{ t('user.processing') }}</span>
             </template>
           </el-button>
         </div>
