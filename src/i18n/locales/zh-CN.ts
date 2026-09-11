@@ -1,4 +1,24 @@
 export default {
+  cu: {
+    confirmPwdRequired: '请输入确认密码',
+    phoneRequired: '请输入手机号',
+    emailRequired: '请输入邮箱',
+    permissRequired: '请选择用户权限',
+    phone: '手机号',
+    email: '邮箱',
+    role: '用户身份',
+    admin: '管理员',
+    normalUser: '普通用户',
+    create: '创建'
+  },
+  tnb: {
+    clientsDesc: '管理和监控所有客户端',
+    listenersDesc: '配置和管理监听器',
+    generateDesc: '生成和分发客户端',
+    genSubDesc: '生成客户端程序',
+    webDesc: '通过Web方式投递',
+    settingsDesc: '系统配置和参数调整'
+  },
   notes: {
     title: '笔记管理',
     chars: '字数：',

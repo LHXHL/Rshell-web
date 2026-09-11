@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 import { reactive, ref } from 'vue'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
 import UserApi from '@/api/user'
@@ -24,18 +26,18 @@ const create_data = reactive<RuleForm>({
 const ruleFormRef = ref<FormInstance>()
 //表单验证规则
 const rules = reactive<FormRules<RuleForm>>({
-  username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+  username: [{ required: true, message: t('login.usernameRequired'), trigger: 'blur' }],
   password: [
-    { required: true, message: '请输入密码', trigger: 'blur' },
+    { required: true, message: t('login.passwordRequired'), trigger: 'blur' },
     // { min: 8, message: '密码长度大于等于8位', trigger: 'blur' }
   ],
   password_again: [
-    { required: true, message: '请输入确认密码', trigger: 'change' },
+    { required: true, message: t('cu.confirmPwdRequired'), trigger: 'change' },
     // { min: 8, message: '确认密码长度大于等于8位', trigger: 'blur' },
     {
       validator: (rule, value, callback) => {
         if (value !== create_data.password) {
-          callback(new Error('两次输入的密码不一致'))
+          callback(new Error(t('user.pwdMismatch')))
         } else {
           callback()
         }
@@ -44,14 +46,14 @@ const rules = reactive<FormRules<RuleForm>>({
     }
   ],
   phone: [
-    { required: true, message: '请输入手机号', trigger: 'blur' },
+    { required: true, message: t('cu.phoneRequired'), trigger: 'blur' },
     // { pattern: /^1[3-9]\d{9}$/, message: '手机号格式不正确', trigger: 'blur' }
   ],
   email: [
-    { required: true, message: '请输入邮箱', trigger: 'blur' },
+    { required: true, message: t('cu.emailRequired'), trigger: 'blur' },
     // { type: 'email', message: '邮箱格式不正确', trigger: 'blur' }
   ],
-  permissions: [{ required: true, message: '请选择用户权限', trigger: 'blur' }]
+  permissions: [{ required: true, message: t('cu.permissRequired'), trigger: 'blur' }]
 })
 
 // 组件间数据通信
@@ -97,65 +99,65 @@ const onCancel = () => {
 <template>
   <div>
     <el-form ref="ruleFormRef" :model="create_data" label-width="140px" :rules="rules">
-      <el-form-item label="用户名" prop="username">
+      <el-form-item :label="t('login.username')" prop="username">
         <el-input
           v-model="create_data.username"
           type="text"
-          placeholder="请输入用户名"
+          :placeholder="t('login.usernamePlaceholder')"
           autocomplete="off"
           minlength="8"
           clearable
           style="width: 200px"
         />
       </el-form-item>
-      <el-form-item label="密码" prop="password">
+      <el-form-item :label="t('login.password')" prop="password">
         <el-input
           v-model="create_data.password"
           type="password"
-          placeholder="请输入密码"
+          :placeholder="t('login.passwordPlaceholder')"
           autocomplete="off"
           clearable
           style="width: 200px"
           show-password
         />
       </el-form-item>
-      <el-form-item label="确认密码" prop="password_again">
+      <el-form-item :label="t('user.confirmPwd')" prop="password_again">
         <el-input
           v-model="create_data.password_again"
           type="password"
-          placeholder="请再次输入密码"
+          :placeholder="t('user.confirmPwdPh')"
           clearable
           style="width: 200px"
           show-password
         />
       </el-form-item>
-      <el-form-item label="手机号" prop="phone">
+      <el-form-item :label="t('cu.phone')" prop="phone">
         <el-input
           v-model="create_data.phone"
           type="text"
-          placeholder="请输入手机号"
+          :placeholder="t('cu.phoneRequired')"
           clearable
           style="width: 200px"
         />
       </el-form-item>
-      <el-form-item label="邮箱" prop="email">
+      <el-form-item :label="t('cu.email')" prop="email">
         <el-input
           v-model="create_data.email"
           type="text"
-          placeholder="请输入邮箱"
+          :placeholder="t('cu.emailRequired')"
           clearable
           style="width: 200px"
         />
       </el-form-item>
-      <el-form-item label="用户身份" prop="permissions">
+      <el-form-item :label="t('cu.role')" prop="permissions">
         <el-radio-group v-model="create_data.permissions">
-          <el-radio label="1">管理员</el-radio>
-          <el-radio label="0">普通用户</el-radio>
+          <el-radio label="1">{{ t('cu.admin') }}</el-radio>
+          <el-radio label="0">{{ t('cu.normalUser') }}</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit(ruleFormRef)">创建</el-button>
-        <el-button @click="onCancel">取消</el-button>
+        <el-button type="primary" @click="onSubmit(ruleFormRef)">{{ t('cu.create') }}</el-button>
+        <el-button @click="onCancel">{{ t('common.cancel') }}</el-button>
       </el-form-item>
     </el-form>
   </div>

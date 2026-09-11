@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import {
@@ -21,43 +23,43 @@ const items: MenuItem[] = [
   {
     icon: Monitor,
     index: '/Clients',
-    title: '客户端管理',
-    description: '管理和监控所有客户端',
+    title: t('clients.title'),
+    description: t('tnb.clientsDesc'),
     permiss: '2',
   },
   {
     icon: Service,
     index: '/Listeners',
-    title: '监听器管理',
-    description: '配置和管理监听器',
+    title: t('listener.title'),
+    description: t('tnb.listenersDesc'),
     permiss: '2'
   },
   {
     icon: Connection,
     index: 'client-generation',
-    title: '客户端生成',
-    description: '生成和分发客户端',
+    title: t('gen.title'),
+    description: t('tnb.generateDesc'),
     permiss: '4',
     subs: [
       {
         index: '/Server',
-        title: '客户端生成',
+        title: t('gen.title'),
         permiss: '5',
-        description: '生成客户端程序'
+        description: t('tnb.genSubDesc')
       },
       {
         index: '/WebDelivery',
-        title: 'Web投递',
+        title: t('gen.funcWeb'),
         permiss: '5',
-        description: '通过Web方式投递',
+        description: t('tnb.webDesc'),
       },
     ]
   },
   {
     icon: Setting,
     index: '/Settings',
-    title: '系统设置',
-    description: '系统配置和参数调整',
+    title: t('settings.title'),
+    description: t('tnb.settingsDesc'),
     permiss: '2'
   },
 ]

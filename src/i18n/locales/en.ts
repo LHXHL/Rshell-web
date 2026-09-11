@@ -1,4 +1,24 @@
 export default {
+  cu: {
+    confirmPwdRequired: 'Please enter the password confirmation',
+    phoneRequired: 'Please enter a phone number',
+    emailRequired: 'Please enter an email',
+    permissRequired: 'Please select a role',
+    phone: 'Phone',
+    email: 'Email',
+    role: 'Role',
+    admin: 'Administrator',
+    normalUser: 'User',
+    create: 'Create'
+  },
+  tnb: {
+    clientsDesc: 'Manage and monitor all clients',
+    listenersDesc: 'Configure and manage listeners',
+    generateDesc: 'Generate and distribute clients',
+    genSubDesc: 'Generate client programs',
+    webDesc: 'Deliver over the web',
+    settingsDesc: 'System configuration and tuning'
+  },
   notes: {
     title: 'Notes',
     chars: 'Chars: ',
