@@ -23,16 +23,24 @@ import {
 import UserApi from '@/api/user'
 import { ElMessage, ElNotification } from 'element-plus'
 import { cancelRequest } from "@/utils/request"
+import { useI18n } from 'vue-i18n'
+import i18n, { setLocale, type AppLocale } from '@/i18n'
 
 const router = useRouter()
 const userinfo = useUserStore()
 const permiss = usePermissStore()
 const themeStore = useThemeStore()
+const { t } = useI18n()
+
+const currentLocale = computed(() => i18n.global.locale.value)
+const switchLang = (locale: AppLocale) => {
+  setLocale(locale)
+}
 
 // 移动端导航展开状态
 const isMobileNavOpen = ref(false)
 
-const username = computed(() => userinfo.getUserName() || '用户')
+const username = computed(() => userinfo.getUserName() || t('header.defaultUser'))
 const userInitial = computed(() => username.value[0]?.toUpperCase() || 'U')
 
 // 生成用户头像颜色
@@ -68,7 +76,7 @@ const notifications = ref([
 const markAllAsRead = () => {
   notifications.value.forEach(notif => notif.read = true)
   notificationCount.value = 0
-  ElMessage.success('已标记所有通知为已读')
+  ElMessage.success(t('header.allRead'))
 }
 
 // 切换移动端导航
@@ -79,17 +87,17 @@ const toggleMobileNav = () => {
 // 主题切换相关
 const showThemeSelector = ref(false)
 const availableThemes: { label: string; value: ThemeType; icon: string }[] = [
-  { label: '粉色', value: 'pink', icon: '🌸' },
-  { label: '蓝色', value: 'blue', icon: '🔵' },
-  { label: '绿色', value: 'green', icon: '💚' },
-  { label: '紫色', value: 'purple', icon: '💜' },
-  { label: '橙色', value: 'orange', icon: '🧡' },
-  { label: '青色', value: 'teal', icon: '💎' }
+  { label: 'header.themePink', value: 'pink', icon: '🌸' },
+  { label: 'header.themeBlue', value: 'blue', icon: '🔵' },
+  { label: 'header.themeGreen', value: 'green', icon: '💚' },
+  { label: 'header.themePurple', value: 'purple', icon: '💜' },
+  { label: 'header.themeOrange', value: 'orange', icon: '🧡' },
+  { label: 'header.themeTeal', value: 'teal', icon: '💎' }
 ]
 
 const switchTheme = (theme: ThemeType) => {
   themeStore.switchTheme(theme)
-  ElMessage.success(`已切换至${availableThemes.find(t => t.value === theme)?.label}主题`)
+  ElMessage.success(t('header.themeSwitched', { name: t(availableThemes.find(th => th.value === theme)?.label ?? '') }))
   showThemeSelector.value = false
 }
 
@@ -110,8 +118,8 @@ const handleCommand = async (command: string) => {
 
     case 'help':
       ElNotification({
-        title: '帮助中心',
-        message: '如需帮助，请联系系统管理员',
+        title: t('header.helpTitle'),
+        message: t('header.helpMessage'),
         type: 'info',
         duration: 3000
       })
@@ -126,7 +134,7 @@ const handleCommand = async (command: string) => {
 // 处理登出
 const handleLogout = async () => {
   try {
-    ElMessage.info('正在退出登录...')
+    ElMessage.info(t('header.loggingOut'))
 
     // 取消所有请求
     cancelRequest()
@@ -138,11 +146,13 @@ const handleLogout = async () => {
     userinfo.logout()
     permiss.clear()
 
-    // 清除存储
+    // 清除存储（保留语言偏好）
+    const savedLang = localStorage.getItem('rshell-lang')
     localStorage.clear()
+    if (savedLang) localStorage.setItem('rshell-lang', savedLang)
     sessionStorage.clear()
 
-    ElMessage.success('退出成功，即将跳转到登录页面')
+    ElMessage.success(t('header.logoutSuccess'))
 
     // 延迟跳转
     setTimeout(() => {
@@ -152,8 +162,8 @@ const handleLogout = async () => {
     }, 1000)
 
   } catch (error) {
-    console.error('登出失败:', error)
-    ElMessage.error('登出失败，请重试')
+    console.error('logout failed:', error)
+    ElMessage.error(t('header.logoutFailed'))
   }
 }
 </script>
@@ -166,7 +176,7 @@ const handleLogout = async () => {
       <div
           class="mobile-nav-toggle"
           @click="toggleMobileNav"
-          :title="isMobileNavOpen ? '收起导航' : '展开导航'"
+          :title="isMobileNavOpen ? t('header.collapseNav') : t('header.expandNav')"
       >
         <el-icon class="toggle-icon">
           <component :is="isMobileNavOpen ? Close : Menu" />
@@ -176,7 +186,7 @@ const handleLogout = async () => {
       <!-- 应用标题 -->
       <div class="app-title" @click="router.push('/home')" style="cursor: pointer;">
         <span class="app-name">Rshell</span>
-        <span class="app-subtitle">远程管理控制台</span>
+        <span class="app-subtitle">{{ t('header.subtitle') }}</span>
       </div>
     </div>
 
@@ -190,7 +200,7 @@ const handleLogout = async () => {
               :class="{ 'nav-item-active': $route.path === '/home' }"
           >
             <el-icon class="nav-icon"><HomeFilled /></el-icon>
-            <span class="nav-text">首页</span>
+            <span class="nav-text">{{ t('header.navHome') }}</span>
           </router-link>
           <router-link
               to="/Clients"
@@ -198,7 +208,7 @@ const handleLogout = async () => {
               :class="{ 'nav-item-active': $route.path === '/Clients' }"
           >
             <el-icon class="nav-icon"><Monitor /></el-icon>
-            <span class="nav-text">客户端管理</span>
+            <span class="nav-text">{{ t('header.navClients') }}</span>
           </router-link>
           <router-link
               to="/Listeners"
@@ -206,7 +216,7 @@ const handleLogout = async () => {
               :class="{ 'nav-item-active': $route.path === '/Listeners' }"
           >
             <el-icon class="nav-icon"><Service /></el-icon>
-            <span class="nav-text">监听器管理</span>
+            <span class="nav-text">{{ t('header.navListeners') }}</span>
           </router-link>
           <router-link
               to="/Server"
@@ -214,7 +224,7 @@ const handleLogout = async () => {
               :class="{ 'nav-item-active': $route.path === '/Server' || $route.path === '/WebDelivery' }"
           >
             <el-icon class="nav-icon"><Connection /></el-icon>
-            <span class="nav-text">客户端生成</span>
+            <span class="nav-text">{{ t('header.navGenerate') }}</span>
           </router-link>
           <router-link
               to="/Plugins"
@@ -222,7 +232,7 @@ const handleLogout = async () => {
               :class="{ 'nav-item-active': $route.path === '/Plugins' }"
           >
             <el-icon class="nav-icon"><ElementPlus /></el-icon>
-            <span class="nav-text">插件管理</span>
+            <span class="nav-text">{{ t('header.navPlugins') }}</span>
           </router-link>
           <router-link
               to="/Settings"
@@ -230,7 +240,7 @@ const handleLogout = async () => {
               :class="{ 'nav-item-active': $route.path === '/Settings' }"
           >
             <el-icon class="nav-icon"><Setting /></el-icon>
-            <span class="nav-text">系统设置</span>
+            <span class="nav-text">{{ t('header.navSettings') }}</span>
           </router-link>
         </div>
       </nav>
@@ -306,6 +316,19 @@ const handleLogout = async () => {
 <!--        </div>-->
 <!--      </el-popover>-->
 
+      <!-- 语言切换按钮 -->
+      <el-dropdown trigger="click" @command="switchLang" placement="bottom-end">
+        <div class="header-action" :title="t('header.lang')">
+          <span class="lang-badge">{{ currentLocale === 'zh-CN' ? '中' : 'EN' }}</span>
+        </div>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item command="zh-CN" :disabled="currentLocale === 'zh-CN'">简体中文</el-dropdown-item>
+            <el-dropdown-item command="en" :disabled="currentLocale === 'en'">English</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+
       <!-- 主题切换按钮 -->
       <el-popover
           v-model:visible="showThemeSelector"
@@ -314,13 +337,13 @@ const handleLogout = async () => {
           trigger="click"
       >
         <template #reference>
-          <div class="header-action theme-action" title="切换主题">
+          <div class="header-action theme-action" :title="t('header.themeTitle')">
             <span class="theme-emoji">🎨</span>
           </div>
         </template>
 
         <div class="theme-selector">
-          <div class="theme-title">选择主题颜色</div>
+          <div class="theme-title">{{ t('header.themeTitle') }}</div>
           <div class="theme-grid">
             <div
                 v-for="theme in availableThemes"
@@ -328,13 +351,13 @@ const handleLogout = async () => {
                 class="theme-item"
                 :class="{ 'theme-item-active': themeStore.currentTheme === theme.value }"
                 @click="switchTheme(theme.value)"
-                :title="theme.label"
+                :title="t(theme.label)"
             >
               <div
                   class="theme-color-dot"
                   :style="{ backgroundColor: themeStore.themeConfigs[theme.value].primary }"
               ></div>
-              <span class="theme-label">{{ theme.label }}</span>
+              <span class="theme-label">{{ t(theme.label) }}</span>
             </div>
           </div>
         </div>
@@ -377,7 +400,7 @@ const handleLogout = async () => {
 
               <el-dropdown-item command="resetpassword">
                 <el-icon><Key /></el-icon>
-                <span>修改密码</span>
+                <span>{{ t('header.changePassword') }}</span>
               </el-dropdown-item>
 
 <!--              <el-dropdown-item divided command="help">-->
@@ -387,7 +410,7 @@ const handleLogout = async () => {
 
               <el-dropdown-item command="logout" class="logout-item">
                 <el-icon><SwitchButton /></el-icon>
-                <span>退出登录</span>
+                <span>{{ t('header.logout') }}</span>
               </el-dropdown-item>
             </el-dropdown-menu>
           </template>
@@ -1014,6 +1037,15 @@ const handleLogout = async () => {
 
 .theme-emoji {
   font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.lang-badge {
+  font-size: 13px;
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;

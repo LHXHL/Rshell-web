@@ -1,8 +1,15 @@
 <script setup lang="ts">
 import {ElConfigProvider} from 'element-plus';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
-import {ref, nextTick, provide, onMounted} from "vue";//要引入方法
+import en from 'element-plus/es/locale/lang/en';
+import {ref, computed, nextTick, provide, onMounted} from "vue";//要引入方法
 import { useThemeStore } from '@/stores/theme'
+import i18n from '@/i18n'
+
+// Element Plus 组件文案跟随应用语言
+const elementLocale = computed(() =>
+  i18n.global.locale.value.startsWith('zh') ? zhCn : en
+);
 
 // 局部组件刷新
 const isRouterAlive = ref(true);
@@ -22,7 +29,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <el-config-provider :locale="zhCn">
+  <el-config-provider :locale="elementLocale">
     <RouterView v-if="isRouterAlive"/>
   </el-config-provider>
 

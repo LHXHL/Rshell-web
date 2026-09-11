@@ -15,6 +15,7 @@ import "./assets/main.css"
 import plugins from '@/plugins'
 
 import directives from "@/components/Common/WaterMark";
+import i18n from "@/i18n";
 
 
 // 执行方法得到实例
@@ -22,6 +23,7 @@ pinia.use(piniaPluginPersistedstate)
 
 const app = createApp(App)
 app.use(pinia)
+app.use(i18n)
 app.use(ElementPlus)
 app.use(directives)
 plugins(app)
@@ -37,7 +39,7 @@ app.directive("permiss", {
 })
 
 router.beforeEach((to, from, next) => {
-    document.title = `${to.meta.title} | Rshell`
+    document.title = `${i18n.global.t(to.meta.title as string)} | Rshell`
     // const axiosConfig = useAxiosConfigStore();
     const users = useUserStore()
     const permiss = usePermissStore()

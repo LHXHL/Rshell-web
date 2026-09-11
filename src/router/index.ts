@@ -16,43 +16,43 @@ const router = createRouter({
                 {
                     path: '/home',
                     name: 'Home',
-                    meta: {title: '首页', permiss: '1'},
+                    meta: {title: 'nav.home', permiss: '1'},
                     component: () => import('@/views/home/index.vue')
                 },
                 {
                     path: '/Clients',
                     name: 'Clients',
-                    meta: {title: '客户端列表', permiss: '2'},
+                    meta: {title: 'nav.clients', permiss: '2'},
                     component: () => import('@/views/clients/ClientsView.vue')
                 },
                 {
                     path: '/Listeners',
                     name: 'Listeners',
-                    meta: {title: 'Listener列表', permiss: '2'},
+                    meta: {title: 'nav.listeners', permiss: '2'},
                     component: () => import('@/views/listener/listener.vue')
                 },
                 {
                     path: '/Server',
                     name: 'Server',
-                    meta: {title: '客户端生成', permiss: '5'},
+                    meta: {title: 'nav.generate', permiss: '5'},
                     component: () => import('@/views/server/ServerGen.vue')
                 },
                 {
                     path: '/WebDelivery',
                     name: 'WebDelivery',
-                    meta: {title: 'WebDelivery', permiss: '5'},
+                    meta: {title: 'nav.webdelivery', permiss: '5'},
                     component: () => import('@/views/server/WebDelivery.vue')
                 },
                 {
                     path: '/Settings',
                     name: 'Settings',
-                    meta: {title: 'Settings', permiss: '5'},
+                    meta: {title: 'nav.settings', permiss: '5'},
                     component: () => import('@/views/settings/Settings.vue')
                 },
                 {
                     path: '/Plugins',
                     name: 'Plugins',
-                    meta: {title: '插件管理', permiss: '5'},
+                    meta: {title: 'nav.plugins', permiss: '5'},
                     component: () => import('@/views/plugin/PluginView.vue')
                 },
             ]
@@ -60,67 +60,67 @@ const router = createRouter({
         {
             path: '/client',
             name: '客户端详情',
-            meta: {title: '客户端详情', permiss: '2'},
+            meta: {title: 'nav.clientDetail', permiss: '2'},
             component: () => import('@/views/client/ClientView.vue'),
             children: [
                 {
                     path: '/client/shell',
                     name: 'Shell',
-                    meta: {title: 'Shell'},
+                    meta: {title: 'nav.shell'},
                     component: () => import('@/views/client/View/ClientShell.vue')
                 },
                 {
                     path: '/client/socks5',
                     name: 'Socks5',
-                    meta: {title: 'Socks5'},
+                    meta: {title: 'nav.socks5'},
                     component: () => import('@/views/client/View/ClientSocks5.vue')
                 },
                 {
                     path: '/client/files',
                     name: 'Files',
-                    meta: {title: 'Files'},
+                    meta: {title: 'nav.files'},
                     component: () => import('@/views/client/View/ClientFiles.vue')
                 },
                 {
                     path: '/client/pid',
                     name: 'PID',
-                    meta: {title: 'PID'},
+                    meta: {title: 'nav.pid'},
                     component: () => import('@/views/client/View/ClientPid.vue')
                 },
                 {
                     path: '/client/downloads',
                     name: 'Downloads',
-                    meta: {title: 'Downloads'},
+                    meta: {title: 'nav.downloads'},
                     component: () => import('@/views/client/View/ClientDownloads.vue')
                 },
                 {
                     path: '/client/notes',
                     name: 'Notes',
-                    meta: {title: 'Notes'},
+                    meta: {title: 'nav.notes'},
                     component: () => import('@/views/client/View/ClientNotes.vue')
                 },
                 {
                     path: '/client/screenshots',
                     name: 'Screenshots',
-                    meta: {title: 'Screenshots'},
+                    meta: {title: 'nav.screenshots'},
                     component: () => import('@/views/client/View/ClientScreenshots.vue')
                 },
                 {
                     path: '/client/credentials',
                     name: 'Credentials',
-                    meta: {title: 'Credentials'},
+                    meta: {title: 'nav.credentials'},
                     component: () => import('@/views/client/View/ClientCredentials.vue')
                 },
                 {
                     path: '/client/sensitive-search',
                     name: 'SensitiveSearch',
-                    meta: {title: 'SensitiveSearch'},
+                    meta: {title: 'nav.sensitive'},
                     component: () => import('@/views/client/View/ClientSensitiveSearch.vue')
                 },
                 {
                     path: '/client/browser-dump',
                     name: 'BrowserDump',
-                    meta: {title: 'BrowserDump'},
+                    meta: {title: 'nav.browserdump'},
                     component: () => import('@/views/client/View/ClientBrowserDump.vue')
                 },
             ]
@@ -128,13 +128,13 @@ const router = createRouter({
         {
             path: '/login',
             name: '登陆',
-            meta: {title: '登陆'},
+            meta: {title: 'nav.login'},
             component: () => import('@/views/login/LoginView.vue')
         },
         {
             path: '/user/resetpassword',
             name: '重置密码',
-            meta: {title: '重置密码', permiss: '1'},
+            meta: {title: 'nav.resetPassword', permiss: '1'},
             component: () => import('@/views/user/ResetPassword.vue')
         },
         {

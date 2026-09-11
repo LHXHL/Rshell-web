@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {onMounted, reactive, ref} from 'vue'
+import {onMounted, reactive, ref, computed} from 'vue'
 import {useTagsStore} from '@/stores/tags'
 import {usePermissStore} from '@/stores/userpermiss'
 import {useUserStore} from '@/stores/user'
@@ -8,6 +8,12 @@ import type {FormInstance, FormRules} from 'element-plus'
 import {ElMessage} from 'element-plus'
 import {Lock, User} from '@element-plus/icons-vue'
 import UserApi from '@/api/user'
+import { useI18n } from 'vue-i18n'
+import i18n, { setLocale, type AppLocale } from '@/i18n'
+
+const { t } = useI18n()
+const currentLocale = computed(() => i18n.global.locale.value)
+const switchLang = (locale: AppLocale) => setLocale(locale)
 // import {useAxiosConfigStore} from '@/stores/server';
 // import {ReadFile, ReadLastLine, WriteToFile} from '../../../wailsjs/go/main/App'
 
@@ -29,11 +35,11 @@ const rules: FormRules = {
   username: [
     {
       required: true,
-      message: '请输入用户名',
+      message: t('login.usernameRequired'),
       trigger: 'blur'
     }
   ],
-  password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
+  password: [{ required: true, message: t('login.passwordRequired'), trigger: 'blur' }]
 }
 const permiss = usePermissStore()
 const userinfo = useUserStore()
@@ -48,7 +54,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
     if (valid) {
       UserApi.login(param).then((res) => {
         if (res.data.code == 200) {
-          ElMessage.success('登录成功')
+          ElMessage.success(t('login.loginSuccess'))
           const keys = permiss.defaultList[res.data.data.permissions === 1 ? 'admin' : 'user']
           console.log('keys', res.data.data.permissions === 1 ? 'admin' : 'user')
           permiss.handleSet(keys)
@@ -56,9 +62,9 @@ const submitForm = (formEl: FormInstance | undefined) => {
           userinfo.setPermiss(res.data.data.permissions)
           userinfo.setRefresh(res.data.data.refresh)
           if (res.data.data.permissions === 1) {
-            userinfo.setRoles('超级管理员')
+            userinfo.setRoles('Administrator')
           } else {
-            userinfo.setRoles('普通用户')
+            userinfo.setRoles('User')
           }
           userinfo.setUserName(res.data.data.username)
           router.push('/home')
@@ -67,7 +73,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
         }
       })
     } else {
-      ElMessage.error('请输入账号或密码')
+      ElMessage.error(t('login.usernameRequired'))
       return false
     }
   })
@@ -106,11 +112,22 @@ tags.clearTags()
 
 <template>
   <div class="login-wrap">
+    <div class="lang-switch">
+      <el-dropdown trigger="click" @command="switchLang" placement="bottom-end">
+        <span class="lang-switch-btn">{{ currentLocale === 'zh-CN' ? '中' : 'EN' }}</span>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item command="zh-CN" :disabled="currentLocale === 'zh-CN'">简体中文</el-dropdown-item>
+            <el-dropdown-item command="en" :disabled="currentLocale === 'en'">English</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+    </div>
     <div class="ms-login">
       <div class="ms-title">Rshell</div>
       <el-form :model="param" :rules="rules" ref="login" class="ms-content">
         <el-form-item prop="username">
-          <el-input v-model="param.username" placeholder="用户名">
+          <el-input v-model="param.username" :placeholder="t('login.usernamePlaceholder')">
             <template #prepend>
               <el-icon>
                 <User />
@@ -121,7 +138,7 @@ tags.clearTags()
         <el-form-item prop="password">
           <el-input
             type="password"
-            placeholder="密码"
+            :placeholder="t('login.passwordPlaceholder')"
             v-model="param.password"
             @keyup.enter="submitForm(login)"
           >
@@ -133,7 +150,7 @@ tags.clearTags()
           </el-input>
         </el-form-item>
         <div class="login-btn">
-          <el-button type="primary" @click="submitForm(login)">登录</el-button>
+          <el-button type="primary" @click="submitForm(login)">{{ t('login.submit') }}</el-button>
         </div>
 <!--        <div class="config-btn">-->
 <!--          <el-button type="success" @click="showDialog">配置服务端地址</el-button>-->
@@ -170,6 +187,29 @@ tags.clearTags()
   position: relative;
   width: 100%;
   height: 100%;
+}
+
+.lang-switch {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  z-index: 10;
+}
+
+.lang-switch-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 8px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--theme-primary, #4a90e2);
+  background: rgba(255, 255, 255, 0.5);
+  border: 2px solid rgba(0, 0, 0, 0.1);
 }
 
 .ms-title {
