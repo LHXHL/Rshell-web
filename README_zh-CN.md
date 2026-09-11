@@ -8,7 +8,7 @@
 
 > ⚠️ **免责声明**：本项目仅供安全研究人员在**授权范围内**进行渗透测试、红蓝对抗与安全教育使用，禁止用于任何未授权用途。完整声明见 [Rshell 主仓库](https://github.com/Rubby2001/Rshell---A-Cross-Platform-C2#免责声明)。
 
-Rshell-web 是 [Rshell](https://github.com/Rubby2001/Rshell---A-Cross-Platform-C2) C2 框架的 **Web 管理前端**，基于 Vue 3 + TypeScript + Vite + Element Plus 构建，通过 WebSocket / HTTP 与服务端交互。
+Rshell-web 是 [Rshell](https://github.com/Rubby2001/Rshell---A-Cross-Platform-C2) C2 框架的 **Web 管理前端**，基于 Vue 3 + TypeScript + Vite + Element Plus 构建，通过 WebSocket / HTTP 与服务端交互。界面支持英文 / 简体中文（跟随浏览器语言，可在顶栏切换）。
 
 ## Rshell 项目矩阵
 

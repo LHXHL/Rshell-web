@@ -8,7 +8,7 @@ English | **[简体中文](./README_zh-CN.md)**
 
 > ⚠️ **Disclaimer**: This project is intended solely for security research, **authorized** penetration testing, red/blue teaming and education. Do not use it for any unauthorized purpose. See the full disclaimer in the [main repository](https://github.com/Rubby2001/Rshell---A-Cross-Platform-C2#disclaimer).
 
-Rshell-web is the **web management frontend** of the [Rshell](https://github.com/Rubby2001/Rshell---A-Cross-Platform-C2) C2 framework, built with Vue 3 + TypeScript + Vite + Element Plus, talking to the server over WebSocket / HTTP.
+Rshell-web is the **web management frontend** of the [Rshell](https://github.com/Rubby2001/Rshell---A-Cross-Platform-C2) C2 framework, built with Vue 3 + TypeScript + Vite + Element Plus, talking to the server over WebSocket / HTTP. The UI ships in English and 简体中文 (detected from the browser, switchable in the top bar).
 
 ## Rshell Project Matrix
 
