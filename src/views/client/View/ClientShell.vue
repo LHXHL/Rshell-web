@@ -8,7 +8,7 @@
         <div class="output-header">
           <div class="output-title">
             <el-icon><Promotion /></el-icon>
-            <span>命令输出</span>
+            <span>{{ t('shell.output') }}</span>
           </div>
         </div>
 
@@ -22,7 +22,7 @@
           </div>
 
           <div class="empty-output" v-else>
-            <el-empty description="暂无输出，请输入命令开始操作" />
+            <el-empty :description="t('shell.emptyOutput')" />
           </div>
         </div>
       </div>
@@ -34,7 +34,7 @@
           <el-input
               v-model="command"
               class="enhanced-command-input"
-              placeholder="输入命令shell + [cmd]，按 Enter 执行，↑↓ 键切换历史命令，clear清除历史命令"
+              :placeholder="t('shell.inputPh')"
               @keyup.enter="sendCommand"
               @keydown.up.prevent="prevCommand"
               @keydown.down.prevent="nextCommand"
@@ -52,18 +52,18 @@
                   :loading="isExecuting"
                   :disabled="!command.trim()"
               >
-                执行
+                {{ t('shell.execute') }}
               </el-button>
             </template>
           </el-input>
         </div>
 
         <div class="input-hints">
-          <span class="hint-text">快捷键: ↑ 上一条命令 | ↓ 下一条命令 | Enter 执行命令</span>
+          <span class="hint-text">{{ t('shell.shortcuts') }}</span>
         </div>
         <!-- 添加的按钮区域 -->
         <div class="action-buttons">
-          <el-tooltip content="Windows内存执行" placement="top">
+          <el-tooltip :content="t('shell.winMemExec')" placement="top">
             <el-button
                 type="primary"
                 @click="dialogVisible = true"
@@ -71,11 +71,11 @@
                 class="action-button"
             >
               <el-icon><MagicStick /></el-icon>
-              Windows内存执行
+              {{ t('shell.winMemExec') }}
             </el-button>
           </el-tooltip>
 
-          <el-tooltip content="Linux执行 (脚本/内存)" placement="top">
+          <el-tooltip :content="t('shell.linuxExec')" placement="top">
             <el-button
                 type="warning"
                 @click="linuxScriptDialogVisible = true"
@@ -83,11 +83,11 @@
                 class="action-button"
             >
             <el-icon><Platform /></el-icon>
-              Linux执行
+              {{ t('shell.linuxExec') }}
             </el-button>
           </el-tooltip>
 
-          <el-tooltip content="打开交互式终端" placement="top">
+          <el-tooltip :content="t('shell.openTerm')" placement="top">
             <el-button
                 type="success"
                 @click="openInteractiveTerminal"
@@ -95,11 +95,11 @@
                 class="action-button"
             >
               <el-icon><Monitor /></el-icon>
-              交互式终端
+              {{ t('cside.termTitle') }}
             </el-button>
           </el-tooltip>
 
-          <el-tooltip content="调用插件执行" placement="top">
+          <el-tooltip :content="t('shell.pluginExec')" placement="top">
             <el-button
                 type="danger"
                 @click="openPluginDialog"
@@ -107,11 +107,11 @@
                 class="action-button"
             >
               <el-icon><MagicStick /></el-icon>
-              插件调用
+              {{ t('shell.pluginExec') }}
             </el-button>
           </el-tooltip>
 
-          <el-tooltip content="敏感信息搜索" placement="top">
+          <el-tooltip :content="t('cside.sensTitle')" placement="top">
             <el-button
                 type="info"
                 @click="sensitiveDialogVisible = true"
@@ -119,7 +119,7 @@
                 class="action-button"
             >
               <el-icon><Search /></el-icon>
-              敏感搜索
+              {{ t('cside.sensTitle') }}
             </el-button>
           </el-tooltip>
 
@@ -127,19 +127,19 @@
 
         <!-- Windows 后渗透区域 -->
         <div class="post-exploitation-box">
-          <div class="post-box-label">Windows 后渗透</div>
+          <div class="post-box-label">{{ t('shell.winPostExploit') }}</div>
           <div class="post-box-buttons">
-            <el-tooltip content="Windows 提权" placement="top">
+            <el-tooltip :content="t('shell.privesc')" placement="top">
               <el-button type="danger" size="default" class="action-button" :loading="postLoading" @click="executeGetSystem">
                 <el-icon><Top /></el-icon>
                 Getsystem
               </el-button>
             </el-tooltip>
 
-            <el-tooltip content="窃取 LSASS 凭据" placement="top">
+            <el-tooltip :content="t('shell.lsass')" placement="top">
               <el-button type="warning" size="default" class="action-button" :loading="postLoading" @click="executeMimikatz">
                 <el-icon><Key /></el-icon>
-                凭据窃取
+                {{ t('shell.lsass') }}
               </el-button>
             </el-tooltip>
 
@@ -152,7 +152,7 @@
     <!-- 美化后的内存执行对话框 -->
     <el-dialog
         v-model="dialogVisible"
-        title="内存执行"
+        :title="t('shell.memExec')"
         width="520px"
         :before-close="handleClose"
         class="enhanced-memory-dialog"
@@ -161,7 +161,7 @@
       <template #header>
         <div class="dialog-title">
           <el-icon class="dialog-icon"><MagicStick /></el-icon>
-          <span>Windows 内存执行</span>
+          <span>{{ t('shell.winMemExec') }}</span>
         </div>
       </template>
 
@@ -170,11 +170,11 @@
         <div class="dialog-section">
           <div class="section-label">
             <el-icon><Setting /></el-icon>
-            <span>执行模式</span>
+            <span>{{ t('shell.execMode') }}</span>
           </div>
           <el-select
               v-model="executionMode"
-              placeholder="请选择执行模式"
+              :placeholder="t('shell.pickMode')"
               class="mode-selector"
               size="large"
               filterable
@@ -205,7 +205,7 @@
         <div class="dialog-section">
           <div class="section-label">
             <el-icon><Document /></el-icon>
-            <span>执行文件</span>
+            <span>{{ t('shell.execFile') }}</span>
           </div>
           <div
               class="file-upload-card"
@@ -217,8 +217,8 @@
             <div class="upload-placeholder" v-if="!selectedFile">
               <el-icon class="upload-icon"><Upload /></el-icon>
               <div class="upload-text">
-                <p class="upload-title">点击选择或拖拽文件到此处</p>
-                <p class="upload-subtitle">支持 .exe, .dll, .bin, .raw, .cna 等格式</p>
+                <p class="upload-title">{{ t('shell.dropFile') }}</p>
+                <p class="upload-subtitle">{{ t('shell.supportedFormats') }}</p>
               </div>
             </div>
             <div class="file-selected" v-else>
@@ -257,11 +257,11 @@
         <div class="dialog-section">
           <div class="section-label">
             <el-icon><EditPen /></el-icon>
-            <span>运行参数 (可选)</span>
+            <span>{{ t('shell.runArgs') }}</span>
           </div>
           <el-input
               v-model="inputParams"
-              placeholder="请输入程序运行参数，多个参数用空格分隔"
+              :placeholder="t('shell.argsPh')"
               type="textarea"
               :rows="2"
               clearable
@@ -278,28 +278,28 @@
         <div class="dialog-section" v-if="selectedFile || inputParams || executionMode">
           <div class="section-label">
             <el-icon><View /></el-icon>
-            <span>执行预览</span>
+            <span>{{ t('shell.preview') }}</span>
           </div>
           <div class="preview-card">
             <div class="preview-item" v-if="selectedFile">
               <el-icon class="preview-icon"><Document /></el-icon>
               <div class="preview-content">
-                <div class="preview-label">文件</div>
+                <div class="preview-label">{{ t('files.colName') }}</div>
                 <div class="preview-value">{{ selectedFile.name }}</div>
               </div>
             </div>
             <div class="preview-item" v-if="executionMode">
               <el-icon class="preview-icon"><Setting /></el-icon>
               <div class="preview-content">
-                <div class="preview-label">模式</div>
+                <div class="preview-label">{{ t('shell.execMode') }}</div>
                 <div class="preview-value">{{ getModeLabel(executionMode) }}</div>
               </div>
             </div>
             <div class="preview-item" v-if="inputParams">
               <el-icon class="preview-icon"><Key /></el-icon>
               <div class="preview-content">
-                <div class="preview-label">参数</div>
-                <div class="preview-value">{{ inputParams || '无' }}</div>
+                <div class="preview-label">{{ t('shell.argsLabel') }}</div>
+                <div class="preview-value">{{ inputParams || t('shell.none') }}</div>
               </div>
             </div>
           </div>
@@ -309,7 +309,7 @@
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="handleClose" :disabled="isExecuting">
-            取消
+            {{ t('common.cancel') }}
           </el-button>
           <el-button
               type="primary"
@@ -319,7 +319,7 @@
               class="execute-button"
           >
             <el-icon><MagicStick /></el-icon>
-            确定执行
+            {{ t('shell.confirmExec') }}
           </el-button>
         </div>
       </template>
@@ -328,7 +328,7 @@
     <!-- Linux执行对话框 -->
     <el-dialog
         v-model="linuxScriptDialogVisible"
-        title="Linux执行"
+        :title="t('shell.linuxExec')"
         width="520px"
         :before-close="handleLinuxScriptClose"
         class="enhanced-memory-dialog"
@@ -337,7 +337,7 @@
       <template #header>
         <div class="dialog-title">
           <el-icon class="dialog-icon"><Platform /></el-icon>
-          <span>Linux 执行</span>
+          <span>{{ t('shell.linuxExec') }}</span>
         </div>
       </template>
 
@@ -346,11 +346,11 @@
         <div class="dialog-section">
           <div class="section-label">
             <el-icon><Setting /></el-icon>
-            <span>执行模式</span>
+            <span>{{ t('shell.execMode') }}</span>
           </div>
           <el-select
               v-model="linuxExecutionMode"
-              placeholder="请选择执行模式"
+              :placeholder="t('shell.pickMode')"
               class="mode-selector"
               size="large"
               filterable
@@ -381,7 +381,7 @@
         <div class="dialog-section">
           <div class="section-label">
             <el-icon><Document /></el-icon>
-            <span>{{ linuxExecutionMode === 'binary' ? '二进制文件' : '脚本文件' }}</span>
+            <span>{{ linuxExecutionMode === 'binary' ? t('shell.binaryFile') : t('shell.scriptFile') }}</span>
           </div>
           <div
               class="file-upload-card"
@@ -393,8 +393,8 @@
             <div class="upload-placeholder" v-if="!linuxScriptFile">
               <el-icon class="upload-icon"><Upload /></el-icon>
               <div class="upload-text">
-                <p class="upload-title">{{ linuxExecutionMode === 'binary' ? '点击选择或拖拽二进制文件到此处' : '点击选择或拖拽脚本到此处' }}</p>
-                <p class="upload-subtitle">{{ linuxExecutionMode === 'binary' ? '支持 ELF 二进制文件' : '支持 .sh 脚本格式' }}</p>
+                <p class="upload-title">{{ linuxExecutionMode === 'binary' ? t('shell.dropBinary') : t('shell.dropScript') }}</p>
+                <p class="upload-subtitle">{{ linuxExecutionMode === 'binary' ? t('shell.elfOnly') : t('shell.shOnly') }}</p>
               </div>
             </div>
             <div class="file-selected" v-else>
@@ -433,11 +433,11 @@
         <div class="dialog-section">
           <div class="section-label">
             <el-icon><EditPen /></el-icon>
-            <span>脚本参数 (可选)</span>
+            <span>{{ t('shell.scriptArgs') }}</span>
           </div>
           <el-input
               v-model="linuxScriptArgs"
-              placeholder="请输入脚本参数，多个参数用空格分隔"
+              :placeholder="t('shell.argsPh')"
               type="textarea"
               :rows="2"
               clearable
@@ -454,28 +454,28 @@
         <div class="dialog-section" v-if="linuxScriptFile || linuxScriptArgs || linuxExecutionMode">
           <div class="section-label">
             <el-icon><View /></el-icon>
-            <span>执行预览</span>
+            <span>{{ t('shell.preview') }}</span>
           </div>
           <div class="preview-card">
             <div class="preview-item">
               <el-icon class="preview-icon"><Setting /></el-icon>
               <div class="preview-content">
-                <div class="preview-label">模式</div>
+                <div class="preview-label">{{ t('shell.execMode') }}</div>
                 <div class="preview-value">{{ linuxExecutionMode === 'binary' ? 'Memory Execute' : 'Bash Script' }}</div>
               </div>
             </div>
             <div class="preview-item" v-if="linuxScriptFile">
               <el-icon class="preview-icon"><Document /></el-icon>
               <div class="preview-content">
-                <div class="preview-label">{{ linuxExecutionMode === 'binary' ? '文件' : '脚本' }}</div>
+                <div class="preview-label">{{ linuxExecutionMode === 'binary' ? t('files.colName') : t('shell.scriptFile') }}</div>
                 <div class="preview-value">{{ linuxScriptFile.name }}</div>
               </div>
             </div>
             <div class="preview-item" v-if="linuxScriptArgs">
               <el-icon class="preview-icon"><Key /></el-icon>
               <div class="preview-content">
-                <div class="preview-label">参数</div>
-                <div class="preview-value">{{ linuxScriptArgs || '无' }}</div>
+                <div class="preview-label">{{ t('shell.argsLabel') }}</div>
+                <div class="preview-value">{{ linuxScriptArgs || t('shell.none') }}</div>
               </div>
             </div>
           </div>
@@ -485,7 +485,7 @@
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="handleLinuxScriptClose" :disabled="isExecuting">
-            取消
+            {{ t('common.cancel') }}
           </el-button>
           <el-button
               type="primary"
@@ -495,7 +495,7 @@
               class="execute-button"
           >
             <el-icon><MagicStick /></el-icon>
-            确定执行
+            {{ t('shell.confirmExec') }}
           </el-button>
         </div>
       </template>
@@ -504,7 +504,7 @@
     <!-- 敏感信息搜索对话框 -->
     <el-dialog
         v-model="sensitiveDialogVisible"
-        title="敏感信息搜索"
+        :title="t('cside.sensTitle')"
         width="520px"
         :before-close="handleSensitiveClose"
         class="enhanced-memory-dialog"
@@ -513,7 +513,7 @@
       <template #header>
         <div class="dialog-title">
           <el-icon class="dialog-icon"><Search /></el-icon>
-          <span>敏感信息搜索</span>
+          <span>{{ t('cside.sensTitle') }}</span>
         </div>
       </template>
 
@@ -521,11 +521,11 @@
         <div class="dialog-section">
           <div class="section-label">
             <el-icon><FolderOpened /></el-icon>
-            <span>搜索路径</span>
+            <span>{{ t('shell.searchPath') }}</span>
           </div>
           <el-input
               v-model="sensitivePath"
-              placeholder="请输入要搜索的路径，例如 /home/user 或 C:\Users"
+              :placeholder="t('shell.searchPathPh')"
               clearable
               class="params-input"
               size="large"
@@ -536,7 +536,7 @@
           </el-input>
           <div class="sensitive-hint">
             <el-icon><InfoFilled /></el-icon>
-            <span>将递归搜索指定路径下的配置文件、脚本等，匹配其中的密码、密钥、令牌等敏感信息</span>
+            <span>{{ t('shell.searchPathHint') }}</span>
           </div>
         </div>
       </div>
@@ -544,7 +544,7 @@
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="handleSensitiveClose" :disabled="isExecuting">
-            取消
+            {{ t('common.cancel') }}
           </el-button>
           <el-button
               type="primary"
@@ -554,7 +554,7 @@
               class="execute-button"
           >
             <el-icon><Search /></el-icon>
-            开始搜索
+            {{ t('shell.startSearch') }}
           </el-button>
         </div>
       </template>
@@ -562,7 +562,7 @@
 
     <el-dialog
         v-model="interactiveDialogVisible"
-        title="交互式终端"
+        :title="t('cside.termTitle')"
         width="90%"
         :fullscreen="isFullscreen"
         class="interactive-terminal-dialog"
@@ -573,17 +573,17 @@
           <div class="title-left">
             <el-icon class="dialog-icon"><Monitor /></el-icon>
             <div class="title-content">
-              <h3 class="title-text">交互式终端</h3>
+              <h3 class="title-text">{{ t('cside.termTitle') }}</h3>
               <div class="title-subtext">
                 <el-tag size="small" type="primary" effect="plain" v-if="terminalStatus.connected">
                   <el-icon><Connection /></el-icon>
-                  实时连接
+                  {{ t('shell.liveConn') }}
                 </el-tag>
               </div>
             </div>
           </div>
           <div class="dialog-actions">
-            <el-tooltip :content="isFullscreen ? '退出全屏' : '全屏'" placement="bottom">
+            <el-tooltip :content="isFullscreen ? t('shell.exitFullscreen') : t('shell.fullscreen')" placement="bottom">
               <el-button
                   type="primary"
                   circle
@@ -592,7 +592,7 @@
                   :icon="isFullscreen ? Fold : Expand"
               />
             </el-tooltip>
-            <el-tooltip content="断开连接" placement="bottom">
+            <el-tooltip :content="t('shell.disconnect')" placement="bottom">
               <el-button
                   type="danger"
                   circle
@@ -623,7 +623,7 @@
           <div class="status-right">
             <el-tag size="small" type="info" effect="plain">
               <el-icon><Clock /></el-icon>
-              连接时长: {{ connectionDuration }}
+              {{ t('shell.connDuration') }} {{ connectionDuration }}
             </el-tag>
           </div>
         </div>
@@ -631,16 +631,16 @@
     </el-dialog>
 
     <!-- 插件调用对话框 -->
-    <el-dialog v-model="pluginDialogVisible" title="调用插件" top="15vh" width="500px" center :append-to-body="true" :lock-scroll="false">
+    <el-dialog v-model="pluginDialogVisible" :title="t('shell.pluginExec')" top="15vh" width="500px" center :append-to-body="true" :lock-scroll="false">
       <el-form label-width="100px" style="min-height: 180px;">
-        <el-form-item label="选择系统">
+        <el-form-item :label="t('shell.pickOs')">
           <el-radio-group v-model="pluginQuery.os" @change="fetchAvailablePlugins">
             <el-radio label="windows"><span style="color: #606266; font-weight: normal;">Windows</span></el-radio>
             <el-radio label="linux"><span style="color: #606266; font-weight: normal;">Linux</span></el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="选择插件">
-          <el-select v-model="pluginQuery.pluginId" placeholder="请选择需要的插件" style="width:100%" :teleported="true" :append-to-body="true" placement="bottom" fallback-placements="['bottom']">
+        <el-form-item :label="t('shell.pickPlugin')">
+          <el-select v-model="pluginQuery.pluginId" :placeholder="t('shell.pickPluginPh')" style="width:100%" :teleported="true" :append-to-body="true" placement="bottom" fallback-placements="['bottom']">
             <el-option
               v-for="item in filteredPlugins"
               :key="item.Id"
@@ -649,14 +649,14 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="执行参数">
-          <el-input v-model="pluginQuery.args" placeholder="输入插件执行参数（可选）" />
+        <el-form-item :label="t('shell.execArgs')">
+          <el-input v-model="pluginQuery.args" :placeholder="t('shell.pluginArgsPh')" />
         </el-form-item>
       </el-form>
       <template #footer>
         <span>
-          <el-button @click="pluginDialogVisible = false">取消</el-button>
-          <el-button type="primary" @click="handleExecutePlugin">后台执行</el-button>
+          <el-button @click="pluginDialogVisible = false">{{ t('common.cancel') }}</el-button>
+          <el-button type="primary" @click="handleExecutePlugin">{{ t('shell.bgExec') }}</el-button>
         </span>
       </template>
     </el-dialog>
@@ -665,6 +665,8 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 import { ref, onMounted, onUnmounted, nextTick, computed, watch } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import ClientAPI from '@/api/clients'
@@ -783,12 +785,12 @@ const sendPostCommand = async (command) => {
   try {
     const res = await ClientAPI.send_commands({ uid: route.query.uid, command })
     if (res.data.status === 200) {
-      ElMessage.success(`命令已发送: ${command}`)
+      ElMessage.success(t('shell.cmdSent', { cmd: command }))
     } else {
-      ElMessage.warning(res.data.msg || '命令发送失败')
+      ElMessage.warning(res.data.msg || t('shell.cmdSendFailed'))
     }
   } catch {
-    ElMessage.error('命令发送失败')
+    ElMessage.error(t('shell.cmdSendFailed'))
   } finally {
     postLoading.value = false
   }
@@ -817,7 +819,7 @@ const openPluginDialog = () => {
 
 const handleExecutePlugin = async () => {
   if (!pluginQuery.value.pluginId) {
-    ElMessage.warning('请选择要执行的插件')
+    ElMessage.warning(t('shell.pickPluginFirst'))
     return
   }
   isExecuting.value = true
@@ -828,13 +830,13 @@ const handleExecutePlugin = async () => {
       args: pluginQuery.value.args
     })
     if (res.data.status === 200) {
-      ElMessage.success('插件推送执行成功')
+      ElMessage.success(t('shell.pluginExecOk'))
       pluginDialogVisible.value = false
     } else {
-      ElMessage.error(res.data.data || '执行失败')
+      ElMessage.error(res.data.data || t('shell.execFailed'))
     }
   } catch (error) {
-    ElMessage.error('执行请求出错')
+    ElMessage.error(t('common.requestError'))
   } finally {
     isExecuting.value = false
   }
@@ -845,28 +847,28 @@ const modeOptions = computed(() => [
   {
     value: 'execute-assembly',
     label: 'Execute Assembly',
-    description: '执行 .NET 程序集内存加载',
+    description: t('plugin.typeAssembly'),
     icon: 'MagicStick',
     iconClass: 'net-icon'
   },
   {
     value: 'inline-bin',
     label: 'Inline Binary',
-    description: '执行原生二进制程序内存加载',
+    description: t('plugin.typeBin'),
     icon: 'Cpu',
     iconClass: 'native-icon'
   },
   {
     value: 'shellcode-inject',
     label: 'Shellcode Inject',
-    description: '注入并执行 Shellcode',
+    description: t('plugin.typeShellcode'),
     icon: 'Connection',
     iconClass: 'inject-icon'
   },
   {
     value: 'inline-execute',
     label: 'Inline Execute',
-    description: '执行 BOF (Beacon Object File)',
+    description: t('plugin.typeBof'),
     icon: 'Tools',
     iconClass: 'bof-icon'
   }
@@ -877,14 +879,14 @@ const linuxModeOptions = computed(() => [
   {
     value: 'script',
     label: 'Bash Script',
-    description: '执行 Shell 脚本 (无文件落地)',
+    description: t('plugin.typeShell'),
     icon: 'Platform',
     iconClass: 'linux-icon'
   },
   {
     value: 'binary',
     label: 'Memory Execute',
-    description: '上传二进制到 /tmp 执行并删除',
+    description: t('plugin.typeElf'),
     icon: 'Cpu',
     iconClass: 'native-icon'
   }
@@ -894,7 +896,7 @@ const linuxModeOptions = computed(() => [
 const clearOutput = () => {
   ShellStr.value = ''
   lastCommand.value = ''
-  ElMessage.success('终端输出已清空')
+  ElMessage.success(t('shell.cleared'))
 }
 
 // 保持您原来的所有函数不变
@@ -920,7 +922,7 @@ const sendCommand = async () => {
     }
     // ElMessage.warning('命令执行中')
   } catch (error) {
-    ElMessage.error('命令执行失败')
+    ElMessage.error(t('shell.execFailed'))
   } finally {
     isExecuting.value = false
   }
@@ -1011,7 +1013,7 @@ const formatFileSize = (bytes) => {
 
 const handleExecute = async () => {
   if (!selectedFile.value) {
-    ElMessage.warning('请先选择一个文件！')
+    ElMessage.warning(t('shell.pickFileFirst'))
     return
   }
 
@@ -1022,7 +1024,7 @@ const handleExecute = async () => {
 
     const res = await ClientAPI.ExecuteBin({ uid: uid, mode: mode, file: selectedFile.value, args: params })
     if (res.data.status === 200) {
-      ElMessage.success("后台执行成功")
+      ElMessage.success(t("shell.bgExecOk"))
       dialogVisible.value = false
       resetDialog()
     } else {
@@ -1030,7 +1032,7 @@ const handleExecute = async () => {
     }
   } catch (error) {
     console.error('执行过程中出错:', error)
-    ElMessage.error(`执行失败: ${error.message || '未知错误'}`)
+    ElMessage.error(t('shell.execFailedWith', { msg: error.message || t('shell.unknownErr') }))
   } finally {
     isExecuting.value = false
   }
@@ -1038,17 +1040,17 @@ const handleExecute = async () => {
 
 const handleClose = () => {
   if (isExecuting.value) {
-    ElMessage.warning('请等待当前执行完成')
+    ElMessage.warning(t('shell.waitCurrent'))
     return
   }
 
   if (selectedFile.value || inputParams.value) {
     ElMessageBox.confirm(
-        '关闭将清除已选择的文件和输入的参数，确定要关闭吗？',
-        '提示',
+        t('shell.closeClearConfirm'),
+        t('common.notice'),
         {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+          confirmButtonText: t('common.confirm'),
+          cancelButtonText: t('common.cancel'),
           type: 'warning',
         }
     ).then(() => {
@@ -1099,17 +1101,17 @@ const removeLinuxScript = () => {
 
 const handleLinuxScriptClose = () => {
   if (isExecuting.value) {
-    ElMessage.warning('请等待当前执行完成')
+    ElMessage.warning(t('shell.waitCurrent'))
     return
   }
 
   if (linuxScriptFile.value || linuxScriptArgs.value) {
     ElMessageBox.confirm(
-        '关闭将清除已选择的脚本和输入的参数，确定要关闭吗？',
-        '提示',
+        t('shell.closeClearConfirm'),
+        t('common.notice'),
         {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+          confirmButtonText: t('common.confirm'),
+          cancelButtonText: t('common.cancel'),
           type: 'warning',
         }
     ).then(() => {
@@ -1132,7 +1134,7 @@ const resetLinuxScriptDialog = () => {
 
 const handleLinuxScriptExecute = async () => {
   if (!linuxScriptFile.value) {
-    ElMessage.warning('请先选择一个文件！')
+    ElMessage.warning(t('shell.pickFileFirst'))
     return
   }
 
@@ -1148,7 +1150,7 @@ const handleLinuxScriptExecute = async () => {
       res = await ClientAPI.ExecuteLinuxScript({ uid: uid, file: linuxScriptFile.value, args: args })
     }
     if (res.data.status === 200) {
-      ElMessage.success("后台执行成功")
+      ElMessage.success(t("shell.bgExecOk"))
       linuxScriptDialogVisible.value = false
       resetLinuxScriptDialog()
     } else {
@@ -1156,7 +1158,7 @@ const handleLinuxScriptExecute = async () => {
     }
   } catch (error) {
     console.error('执行过程中出错:', error)
-    ElMessage.error(`执行失败: ${error.message || '未知错误'}`)
+    ElMessage.error(t('shell.execFailedWith', { msg: error.message || t('shell.unknownErr') }))
   } finally {
     isExecuting.value = false
   }
@@ -1166,7 +1168,7 @@ const handleLinuxScriptExecute = async () => {
 const handleSensitiveExecute = async () => {
   const path = sensitivePath.value.trim()
   if (!path) {
-    ElMessage.warning('请输入搜索路径！')
+    ElMessage.warning(t('shell.searchPathRequired'))
     return
   }
 
@@ -1174,15 +1176,15 @@ const handleSensitiveExecute = async () => {
   try {
     const res = await ClientAPI.SearchSensitive({ uid: uid, path: path })
     if (res.data.status === 200) {
-      ElMessage.success("敏感信息搜索已启动")
+      ElMessage.success(t("shell.searchStarted"))
       sensitiveDialogVisible.value = false
       sensitivePath.value = ''
     } else {
-      ElMessage.error(res.data.data || '搜索启动失败')
+      ElMessage.error(res.data.data || t('shell.searchStartFailed'))
     }
   } catch (error) {
     console.error('搜索请求出错:', error)
-    ElMessage.error(`搜索启动失败: ${error.message || '未知错误'}`)
+    ElMessage.error(t('shell.searchStartFailedWith', { msg: error.message || t('shell.unknownErr') }))
   } finally {
     isExecuting.value = false
   }
@@ -1190,16 +1192,16 @@ const handleSensitiveExecute = async () => {
 
 const handleSensitiveClose = () => {
   if (isExecuting.value) {
-    ElMessage.warning('请等待当前操作完成')
+    ElMessage.warning(t('shell.waitCurrent'))
     return
   }
   if (sensitivePath.value) {
     ElMessageBox.confirm(
-        '关闭将清除已输入的路径，确定要关闭吗？',
-        '提示',
+        t('shell.closeClearPath'),
+        t('common.notice'),
         {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+          confirmButtonText: t('common.confirm'),
+          cancelButtonText: t('common.cancel'),
           type: 'warning',
         }
     ).then(() => {
@@ -1227,7 +1229,7 @@ let ws = null
 // 4. 新增终端状态管理
 const terminalStatus = ref({
   connected: false,
-  text: '未连接',
+  text: t('shell.stDisconnected'),
   type: 'info'
 })
 
@@ -1263,7 +1265,7 @@ const openInteractiveTerminal = async () => {
     await connectWebSocket()
   } catch (error) {
     console.error('打开终端失败:', error)
-    ElMessage.error('打开终端失败: ' + error.message)
+    ElMessage.error(t('shell.openTermFailed') + ' ' + error.message)
   }
 }
 
@@ -1342,7 +1344,7 @@ const getWebSocketAuth = async () => {
     return response.data
   } catch (error) {
     console.error('获取WebSocket认证失败:', error)
-    ElMessage.error('认证失败: ' + (error.response?.data?.error || error.message))
+    ElMessage.error(t('shell.authFailed') + ' ' + (error.response?.data?.error || error.message))
     throw error
   }
 }
@@ -1394,7 +1396,7 @@ const connectWebSocket = async () => {
     reconnectTimeout = null
   }
 
-  updateTerminalStatus('连接中...', 'warning')
+  updateTerminalStatus(t('shell.stConnecting'), 'warning')
 
   try {
     // 1. 先获取WebSocket专用token
@@ -1412,7 +1414,7 @@ const connectWebSocket = async () => {
     let authenticated = false
 
     ws.onopen = () => {
-      updateTerminalStatus('认证中...', 'warning')
+      updateTerminalStatus(t('shell.stAuthing'), 'warning')
       console.log('WebSocket连接已建立')
       startHeartbeat()
     }
@@ -1431,7 +1433,7 @@ const connectWebSocket = async () => {
         if (data.type === 'auth_response') {
           if (data.success) {
             authenticated = true
-            updateTerminalStatus('已连接', 'success')
+            updateTerminalStatus(t('shell.stConnected'), 'success')
             console.log('WebSocket认证成功')
 
             // 重置重连计数
@@ -1448,8 +1450,8 @@ const connectWebSocket = async () => {
             }))
           } else {
             console.error('认证失败:', data.message)
-            term.writeln(`\x1b[31m✗ 认证失败: ${data.message}\x1b[0m`)
-            updateTerminalStatus('认证失败', 'danger')
+            term.writeln(`\x1b[31m✗ ${t('shell.authFailed')}: ${data.message}\x1b[0m`)
+            updateTerminalStatus(t('shell.stAuthFailed'), 'danger')
             ws.close()
           }
           return
@@ -1458,7 +1460,7 @@ const connectWebSocket = async () => {
         // 认证通过后才处理其他消息
         if (!authenticated) {
           console.warn('收到未认证的消息')
-          term.writeln('\x1b[31m✗ 收到未认证的消息\x1b[0m')
+          term.writeln(`\x1b[31m✗ ${t('shell.unauthMsg')}\x1b[0m`)
           ws.close()
           return
         }
@@ -1469,7 +1471,7 @@ const connectWebSocket = async () => {
             break
           case 'error':
             console.error('服务器错误:', data.message)
-            term.writeln(`\x1b[31m错误: ${data.message}\x1b[0m`)
+            term.writeln(`\x1b[31m${t('common.failed')}: ${data.message}\x1b[0m`)
             break
           case 'session_info':
             console.log('会话信息:', data.message)
@@ -1486,10 +1488,10 @@ const connectWebSocket = async () => {
 
     ws.onerror = (error) => {
       console.error('WebSocket错误:', error)
-      updateTerminalStatus('连接错误', 'danger')
+      updateTerminalStatus(t('shell.stConnError'), 'danger')
 
       if (term) {
-        term.writeln('\x1b[31m✗ 连接错误，请检查网络\x1b[0m')
+        term.writeln(`\x1b[31m✗ ${t('shell.connErrCheckNet')}\x1b[0m`)
       }
 
       // 立即尝试重连
@@ -1498,10 +1500,10 @@ const connectWebSocket = async () => {
 
     ws.onclose = (event) => {
       console.log(`WebSocket连接关闭，代码: ${event.code}, 原因: ${event.reason}`)
-      updateTerminalStatus('已断开', 'info')
+      updateTerminalStatus(t('shell.stDisconnected'), 'info')
 
       if (term) {
-        term.writeln('\x1b[33m✗ 连接已断开，尝试重新连接...\x1b[0m')
+        term.writeln(`\x1b[33m✗ ${t('shell.reconnecting')}\x1b[0m`)
       }
 
       stopHeartbeat()
@@ -1516,9 +1518,9 @@ const connectWebSocket = async () => {
     setTimeout(() => {
       if (ws && ws.readyState === WebSocket.CONNECTING) {
         console.warn('WebSocket连接超时')
-        term.writeln('\x1b[31m✗ 连接超时\x1b[0m')
+        term.writeln(`\x1b[31m✗ ${t('shell.stConnTimeout')}\x1b[0m`)
         ws.close()
-        updateTerminalStatus('连接超时', 'danger')
+        updateTerminalStatus(t('shell.stConnTimeout'), 'danger')
 
         // 超时后也尝试重连
         scheduleReconnect()
@@ -1527,13 +1529,13 @@ const connectWebSocket = async () => {
 
   } catch (error) {
     console.error('WebSocket连接失败:', error)
-    updateTerminalStatus('认证失败', 'danger')
+    updateTerminalStatus(t('shell.stAuthFailed'), 'danger')
 
     if (term) {
-      term.writeln('\x1b[31m✗ 认证失败，无法连接终端\x1b[0m')
+      term.writeln(`\x1b[31m✗ ${t('shell.authFailedTerm')}\x1b[0m`)
     }
 
-    ElMessage.error('终端连接失败: ' + error.message)
+    ElMessage.error(t('shell.termConnFailed') + ' ' + error.message)
 
     // 连接失败也尝试重连
     scheduleReconnect()
@@ -1651,7 +1653,7 @@ const reconnectTerminal = async () => {
   // 停止自动重连（如果是手动触发）
   autoReconnect = false
 
-  ElMessage.info('正在重新连接...')
+  ElMessage.info(t('shell.reconnecting'))
 
   // 清理现有连接
   stopHeartbeat()
@@ -1671,10 +1673,10 @@ const reconnectTerminal = async () => {
     reconnectAttempts.value = 0
     autoReconnect = true
 
-    ElMessage.success('重新连接成功')
+    ElMessage.success(t('shell.reconnectOk'))
   } catch (error) {
     console.error('重连失败:', error)
-    ElMessage.error('重连失败: ' + error.message)
+    ElMessage.error(t('shell.reconnectFailed') + ' ' + error.message)
 
     // 重置为自动重连模式
     autoReconnect = true
@@ -1716,7 +1718,7 @@ const scheduleReconnect = () => {
 
         // 成功连接后重置计数
         reconnectAttempts.value = 0
-        ElMessage.success('自动重连成功')
+        ElMessage.success(t('shell.reconnectOk'))
       } catch (error) {
         console.error(`第 ${reconnectAttempts.value} 次重连失败:`, error)
         // 继续尝试重连
@@ -1729,7 +1731,7 @@ const scheduleReconnect = () => {
 const clearTerminal = () => {
   if (term) {
     term.clear()
-    ElMessage.success('终端已清空')
+    ElMessage.success(t('shell.cleared'))
   }
 }
 
@@ -1738,12 +1740,12 @@ const copySelectedText = async () => {
     const selectedText = window.getSelection().toString()
     if (selectedText) {
       await navigator.clipboard.writeText(selectedText)
-      ElMessage.success('已复制选中内容')
+      ElMessage.success(t('common.copied'))
     } else {
-      ElMessage.info('请先选中要复制的内容')
+      ElMessage.info(t('shell.selectFirst'))
     }
   } catch (err) {
-    ElMessage.error('复制失败')
+    ElMessage.error(t('gen.copyFailed'))
   }
 }
 
@@ -1754,7 +1756,7 @@ const pasteToTerminal = async () => {
       term.write(text)
     }
   } catch (err) {
-    ElMessage.error('粘贴失败')
+    ElMessage.error(t('shell.pasteFailed'))
   }
 }
 
