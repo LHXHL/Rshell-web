@@ -3,8 +3,8 @@
     <!-- 欢迎横幅 -->
     <div class="welcome-banner">
       <div class="banner-content">
-<h1 class="welcome-title">欢迎使用 Rshell 控制平台</h1>
-<p class="welcome-subtitle">功能强大的跨平台远程控制管理工具</p>
+<h1 class="welcome-title">{{ t('home.welcomeTitle') }}</h1>
+<p class="welcome-subtitle">{{ t('home.welcomeSubtitle') }}</p>
         <div class="banner-decoration">
           <div class="decoration-circle"></div>
           <div class="decoration-circle"></div>
@@ -16,8 +16,8 @@
     <!-- 功能特性 -->
     <div class="features-section">
       <div class="section-title">
-        <h2>核心功能</h2>
-        <p>提供全面的远程控制解决方案</p>
+        <h2>{{ t('home.coreFeatures') }}</h2>
+        <p>{{ t('home.coreFeaturesDesc') }}</p>
       </div>
 
       <div class="features-grid">
@@ -25,13 +25,13 @@
           <div class="feature-icon">
             <el-icon><Connection /></el-icon>
           </div>
-          <h3 class="feature-title">监听器管理</h3>
-          <p class="feature-desc">支持多种协议（WebSocket、TCP、KCP、HTTP、OSS）的监听器配置与管理</p>
+          <h3 class="feature-title">{{ t('home.fListenerTitle') }}</h3>
+          <p class="feature-desc">{{ t('home.fListenerDesc') }}</p>
           <ul class="feature-list">
-            <li><el-icon><Check /></el-icon> WebSocket 实时通信</li>
-            <li><el-icon><Check /></el-icon> TCP 标准协议</li>
-            <li><el-icon><Check /></el-icon> KCP 快速传输</li>
-            <li><el-icon><Check /></el-icon> OSS 云存储支持</li>
+            <li><el-icon><Check /></el-icon> {{ t('home.fWs') }}</li>
+            <li><el-icon><Check /></el-icon> {{ t('home.fTcp') }}</li>
+            <li><el-icon><Check /></el-icon> {{ t('home.fKcp') }}</li>
+            <li><el-icon><Check /></el-icon> {{ t('home.fOss') }}</li>
           </ul>
         </el-card>
 
@@ -39,13 +39,13 @@
           <div class="feature-icon">
             <el-icon><Download /></el-icon>
           </div>
-          <h3 class="feature-title">客户端生成</h3>
-          <p class="feature-desc">快速生成适用于不同操作系统和架构的客户端程序</p>
+          <h3 class="feature-title">{{ t('home.fGenTitle') }}</h3>
+          <p class="feature-desc">{{ t('home.fGenDesc') }}</p>
           <ul class="feature-list">
             <li><el-icon><Check /></el-icon> Windows / Linux / macOS</li>
-            <li><el-icon><Check /></el-icon> 多架构支持（x86/x64/ARM等）</li>
-            <li><el-icon><Check /></el-icon> 一键生成下载</li>
-            <li><el-icon><Check /></el-icon> 自定义连接密码</li>
+            <li><el-icon><Check /></el-icon> {{ t('home.fMultiArch') }}</li>
+            <li><el-icon><Check /></el-icon> {{ t('home.fOneClick') }}</li>
+            <li><el-icon><Check /></el-icon> {{ t('home.fCustomPwd') }}</li>
           </ul>
         </el-card>
 
@@ -53,13 +53,13 @@
           <div class="feature-icon">
             <el-icon><Promotion /></el-icon>
           </div>
-          <h3 class="feature-title">Web 投递</h3>
-          <p class="feature-desc">通过 HTTP 服务投递客户端，支持一键上线</p>
+          <h3 class="feature-title">{{ t('home.fDeliveryTitle') }}</h3>
+          <p class="feature-desc">{{ t('home.fDeliveryDesc') }}</p>
           <ul class="feature-list">
-            <li><el-icon><Check /></el-icon> 快速部署服务</li>
-            <li><el-icon><Check /></el-icon> 自动生成上线命令</li>
-            <li><el-icon><Check /></el-icon> 支持 Shellcode 生成</li>
-            <li><el-icon><Check /></el-icon> 状态实时监控</li>
+            <li><el-icon><Check /></el-icon> {{ t('home.fFastDeploy') }}</li>
+            <li><el-icon><Check /></el-icon> {{ t('home.fAutoCmd') }}</li>
+            <li><el-icon><Check /></el-icon> {{ t('home.fShellcode') }}</li>
+            <li><el-icon><Check /></el-icon> {{ t('home.fMonitor') }}</li>
           </ul>
         </el-card>
 
@@ -67,13 +67,13 @@
           <div class="feature-icon">
             <el-icon><Monitor /></el-icon>
           </div>
-          <h3 class="feature-title">客户端管理</h3>
-          <p class="feature-desc">统一管理已连接的客户端，实时监控状态</p>
+          <h3 class="feature-title">{{ t('home.fClientTitle') }}</h3>
+          <p class="feature-desc">{{ t('home.fClientDesc') }}</p>
           <ul class="feature-list">
-            <li><el-icon><Check /></el-icon> 实时在线状态</li>
-            <li><el-icon><Check /></el-icon> 交互式 Shell</li>
-            <li><el-icon><Check /></el-icon> 文件传输与管理</li>
-            <li><el-icon><Check /></el-icon> 进程管理</li>
+            <li><el-icon><Check /></el-icon> {{ t('home.fOnline') }}</li>
+            <li><el-icon><Check /></el-icon> {{ t('home.fShell') }}</li>
+            <li><el-icon><Check /></el-icon> {{ t('home.fFile') }}</li>
+            <li><el-icon><Check /></el-icon> {{ t('home.fProcess') }}</li>
           </ul>
         </el-card>
       </div>
@@ -82,18 +82,18 @@
     <!-- 快速开始 -->
     <div class="quick-start-section">
       <div class="section-title">
-        <h2>快速开始</h2>
-        <p>只需三步即可开始使用</p>
+        <h2>{{ t('home.quickStart') }}</h2>
+        <p>{{ t('home.quickStartDesc') }}</p>
       </div>
 
       <div class="steps-container">
         <div class="step-card">
           <div class="step-number">1</div>
-          <h3 class="step-title">创建监听器</h3>
-          <p class="step-desc">在监听器管理页面创建一个新的监听器，选择协议和配置连接参数</p>
+          <h3 class="step-title">{{ t('home.step1Title') }}</h3>
+          <p class="step-desc">{{ t('home.step1Desc') }}</p>
           <el-button type="primary" @click="goToListener" class="step-btn">
             <el-icon><Position /></el-icon>
-            前往监听器
+            {{ t('home.goListeners') }}
           </el-button>
         </div>
 
@@ -103,11 +103,11 @@
 
         <div class="step-card">
           <div class="step-number">2</div>
-          <h3 class="step-title">生成客户端</h3>
-          <p class="step-desc">在客户端生成页面配置参数，生成适用于目标系统的客户端程序</p>
+          <h3 class="step-title">{{ t('home.step2Title') }}</h3>
+          <p class="step-desc">{{ t('home.step2Desc') }}</p>
           <el-button type="primary" @click="goToClient" class="step-btn">
             <el-icon><Download /></el-icon>
-            前往生成
+            {{ t('home.goGenerate') }}
           </el-button>
         </div>
 
@@ -117,11 +117,11 @@
 
         <div class="step-card">
           <div class="step-number">3</div>
-          <h3 class="step-title">运行并连接</h3>
-          <p class="step-desc">在目标系统运行客户端，即可在控制台看到在线主机</p>
+          <h3 class="step-title">{{ t('home.step3Title') }}</h3>
+          <p class="step-desc">{{ t('home.step3Desc') }}</p>
           <el-button type="primary" @click="goToClients" class="step-btn">
             <el-icon><Monitor /></el-icon>
-            查看客户端
+            {{ t('home.goClients') }}
           </el-button>
         </div>
       </div>
@@ -130,33 +130,33 @@
     <!-- 使用技巧 -->
     <div class="tips-section">
       <div class="section-title">
-        <h2>使用技巧</h2>
-        <p>提升使用效率的小贴士</p>
+        <h2>{{ t('home.tipsTitle') }}</h2>
+        <p>{{ t('home.tipsDesc') }}</p>
       </div>
 
       <div class="tips-grid">
         <div class="tip-item">
           <el-icon class="tip-icon"><InfoFilled /></el-icon>
-          <h4>多协议支持</h4>
-          <p>根据网络环境选择合适的协议，WebSocket 适合公网环境，KCP 适合高延迟网络</p>
+          <h4>{{ t('home.tipProtoTitle') }}</h4>
+          <p>{{ t('home.tipProtoDesc') }}</p>
         </div>
 
         <div class="tip-item">
           <el-icon class="tip-icon"><Lock /></el-icon>
-          <h4>安全加固</h4>
-          <p>建议为每个客户端设置独立的连接密码，提高安全性</p>
+          <h4>{{ t('home.tipSecTitle') }}</h4>
+          <p>{{ t('home.tipSecDesc') }}</p>
         </div>
 
         <div class="tip-item">
           <el-icon class="tip-icon"><MagicStick /></el-icon>
-          <h4>Shellcode 生成</h4>
-          <p>Web 投递支持生成多种格式的 Shellcode，方便集成到其他攻击载体</p>
+          <h4>{{ t('home.tipScTitle') }}</h4>
+          <p>{{ t('home.tipScDesc') }}</p>
         </div>
 
         <div class="tip-item">
           <el-icon class="tip-icon"><Document /></el-icon>
-          <h4>命令参考</h4>
-          <p>客户端生成页面提供了多种上线命令参考，可直接复制使用</p>
+          <h4>{{ t('home.tipCmdTitle') }}</h4>
+          <p>{{ t('home.tipCmdDesc') }}</p>
         </div>
       </div>
     </div>
@@ -167,9 +167,9 @@
         <div class="version-content">
           <el-icon class="version-icon"><SuccessFilled /></el-icon>
           <div class="version-info">
-<h3>系统版本</h3>
+<h3>{{ t('home.versionTitle') }}</h3>
 <p>Rshell - Cross-Platform C2 Framework</p>
-<p class="version-note">基于 Go 语言开发的跨平台 C2 控制框架</p>
+<p class="version-note">{{ t('home.versionNote') }}</p>
           </div>
         </div>
       </el-card>
@@ -178,6 +178,8 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 import { useRouter } from 'vue-router';
 import {
   Connection,
