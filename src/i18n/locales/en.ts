@@ -123,6 +123,9 @@ export default {
   },
   gen: {
     title: 'Client Generation',
+    webManageTitle: 'WebDelivery Management',
+    webManageSubtitle: 'Deliver client programs over the web',
+    webAdd: 'Add WebDelivery',
     subtitle: 'Configure and generate remote clients for different systems',
     configTitle: 'Generation Config',
     realtime: 'Realtime',

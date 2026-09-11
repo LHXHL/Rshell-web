@@ -123,6 +123,9 @@ export default {
   },
   gen: {
     title: '客户端生成',
+    webManageTitle: 'WebDelivery 管理',
+    webManageSubtitle: '通过Web方式投递客户端程序',
+    webAdd: '新增 WebDelivery',
     subtitle: '配置并生成适用于不同系统的远程客户端',
     configTitle: '生成配置',
     realtime: '实时生成',
