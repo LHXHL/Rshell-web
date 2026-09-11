@@ -1,4 +1,19 @@
 export default {
+  common: {
+    loading: '加载中，请稍后...'
+  },
+  error: {
+    noPermission: '啊哦~ 你无权限访问',
+    notFound: '啊哦~ 你所访问的页面不存在',
+    backLogin: '返回登陆',
+    backHome: '返回首页',
+    backPrev: '返回上一页'
+  },
+  tags: {
+    options: '标签选项',
+    closeOthers: '关闭其他',
+    closeAll: '关闭所有'
+  },
   nav: {
     home: '首页',
     clients: '客户端列表',

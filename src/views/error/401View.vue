@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 import {useRouter} from "vue-router";
 
 const router = useRouter();
@@ -7,12 +9,12 @@ const router = useRouter();
 <template>
   <div class="error-page">
     <div class="error-code">4<span>0</span>1</div>
-    <div class="error-desc">啊哦~ 你无权限访问</div>
+    <div class="error-desc">{{ t('error.noPermission') }}</div>
     <div class="error-handle">
       <router-link to="/login">
-        <el-button type="primary" size="large">返回登陆</el-button>
+        <el-button type="primary" size="large">{{ t('error.backLogin') }}</el-button>
       </router-link>
-      <el-button class="error-btn" type="primary" size="large" @click="router.push('/')">返回上一页</el-button>
+      <el-button class="error-btn" type="primary" size="large" @click="router.push('/')">{{ t('error.backPrev') }}</el-button>
     </div>
   </div>
 </template>

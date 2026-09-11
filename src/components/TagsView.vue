@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 import {useTagsStore} from '@/stores/tags';
 import {onBeforeRouteUpdate, useRoute, useRouter} from 'vue-router';
 
@@ -75,15 +77,15 @@ const handleTags = (command: string) => {
     <div class="tags-close-box">
       <el-dropdown @command="handleTags">
         <el-button size="small" type="primary">
-          标签选项
+          {{ t('tags.options') }}
           <el-icon class="el-icon--right">
             <arrow-down/>
           </el-icon>
         </el-button>
         <template #dropdown>
           <el-dropdown-menu size="small">
-            <el-dropdown-item command="other">关闭其他</el-dropdown-item>
-            <el-dropdown-item command="all">关闭所有</el-dropdown-item>
+            <el-dropdown-item command="other">{{ t('tags.closeOthers') }}</el-dropdown-item>
+            <el-dropdown-item command="all">{{ t('tags.closeAll') }}</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>

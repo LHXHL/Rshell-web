@@ -1,4 +1,19 @@
 export default {
+  common: {
+    loading: 'Loading, please wait...'
+  },
+  error: {
+    noPermission: 'Oops~ No permission to access this page',
+    notFound: 'Oops~ Page not found',
+    backLogin: 'Back to Login',
+    backHome: 'Back to Home',
+    backPrev: 'Back to Previous Page'
+  },
+  tags: {
+    options: 'Tag Options',
+    closeOthers: 'Close Others',
+    closeAll: 'Close All'
+  },
   nav: {
     home: 'Home',
     clients: 'Clients',

@@ -1,11 +1,13 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 import './LoadingCss.css'
 
 const props = defineProps({
   message: {
     type: String,
     default() {
-      return '加载中，请稍后...'
+      return t('common.loading')
     }
   }
 })
