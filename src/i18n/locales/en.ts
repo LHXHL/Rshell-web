@@ -1,6 +1,25 @@
 export default {
   common: {
-    loading: 'Loading, please wait...'
+    loading: 'Loading, please wait...',
+    refresh: 'Refresh',
+    actions: 'Actions',
+    delete: 'Delete',
+    deleted: 'Deleted',
+    notice: 'Notice',
+    confirm: 'Confirm',
+    cancel: 'Cancel',
+    add: 'Add',
+    edit: 'Edit',
+    save: 'Save',
+    search: 'Search',
+    enable: 'Enable',
+    disable: 'Disable',
+    status: 'Status',
+    close: 'Close',
+    success: 'Success',
+    failed: 'Failed',
+    copy: 'Copy',
+    copied: 'Copied to clipboard'
   },
   error: {
     noPermission: 'Oops~ No permission to access this page',
@@ -13,6 +32,18 @@ export default {
     options: 'Tag Options',
     closeOthers: 'Close Others',
     closeAll: 'Close All'
+  },
+  credentials: {
+    title: 'Credential Management',
+    client: 'Client',
+    target: 'Target',
+    username: 'Username',
+    secret: 'Password/Hash',
+    type: 'Type',
+    source: 'Source',
+    notes: 'Notes',
+    time: 'Time',
+    deleteConfirm: 'Delete this credential?'
   },
   nav: {
     home: 'Home',

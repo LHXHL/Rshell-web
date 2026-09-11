@@ -1,6 +1,25 @@
 export default {
   common: {
-    loading: '加载中，请稍后...'
+    loading: '加载中，请稍后...',
+    refresh: '刷新',
+    actions: '操作',
+    delete: '删除',
+    deleted: '已删除',
+    notice: '提示',
+    confirm: '确认',
+    cancel: '取消',
+    add: '添加',
+    edit: '编辑',
+    save: '保存',
+    search: '搜索',
+    enable: '启用',
+    disable: '禁用',
+    status: '状态',
+    close: '关闭',
+    success: '成功',
+    failed: '失败',
+    copy: '复制',
+    copied: '已复制到剪贴板'
   },
   error: {
     noPermission: '啊哦~ 你无权限访问',
@@ -13,6 +32,18 @@ export default {
     options: '标签选项',
     closeOthers: '关闭其他',
     closeAll: '关闭所有'
+  },
+  credentials: {
+    title: '凭据管理',
+    client: '客户端',
+    target: '目标',
+    username: '用户名',
+    secret: '密码/Hash',
+    type: '类型',
+    source: '来源',
+    notes: '备注',
+    time: '时间',
+    deleteConfirm: '确认删除此凭据?'
   },
   nav: {
     home: '首页',
