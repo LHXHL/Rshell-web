@@ -3,8 +3,8 @@
     <!-- 头部区域 -->
     <div class="header-section">
       <div class="header-content">
-        <h1 class="page-title">监听器管理</h1>
-        <p class="page-subtitle">配置和管理远程连接的监听器</p>
+        <h1 class="page-title">{{ t('listener.title') }}</h1>
+        <p class="page-subtitle">{{ t('listener.subtitle') }}</p>
       </div>
       <el-button
           type="primary"
@@ -13,7 +13,7 @@
           @click="addListenerDialogVisible = true"
       >
         <el-icon><Plus /></el-icon>
-        添加监听器
+        {{ t('listener.add') }}
       </el-button>
     </div>
 
@@ -24,7 +24,7 @@
           <el-icon class="stat-icon total-icon"><DataLine /></el-icon>
           <div class="stat-info">
             <div class="stat-value">{{ tableData.length }}</div>
-            <div class="stat-label">总数</div>
+            <div class="stat-label">{{ t('listener.total') }}</div>
           </div>
         </div>
       </el-card>
@@ -34,7 +34,7 @@
           <el-icon class="stat-icon active-icon"><CircleCheck /></el-icon>
           <div class="stat-info">
             <div class="stat-value">{{ activeListeners }}</div>
-            <div class="stat-label">活跃</div>
+            <div class="stat-label">{{ t('listener.active') }}</div>
           </div>
         </div>
       </el-card>
@@ -44,7 +44,7 @@
           <el-icon class="stat-icon inactive-icon"><CircleClose /></el-icon>
           <div class="stat-info">
             <div class="stat-value">{{ inactiveListeners }}</div>
-            <div class="stat-label">未启动</div>
+            <div class="stat-label">{{ t('listener.inactive') }}</div>
           </div>
         </div>
       </el-card>
@@ -54,9 +54,9 @@
     <el-card class="listener-table-card">
       <template #header>
         <div class="table-header">
-          <h3 class="table-title">监听器列表</h3>
+          <h3 class="table-title">{{ t('listener.listTitle') }}</h3>
           <div class="table-actions">
-            <el-tooltip content="刷新列表" placement="top">
+            <el-tooltip :content="t('common.refresh')" placement="top">
               <el-button
                   type="info"
                   size="small"
@@ -74,9 +74,9 @@
           :data="tableData"
           class="custom-table"
           v-loading="loading"
-          empty-text="暂无监听器数据"
+          :empty-text="t('listener.empty')"
       >
-        <el-table-column prop="Type" label="协议类型" width="120">
+        <el-table-column prop="Type" :label="t('listener.protoType')" width="120">
           <template #default="{ row }">
             <div class="protocol-cell">
               <el-tag
@@ -91,31 +91,31 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop="ListenAddress" label="监听地址" min-width="180">
+        <el-table-column prop="ListenAddress" :label="t('listener.listenAddr')" min-width="180">
           <template #default="{ row }">
             <div class="address-cell">
               <el-icon class="address-icon"><Position /></el-icon>
               <div class="address-content">
                 <div class="address-text">{{ row.ListenAddress }}</div>
-                <div class="address-label">监听地址</div>
+                <div class="address-label">{{ t('listener.listenAddr') }}</div>
               </div>
             </div>
           </template>
         </el-table-column>
 
-        <el-table-column prop="ConnectAddress" label="连接地址" min-width="180">
+        <el-table-column prop="ConnectAddress" :label="t('listener.connAddr')" min-width="180">
           <template #default="{ row }">
             <div class="address-cell">
               <el-icon class="address-icon"><Connection /></el-icon>
               <div class="address-content">
                 <div class="address-text">{{ row.ConnectAddress }}</div>
-                <div class="address-label">连接地址</div>
+                <div class="address-label">{{ t('listener.connAddr') }}</div>
               </div>
             </div>
           </template>
         </el-table-column>
 
-        <el-table-column label="状态" width="120">
+        <el-table-column :label="t('common.status')" width="120">
           <template #default="{ row }">
             <div class="status-cell">
               <div
@@ -128,17 +128,17 @@
                   class="status-tag"
                   effect="light"
               >
-                {{ row.Status === 1 ? '运行中' : '已停止' }}
+                {{ row.Status === 1 ? t('listener.running') : t('listener.stopped') }}
               </el-tag>
             </div>
           </template>
         </el-table-column>
 
-        <el-table-column label="操作" width="200">
+        <el-table-column :label="t('common.actions')" width="200">
           <template #default="{ row }">
             <div class="action-buttons">
               <el-tooltip
-                  :content="row.Status === 2 ? '启动监听器' : '停止监听器'"
+                  :content="row.Status === 2 ? t('listener.start') : t('listener.stop')"
                   placement="top"
               >
                 <el-button
@@ -150,7 +150,7 @@
                 />
               </el-tooltip>
 
-              <el-tooltip content="删除监听器" placement="top">
+              <el-tooltip :content="t('common.delete')" placement="top">
                 <el-button
                     size="small"
                     type="danger"
@@ -160,7 +160,7 @@
                 />
               </el-tooltip>
 
-              <el-tooltip content="查看详情" placement="top">
+              <el-tooltip :content="t('listener.viewDetail')" placement="top">
                 <el-button
                     size="small"
                     type="info"
@@ -178,15 +178,15 @@
     <!-- 添加监听器对话框 -->
     <el-dialog
         v-model="addListenerDialogVisible"
-        title="添加监听器"
+        :title="t('listener.add')"
         width="560px"
         class="add-listener-dialog"
         :close-on-click-modal="false"
     >
       <div class="dialog-content">
         <el-steps :active="currentStep" finish-status="success" simple class="form-steps">
-          <el-step title="协议选择" />
-          <el-step title="参数配置" />
+          :title="t('listener.stepProto')" />'.replace('title=', 'title=').replace("'", '"')
+          <el-step :title="t('listener.stepConfig')" />
         </el-steps>
 
         <el-form
@@ -198,7 +198,7 @@
         >
           <!-- 协议选择 -->
           <div v-show="currentStep === 0" class="step-content">
-            <div class="step-title">选择监听协议</div>
+            <div class="step-title">{{ t('listener.pickProto') }}</div>
             <div class="protocol-grid">
               <div
                   v-for="protocol in protocols"
@@ -222,7 +222,7 @@
 
           <!-- 参数配置 -->
           <div v-show="currentStep === 1" class="step-content">
-            <div class="step-title">配置监听参数</div>
+            <div class="step-title">{{ t('listener.configParams') }}</div>
 
             <!-- OSS 特殊配置 -->
             <template v-if="formData.protocol === 'oss'">
@@ -242,7 +242,7 @@
               <el-form-item label="AccessKeyId" required>
                 <el-input
                     v-model="formData.listenAddress"
-                    placeholder="请输入AccessKeyId"
+                    :placeholder="t('listener.akIdPh')"
                     clearable
                     size="large"
                 >
@@ -256,7 +256,7 @@
                 <el-input
                     v-model="formData.connectAddress"
                     type="password"
-                    placeholder="请输入AccessKeySecret"
+                    :placeholder="t('listener.akSecretPh')"
                     show-password
                     clearable
                     size="large"
@@ -283,7 +283,7 @@
 
             <!-- 其他协议配置 -->
             <template v-else>
-              <el-form-item :label="formData.protocol === 'oss' ? 'AccessKeyId' : '监听地址'" required>
+              <el-form-item :label="formData.protocol === 'oss' ? 'AccessKeyId' : t('listener.listenAddr')" required>
                 <el-input
                     v-model="formData.listenAddress"
                     :placeholder="getListenAddressPlaceholder()"
@@ -294,10 +294,10 @@
                     <el-icon><Monitor /></el-icon>
                   </template>
                 </el-input>
-                <div class="form-hint">监听地址格式：IP:端口</div>
+                <div class="form-hint">{{ t('listener.listenAddrHint') }}</div>
               </el-form-item>
 
-              <el-form-item :label="formData.protocol === 'oss' ? 'AccessKeySecret' : '连接地址'" required>
+              <el-form-item :label="formData.protocol === 'oss' ? 'AccessKeySecret' : t('listener.connAddr')" required>
                 <el-input
                     v-model="formData.connectAddress"
                     :placeholder="getConnectAddressPlaceholder()"
@@ -308,7 +308,7 @@
                     <el-icon><Promotion /></el-icon>
                   </template>
                 </el-input>
-                <div class="form-hint">客户端连接地址格式：IP:端口</div>
+                <div class="form-hint">{{ t('listener.connAddrHint') }}</div>
               </el-form-item>
             </template>
           </div>
@@ -318,14 +318,14 @@
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="handleCancel" :disabled="loading" style="background: rgb(255, 107, 157) !important;">
-            取消
+            {{ t('common.cancel') }}
           </el-button>
           <el-button
               v-if="currentStep > 0"
               @click="currentStep--"
               :disabled="loading"
           >
-            上一步
+            {{ t('listener.prevStep') }}
           </el-button>
           <el-button
               v-if="currentStep < 1"
@@ -333,7 +333,7 @@
               @click="currentStep++"
               :disabled="!formData.protocol"
           >
-            下一步
+            {{ t('listener.nextStep') }}
           </el-button>
           <el-button
               v-if="currentStep === 1"
@@ -342,7 +342,7 @@
               :loading="loading"
               :disabled="!isFormValid"
           >
-            确认添加
+            {{ t('listener.confirmAdd') }}
           </el-button>
         </div>
       </template>
@@ -354,6 +354,7 @@
 import { ref, computed, onMounted } from "vue";
 import ListenerAPI from '@/api/listener'
 import { ElMessage, ElMessageBox } from "element-plus";
+import { useI18n } from 'vue-i18n'
 import {
   Plus,
   Refresh,
@@ -377,6 +378,8 @@ import {
   Cloudy
 } from '@element-plus/icons-vue'
 
+const { t } = useI18n()
+
 const tableData = ref([]);
 const loading = ref(false);
 const addListenerDialogVisible = ref(false);
@@ -394,14 +397,14 @@ const ossData = ref({
 });
 
 // 协议选项
-const protocols = [
-  { value: 'websocket', label: 'Websocket', icon: ConnectionIcon, iconClass: 'protocol-ws', description: '基于WebSocket的实时通信' },
-  { value: 'tcp', label: 'TCP', icon: ConnectionIcon, iconClass: 'protocol-tcp', description: '标准的TCP协议连接' },
-  { value: 'kcp', label: 'KCP', icon: Lightning, iconClass: 'protocol-kcp', description: '快速可靠的KCP协议' },
-  { value: 'http', label: 'HTTP', icon: Link, iconClass: 'protocol-http', description: 'HTTP协议支持' },
-  { value: 'https', label: 'HTTPS', icon: Link, iconClass: 'protocol-https', description: '加密的HTTPS协议支持' },
-  { value: 'oss', label: 'OSS', icon: Cloudy, iconClass: 'protocol-oss', description: '阿里云OSS存储' }
-];
+const protocols = computed(() => [
+  { value: 'websocket', label: 'Websocket', icon: ConnectionIcon, iconClass: 'protocol-ws', description: t('listener.wsDesc') },
+  { value: 'tcp', label: 'TCP', icon: ConnectionIcon, iconClass: 'protocol-tcp', description: t('listener.tcpDesc') },
+  { value: 'kcp', label: 'KCP', icon: Lightning, iconClass: 'protocol-kcp', description: t('listener.kcpDesc') },
+  { value: 'http', label: 'HTTP', icon: Link, iconClass: 'protocol-http', description: t('listener.httpDesc') },
+  { value: 'https', label: 'HTTPS', icon: Link, iconClass: 'protocol-https', description: t('listener.httpsDesc') },
+  { value: 'oss', label: 'OSS', icon: Cloudy, iconClass: 'protocol-oss', description: t('listener.ossDesc') }
+]);
 
 // 计算属性
 const activeListeners = computed(() => {
@@ -451,7 +454,7 @@ const getListenAddressPlaceholder = () => {
 };
 
 const getConnectAddressPlaceholder = () => {
-  return '外网连接地址 (127.0.0.1:8083)';
+  return t('listener.extConnExample');
 };
 
 const getListenerList = async () => {
@@ -462,8 +465,8 @@ const getListenerList = async () => {
       tableData.value = res.data.data;
     }
   } catch (error) {
-    console.error('获取监听器列表失败:', error);
-    ElMessage.error('获取监听器列表失败');
+    console.error('failed to load listeners:', error);
+    ElMessage.error(t('listener.loadFailed'));
   } finally {
     loading.value = false;
   }
@@ -471,7 +474,7 @@ const getListenerList = async () => {
 
 const addListener = async () => {
   if (!isFormValid.value) {
-    ElMessage.warning('请填写完整的配置信息');
+    ElMessage.warning(t('listener.configIncomplete'));
     return;
   }
 
@@ -495,17 +498,17 @@ const addListener = async () => {
 
     if (res.status === 200) {
       if (res.data.status === 200) {
-        ElMessage.success("监听器添加成功");
+        ElMessage.success(t("listener.addOk"));
         addListenerDialogVisible.value = false;
         resetForm();
         await getListenerList();
       } else {
-        ElMessage.error(res.data.data || "添加失败");
+        ElMessage.error(res.data.data || t("common.addFailed"));
       }
     }
   } catch (error) {
-    console.error('添加监听器失败:', error);
-    ElMessage.error('添加监听器失败');
+    console.error('failed to add listener:', error);
+    ElMessage.error(t('listener.addFailed'));
   } finally {
     loading.value = false;
   }
@@ -516,13 +519,13 @@ const handleOpen = async (row: any) => {
     const res = await ListenerAPI.openListener({ listenAddress: row.ListenAddress });
     if (res.data.status === 200) {
       await getListenerList();
-      ElMessage.success("监听器启动成功");
+      ElMessage.success(t("listener.startOk"));
     } else {
-      ElMessage.error(res.data.data || "启动失败");
+      ElMessage.error(res.data.data || t("listener.startFailed"));
     }
   } catch (error) {
-    console.error('启动监听器失败:', error);
-    ElMessage.error('启动监听器失败');
+    console.error('failed to start listener:', error);
+    ElMessage.error(t('listener.startFailed'));
   }
 };
 
@@ -531,24 +534,24 @@ const handleClose = async (row: any) => {
     const res = await ListenerAPI.closeListener({ listenAddress: row.ListenAddress });
     if (res.data.status === 200) {
       await getListenerList();
-      ElMessage.success("监听器已停止");
+      ElMessage.success(t("listener.stopOk"));
     } else {
-      ElMessage.error(res.data.data || "停止失败");
+      ElMessage.error(res.data.data || t("listener.stopFailed"));
     }
   } catch (error) {
-    console.error('停止监听器失败:', error);
-    ElMessage.error('停止监听器失败');
+    console.error('failed to stop listener:', error);
+    ElMessage.error(t('listener.stopFailed'));
   }
 };
 
 const handleDelete = async (row: any) => {
   try {
     await ElMessageBox.confirm(
-        `确定要删除监听器 "${row.ListenAddress}" 吗？`,
-        '删除确认',
+        t('listener.deleteConfirm', { addr: row.ListenAddress }),
+        t('listener.deleteTitle'),
         {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+          confirmButtonText: t('common.confirm'),
+          cancelButtonText: t('common.cancel'),
           type: 'warning',
           confirmButtonClass: 'delete-confirm-btn'
         }
@@ -557,14 +560,14 @@ const handleDelete = async (row: any) => {
     const res = await ListenerAPI.deleteListener({ listenAddress: row.ListenAddress });
     if (res.data.status === 200) {
       await getListenerList();
-      ElMessage.success("监听器删除成功");
+      ElMessage.success(t("listener.deleteOk"));
     } else {
-      ElMessage.error(res.data.data || "删除失败");
+      ElMessage.error(res.data.data || t("common.deleteFailed"));
     }
   } catch (error) {
     if (error !== 'cancel') {
-      console.error('删除监听器失败:', error);
-      ElMessage.error('删除监听器失败');
+      console.error('failed to delete listener:', error);
+      ElMessage.error(t('listener.deleteFailed'));
     }
   }
 };
@@ -572,16 +575,16 @@ const handleDelete = async (row: any) => {
 const handleViewDetails = (row: any) => {
   ElMessageBox.alert(
       `<div class="listener-details">
-      <h3>监听器详情</h3>
-      <p style="color: var(--theme-primary);"><strong>协议类型：</strong>${row.Type}</p>
-      <p style="color: var(--theme-primary);"><strong>监听地址：</strong>${row.ListenAddress}</p>
-      <p style="color: var(--theme-primary);"><strong>连接地址：</strong>${row.ConnectAddress}</p>
-      <p style="color: var(--theme-primary);"><strong>当前状态：</strong>${row.Status === 1 ? '运行中' : '已停止'}</p>
+      <h3>{{ t('listener.detailTitle') }}</h3>
+      <p style="color: var(--theme-primary);"><strong>{{ t('listener.protoType') }}:</strong>${row.Type}</p>
+      <p style="color: var(--theme-primary);"><strong>{{ t('listener.listenAddr') }}:</strong>${row.ListenAddress}</p>
+      <p style="color: var(--theme-primary);"><strong>{{ t('listener.connAddr') }}:</strong>${row.ConnectAddress}</p>
+      <p style="color: var(--theme-primary);"><strong>{{ t('common.status') }}:</strong>${row.Status === 1 ? t('listener.running') : t('listener.stopped')}</p>
     </div>`,
-      '监听器详情',
+      t('listener.detailTitle'),
       {
         dangerouslyUseHTMLString: true,
-        confirmButtonText: '确定',
+        confirmButtonText: t('common.confirm'),
         customClass: 'details-dialog'
       }
   );
