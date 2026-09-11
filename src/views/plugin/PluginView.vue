@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 import { ref, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus, Delete, Upload, MagicStick, Cpu, Connection, Tools, Platform } from '@element-plus/icons-vue'
@@ -24,10 +26,10 @@ const fetchPlugins = async () => {
     if (res.data.status === 200) {
       pluginList.value = res.data.data || []
     } else {
-      ElMessage.error('获取插件列表失败')
+      ElMessage.error(t('plugin.loadFailed'))
     }
   } catch (error) {
-    ElMessage.error('获取出错')
+    ElMessage.error(t('common.fetchError'))
   } finally {
     loading.value = false
   }
@@ -42,25 +44,25 @@ const handleFileChange = (e: Event) => {
 
 const handleUploadPlugin = async () => {
   if (!newPlugin.value.name) {
-    ElMessage.warning('请输入插件名称')
+    ElMessage.warning(t('plugin.nameRequired'))
     return
   }
   if (!newPlugin.value.file) {
-    ElMessage.warning('请选择文件')
+    ElMessage.warning(t('common.selectFile'))
     return
   }
   try {
     const res = await addPlugin(newPlugin.value)
     if (res.data.status === 200) {
-      ElMessage.success('插件添加成功')
+      ElMessage.success(t('plugin.added'))
       uploadDialogVisible.value = false
       resetNewPlugin()
       fetchPlugins()
     } else {
-      ElMessage.error(res.data.data || '添加失败')
+      ElMessage.error(res.data.data || t('common.addFailed'))
     }
   } catch (error) {
-    ElMessage.error('请求出错')
+    ElMessage.error(t('common.requestError'))
   }
 }
 
@@ -78,13 +80,13 @@ const resetNewPlugin = () => {
 
 const handleDelete = async (id: number) => {
   try {
-    await ElMessageBox.confirm('确定要删除该插件吗？', '提示', { type: 'warning' })
+    await ElMessageBox.confirm(t('plugin.deleteConfirm'), t('common.notice'), { type: 'warning' })
     const res = await deletePlugin({ id })
     if (res.data.status === 200) {
-      ElMessage.success('删除成功')
+      ElMessage.success(t('common.deleted'))
       fetchPlugins()
     } else {
-      ElMessage.error('删除失败')
+      ElMessage.error(t('common.deleteFailed'))
     }
   } catch (error) {
     // cancelled
@@ -99,48 +101,48 @@ onMounted(() => {
 <template>
   <div class="plugin-container">
     <div class="header">
-      <h2>插件管理</h2>
+      <h2>{{ t('plugin.title') }}</h2>
       <el-button type="primary" :icon="Plus" @click="uploadDialogVisible = true">
-        添加插件
+        {{ t('plugin.add') }}
       </el-button>
     </div>
 
     <el-table :data="pluginList" v-loading="loading" style="width: 100%; margin-top: 20px" border>
       <el-table-column prop="Id" label="ID" width="80" />
-      <el-table-column prop="Name" label="插件名称" />
-      <el-table-column prop="Os" label="平台" width="120" />
-      <el-table-column prop="Type" label="类型" width="180" />
-      <el-table-column prop="FileName" label="文件名" />
-      <el-table-column label="操作" width="150" align="center">
+      <el-table-column prop="Name" :label="t('plugin.name')" />
+      <el-table-column prop="Os" :label="t('plugin.platform')" width="120" />
+      <el-table-column prop="Type" :label="t('credentials.type')" width="180" />
+      <el-table-column prop="FileName" :label="t('plugin.fileName')" />
+      <el-table-column :label="t('common.actions')" width="150" align="center">
         <template #default="{ row }">
           <el-button type="danger" size="small" :icon="Delete" @click="handleDelete(row.Id)">
-            删除
+            {{ t('common.delete') }}
           </el-button>
         </template>
       </el-table-column>
     </el-table>
 
     <!-- 添加插件对话框 -->
-    <el-dialog v-model="uploadDialogVisible" title="添加插件" width="500px" top="15vh" :append-to-body="true" :lock-scroll="false" @close="resetNewPlugin">
+    <el-dialog v-model="uploadDialogVisible" :title="t('plugin.add')" width="500px" top="15vh" :append-to-body="true" :lock-scroll="false" @close="resetNewPlugin">
       <el-form label-width="100px" style="min-height: 200px;">
-        <el-form-item label="插件名称" required>
-          <el-input v-model="newPlugin.name" placeholder="请输入插件识别名称" />
+        <el-form-item :label="t('plugin.name')" required>
+          <el-input v-model="newPlugin.name" :placeholder="t('plugin.namePh')" />
         </el-form-item>
-        <el-form-item label="目标系统" required>
+        <el-form-item :label="t('plugin.os')" required>
           <el-radio-group v-model="newPlugin.os">
             <el-radio label="windows"><span style="color: #606266; font-weight: normal;">Windows</span></el-radio>
             <el-radio label="linux"><span style="color: #606266; font-weight: normal;">Linux</span></el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="执行类型" required>
-          <el-select v-model="newPlugin.type" placeholder="请选择执行类型" popper-class="plugin-type-dropdown" style="width: 100%" :teleported="true" :append-to-body="true" placement="bottom" fallback-placements="['bottom']">
+        <el-form-item :label="t('plugin.execType')" required>
+          <el-select v-model="newPlugin.type" :placeholder="t('plugin.execTypePh')" popper-class="plugin-type-dropdown" style="width: 100%" :teleported="true" :append-to-body="true" placement="bottom" fallback-placements="['bottom']">
             <template v-if="newPlugin.os === 'windows'">
               <el-option label="Execute Assembly" value="execute-assembly">
                 <div class="mode-option-item">
                   <el-icon class="net-icon"><MagicStick /></el-icon>
                   <div class="option-details">
                     <div class="option-label">Execute Assembly</div>
-                    <div class="option-desc">执行 .NET 程序集内存加载</div>
+                    <div class="option-desc">{{ t('plugin.typeAssembly') }}</div>
                   </div>
                 </div>
               </el-option>
@@ -149,7 +151,7 @@ onMounted(() => {
                   <el-icon class="native-icon"><Cpu /></el-icon>
                   <div class="option-details">
                     <div class="option-label">Inline Binary</div>
-                    <div class="option-desc">执行原生二进制程序内存加载</div>
+                    <div class="option-desc">{{ t('plugin.typeBin') }}</div>
                   </div>
                 </div>
               </el-option>
@@ -158,7 +160,7 @@ onMounted(() => {
                   <el-icon class="inject-icon"><Connection /></el-icon>
                   <div class="option-details">
                     <div class="option-label">Shellcode Inject</div>
-                    <div class="option-desc">注入并执行 Shellcode</div>
+                    <div class="option-desc">{{ t('plugin.typeShellcode') }}</div>
                   </div>
                 </div>
               </el-option>
@@ -167,7 +169,7 @@ onMounted(() => {
                   <el-icon class="bof-icon"><Tools /></el-icon>
                   <div class="option-details">
                     <div class="option-label">Inline Execute</div>
-                    <div class="option-desc">执行 BOF (Beacon Object File)</div>
+                    <div class="option-desc">{{ t('plugin.typeBof') }}</div>
                   </div>
                 </div>
               </el-option>
@@ -178,7 +180,7 @@ onMounted(() => {
                   <el-icon class="linux-icon"><Platform /></el-icon>
                   <div class="option-details">
                     <div class="option-label">Script (Shell)</div>
-                    <div class="option-desc">执行 Linux Shell 脚本</div>
+                    <div class="option-desc">{{ t('plugin.typeShell') }}</div>
                   </div>
                 </div>
               </el-option>
@@ -187,14 +189,14 @@ onMounted(() => {
                   <el-icon class="native-icon"><Cpu /></el-icon>
                   <div class="option-details">
                     <div class="option-label">Binary (Memory)</div>
-                    <div class="option-desc">上传 ELF 到 /tmp 执行并删除</div>
+                    <div class="option-desc">{{ t('plugin.typeElf') }}</div>
                   </div>
                 </div>
               </el-option>
             </template>
           </el-select>
         </el-form-item>
-        <el-form-item label="插件文件" required>
+        <el-form-item :label="t('plugin.file')" required>
           <div class="file-upload">
             <input type="file" ref="fileInputRef" @change="handleFileChange" />
           </div>
@@ -202,8 +204,8 @@ onMounted(() => {
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="uploadDialogVisible = false">取消</el-button>
-          <el-button type="primary" @click="handleUploadPlugin">确定上传</el-button>
+          <el-button @click="uploadDialogVisible = false">{{ t('common.cancel') }}</el-button>
+          <el-button type="primary" @click="handleUploadPlugin">{{ t('plugin.confirmUpload') }}</el-button>
         </span>
       </template>
     </el-dialog>
