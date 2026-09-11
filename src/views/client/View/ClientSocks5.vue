@@ -6,10 +6,10 @@
         <div class="header-left">
           <h2 class="header-title">
             <i class="el-icon-connection header-icon"></i>
-            Socks5代理管理
+            {{ t('socks.title') }}
           </h2>
           <p class="header-description">
-            管理主机上的Socks5代理服务，实现网络流量转发
+            {{ t('socks.subtitle') }}
           </p>
         </div>
         <div class="header-right">
@@ -20,7 +20,7 @@
               class="add-button"
           >
             <i class="el-icon-plus"></i>
-            新增代理
+            {{ t('socks.add') }}
           </el-button>
         </div>
       </div>
@@ -32,7 +32,7 @@
         <div class="table-header">
           <div class="table-title">
             <i class="el-icon-s-order"></i>
-            <span>代理列表</span>
+            <span>{{ t('socks.list') }}</span>
           </div>
           <div class="table-actions">
             <el-button
@@ -42,7 +42,7 @@
                 @click="refreshList"
                 :loading="loading"
             >
-              刷新
+              {{ t('common.refresh') }}
             </el-button>
             <el-button
                 type="text"
@@ -50,7 +50,7 @@
                 @click="toggleHelp"
             >
               <i class="el-icon-question"></i>
-              使用说明
+              {{ t('socks.guide') }}
             </el-button>
           </div>
         </div>
@@ -59,11 +59,11 @@
       <!-- 空状态 -->
       <el-empty
           v-if="tableData.length === 0 && !loading"
-          description="暂无代理配置"
+          :description="t('socks.empty')"
           :image-size="100"
       >
         <el-button type="primary" @click="dialogVisible = true">
-          创建第一个代理
+          {{ t('socks.createFirst') }}
         </el-button>
       </el-empty>
 
@@ -78,7 +78,7 @@
         >
           <el-table-column
               prop="Socks5port"
-              label="端口"
+              :label="t('gen.listenPort')"
               width="120"
           >
             <template #default="{ row }">
@@ -90,7 +90,7 @@
                     effect="plain"
                     v-if="row.Status === 1"
                 >
-                  已开启
+                  {{ t('socks.enabled') }}
                 </el-tag>
               </div>
             </template>
@@ -98,7 +98,7 @@
 
           <el-table-column
               prop="UserName"
-              label="用户名"
+              :label="t('credentials.username')"
               width="150"
           >
             <template #default="{ row }">
@@ -106,20 +106,20 @@
                 <i class="el-icon-user"></i>
                 {{ row.UserName }}
               </span>
-              <span v-else class="no-auth">无认证</span>
+              <span v-else class="no-auth">{{ t('socks.noAuth') }}</span>
             </template>
           </el-table-column>
 
           <el-table-column
               prop="Password"
-              label="密码"
+              :label="t('socks.pwd')"
               width="180"
           >
             <template #default="{ row }">
               <div v-if="row.Password" class="password-cell">
                 <span class="password-mask">••••••</span>
                 <el-tooltip
-                    content="点击显示密码"
+                    :content="t('socks.showPwd')"
                     placement="top"
                 >
                   <el-button
@@ -132,29 +132,29 @@
                   </el-button>
                 </el-tooltip>
               </div>
-              <span v-else class="no-auth">无密码</span>
+              <span v-else class="no-auth">{{ t('socks.noPwd') }}</span>
             </template>
           </el-table-column>
 
           <el-table-column
-              label="连接信息"
+              :label="t('socks.connInfo')"
               min-width="200"
           >
             <template #default="{ row }">
               <div class="connection-info">
                 <div class="connection-item">
-                  <span class="label">类型：</span>
+                  <span class="label">{{ t('credentials.type') }}:</span>
                   <el-tag size="small">{{ row.Type }}</el-tag>
                 </div>
                 <div class="connection-item">
-                  <span class="label">状态：</span>
+                  <span class="label">{{ t('common.status') }}:</span>
                   <el-tag
                       :type="row.Status === 1 ? 'success' : 'danger'"
                       size="small"
                       :effect="row.Status === 1 ? 'light' : 'plain'"
                   >
                     <i :class="row.Status === 1 ? 'el-icon-success' : 'el-icon-error'"></i>
-                    {{ row.Status === 1 ? '运行中' : '已停止' }}
+                    {{ row.Status === 1 ? t('listener.running') : t('listener.stopped') }}
                   </el-tag>
                 </div>
               </div>
@@ -162,7 +162,7 @@
           </el-table-column>
 
           <el-table-column
-              label="操作"
+              :label="t('common.actions')"
               width="240"
               align="center"
               fixed="right"
@@ -178,7 +178,7 @@
                     class="action-btn"
                 >
                   <i class="el-icon-video-play"></i>
-                  开启
+                  {{ t('socks.enable') }}
                 </el-button>
                 <el-button
                     v-if="row.Status === 1"
@@ -189,7 +189,7 @@
                     class="action-btn"
                 >
                   <i class="el-icon-video-pause"></i>
-                  停止
+                  {{ t('socks.disable') }}
                 </el-button>
                 <el-button
                     type="danger"
@@ -199,7 +199,7 @@
                     class="action-btn"
                 >
                   <i class="el-icon-delete"></i>
-                  删除
+                  {{ t('common.delete') }}
                 </el-button>
                 <el-dropdown
                     trigger="click"
@@ -217,11 +217,11 @@
                     <el-dropdown-menu>
                       <el-dropdown-item command="copy">
                         <i class="el-icon-document-copy"></i>
-                        复制连接信息
+                        {{ t('socks.copyConn') }}
                       </el-dropdown-item>
                       <el-dropdown-item command="test">
                         <i class="el-icon-connection"></i>
-                        测试连接
+                        {{ t('socks.testConn') }}
                       </el-dropdown-item>
                     </el-dropdown-menu>
                   </template>
@@ -235,19 +235,19 @@
         <div class="stats-info" v-if="tableData.length > 0">
           <el-space>
             <span class="stat-item">
-              <span class="stat-label">总数：</span>
+              <span class="stat-label">{{ t('listener.total') }}:</span>
               <span class="stat-value">{{ tableData.length }}</span>
             </span>
             <el-divider direction="vertical" />
             <span class="stat-item">
-              <span class="stat-label">运行中：</span>
+              <span class="stat-label">{{ t('listener.running') }}:</span>
               <span class="stat-value running">
                 {{ runningCount }}
               </span>
             </span>
             <el-divider direction="vertical" />
             <span class="stat-item">
-              <span class="stat-label">已停止：</span>
+              <span class="stat-label">{{ t('listener.stopped') }}:</span>
               <span class="stat-value stopped">
                 {{ stoppedCount }}
               </span>
@@ -260,7 +260,7 @@
     <!-- 新增代理对话框 -->
     <el-dialog
         v-model="dialogVisible"
-        title="新增Socks5代理"
+        :title="t('socks.add')"
         width="480px"
         class="add-dialog"
         @close="resetForm"
@@ -272,56 +272,56 @@
           ref="formRef"
       >
         <el-form-item
-            label="监听端口"
+            :label="t('gen.listenPort')"
             prop="socks5port"
             required
         >
           <el-input
               v-model="formData.socks5port"
-              placeholder="请输入端口号（如：1080）"
+              :placeholder="t('socks.portPh')"
               clearable
           >
             <template #prepend>
-              <span class="input-prepend">端口</span>
+              <span class="input-prepend">{{ t('gen.listenPort') }}</span>
             </template>
           </el-input>
           <div class="form-tip">
-            建议使用 10000-65535 之间的端口
+            {{ t('socks.portRange') }}
           </div>
         </el-form-item>
 
-        <el-form-item label="用户名" prop="username">
+        <el-form-item :label="t('credentials.username')" prop="username">
           <el-input
               v-model="formData.username"
-              placeholder="可选，留空则不启用认证"
+              :placeholder="t('socks.authOptional')"
               clearable
               autocomplete="off"
           >
             <template #prepend>
-              <span class="input-prepend">用户</span>
+              <span class="input-prepend">{{ t('credentials.username') }}</span>
             </template>
           </el-input>
         </el-form-item>
 
-        <el-form-item label="密码" prop="password">
+        <el-form-item :label="t('socks.pwd')" prop="password">
           <el-input
               v-model="formData.password"
-              placeholder="可选，留空则不启用认证"
+              :placeholder="t('socks.authOptional')"
               type="password"
               show-password
               clearable
               autocomplete="new-password"
           >
             <template #prepend>
-              <span class="input-prepend">密码</span>
+              <span class="input-prepend">{{ t('socks.pwd') }}</span>
             </template>
           </el-input>
           <div class="form-tip">
-            若设置用户名，则必须同时设置密码
+            {{ t('socks.userPwdRule') }}
           </div>
         </el-form-item>
 
-        <el-form-item label="代理类型" prop="type">
+        <el-form-item :label="t('socks.proxyType')" prop="type">
           <el-radio-group v-model="formData.type">
             <el-radio label="socks5">Socks5</el-radio>
 <!--            <el-radio label="socks4" disabled>Socks4（暂不支持）</el-radio>-->
@@ -331,13 +331,13 @@
 
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="dialogVisible = false">取消</el-button>
+          <el-button @click="dialogVisible = false">{{ t('common.cancel') }}</el-button>
           <el-button
               type="primary"
               @click="startSocks5"
               :loading="adding"
           >
-            确认创建
+            {{ t('socks.confirmCreate') }}
           </el-button>
         </div>
       </template>
@@ -346,48 +346,48 @@
     <!-- 使用说明抽屉 -->
     <el-drawer
         v-model="helpVisible"
-        title="使用说明"
+        :title="t('socks.guide')"
         size="400px"
     >
       <div class="help-content">
-        <h3><i class="el-icon-info"></i> 什么是Socks5代理？</h3>
-        <p>Socks5是一种网络代理协议，它比HTTP代理更底层，可以代理各种类型的网络流量。</p>
+        <h3><i class="el-icon-info"></i> {{ t('socks.whatIs') }}</h3>
+        <p>{{ t('socks.whatIsDesc') }}</p>
 
-        <h3><i class="el-icon-setting"></i> 使用方法</h3>
+        <h3><i class="el-icon-setting"></i> {{ t('socks.howTo') }}</h3>
         <el-steps direction="vertical" :active="4">
-          <el-step title="创建代理">
+          <el-step :title="t('socks.stepCreate')">
             <template #description>
-              <p>点击"新增代理"按钮，配置端口和认证信息</p>
+              <p>{{ t('socks.stepCreateDesc') }}</p>
             </template>
           </el-step>
-          <el-step title="启动代理">
+          <el-step :title="t('socks.stepStart')">
             <template #description>
-              <p>创建后，点击"开启"按钮启动代理服务</p>
+              <p>{{ t('socks.stepStartDesc') }}</p>
             </template>
           </el-step>
-          <el-step title="配置客户端">
+          <el-step :title="t('socks.stepConfig')">
             <template #description>
-              <p>在客户端工具中配置代理地址：</p>
+              <p>{{ t('socks.stepConfigDesc') }}</p>
               <el-card shadow="never" class="example-card">
-                <pre class="config-example">地址: {{ currentHost }}
-端口: [您的端口]
-认证: [用户名/密码]（如已设置）</pre>
+                <pre class="config-example">{{ t('socks.cfgHost') }}: {{ currentHost }}
+{{ t('gen.listenPort') }}: [{{ t('socks.cfgYourPort') }}]
+{{ t('socks.cfgAuth') }}: [{{ t('credentials.username') }}/{{ t('socks.pwd') }}] ({{ t('socks.cfgIfSet') }})</pre>
               </el-card>
             </template>
           </el-step>
-          <el-step title="使用代理">
+          <el-step :title="t('socks.stepUse')">
             <template #description>
-              <p>配置完成后，所有流量将通过代理服务器转发</p>
+              <p>{{ t('socks.stepUseDesc') }}</p>
             </template>
           </el-step>
         </el-steps>
 
-        <h3><i class="el-icon-warning-outline"></i> 注意事项</h3>
+        <h3><i class="el-icon-warning-outline"></i> {{ t('socks.notes') }}</h3>
         <ul class="notice-list">
-          <li>确保防火墙已开放对应端口</li>
-          <li>建议使用高强度密码</li>
-          <li>定期检查代理状态和日志</li>
-          <li>不使用时请及时关闭代理</li>
+          <li>{{ t('socks.note1') }}</li>
+          <li>{{ t('socks.note2') }}</li>
+          <li>{{ t('socks.note3') }}</li>
+          <li>{{ t('socks.note4') }}</li>
         </ul>
       </div>
     </el-drawer>
@@ -395,6 +395,8 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 import { ref, reactive, computed, onMounted } from "vue";
 import { ElMessage, ElMessageBox, type FormInstance } from "element-plus";
 import { Refresh } from '@element-plus/icons-vue';
@@ -424,11 +426,11 @@ const formData = reactive({
 // 表单验证规则
 const formRules = {
   socks5port: [
-    { required: true, message: '请输入端口号', trigger: 'blur' },
-    { pattern: /^[1-9]\d*$/, message: '端口号必须为正整数', trigger: 'blur' },
+    { required: true, message: t('socks.portRequired'), trigger: 'blur' },
+    { pattern: /^[1-9]\d*$/, message: t('socks.portInteger'), trigger: 'blur' },
     { validator: (rule: any, value: string, callback: any) => {
         if (value && (parseInt(value) < 1 || parseInt(value) > 65535)) {
-          callback(new Error('端口号范围 1-65535'));
+          callback(new Error(t('socks.portRangeErr')));
         } else {
           callback();
         }
@@ -438,9 +440,9 @@ const formRules = {
     {
       validator: (rule: any, value: string, callback: any) => {
         if (value && !formData.password) {
-          callback(new Error('设置了用户名必须同时设置密码'));
+          callback(new Error(t('socks.userNeedsPwd')));
         } else if (!value && formData.password) {
-          callback(new Error('设置了密码必须同时设置用户名'));
+          callback(new Error(t('socks.pwdNeedsUser')));
         } else {
           callback();
         }
@@ -483,7 +485,7 @@ const getSocks5List = async () => {
     }
   } catch (error) {
     console.error('获取代理列表失败:', error);
-    ElMessage.error('获取代理列表失败');
+    ElMessage.error(t('socks.loadFailed'));
   } finally {
     loading.value = false;
   }
@@ -491,7 +493,7 @@ const getSocks5List = async () => {
 
 const refreshList = async () => {
   await getSocks5List();
-  ElMessage.success('列表已刷新');
+  ElMessage.success(t('socks.refreshed'));
 };
 
 const startSocks5 = async () => {
@@ -511,16 +513,16 @@ const startSocks5 = async () => {
 
       if (res.status === 200) {
         if (res.data.status === 200) {
-          ElMessage.success('代理创建成功');
+          ElMessage.success(t('socks.createOk'));
           dialogVisible.value = false;
           await getSocks5List();
         } else {
-          ElMessage.error(res.data.data || '创建失败');
+          ElMessage.error(res.data.data || t('gen.createFailed'));
         }
       }
     } catch (error) {
       console.error('创建代理失败:', error);
-      ElMessage.error('创建代理失败');
+      ElMessage.error(t('socks.createFailed'));
     } finally {
       adding.value = false;
     }
@@ -539,15 +541,15 @@ const handleClose = async (row: any) => {
 
     if (res.status === 200) {
       if (res.data.status === 200) {
-        ElMessage.success('代理已停止');
+        ElMessage.success(t('gen.serviceStopped'));
         await getSocks5List();
       } else {
-        ElMessage.error(res.data.data || '停止失败');
+        ElMessage.error(res.data.data || t('gen.stopFailed'));
       }
     }
   } catch (error) {
     console.error('停止代理失败:', error);
-    ElMessage.error('停止代理失败');
+    ElMessage.error(t('gen.stopFailed'));
   } finally {
     row.loading = false;
   }
@@ -565,15 +567,15 @@ const handleOpen = async (row: any) => {
 
     if (res.status === 200) {
       if (res.data.status === 200) {
-        ElMessage.success('代理已开启');
+        ElMessage.success(t('socks.started'));
         await getSocks5List();
       } else {
-        ElMessage.error(res.data.data || '开启失败');
+        ElMessage.error(res.data.data || t('socks.startFailed'));
       }
     }
   } catch (error) {
     console.error('开启代理失败:', error);
-    ElMessage.error('开启代理失败');
+    ElMessage.error(t('socks.startFailed'));
   } finally {
     row.loading = false;
   }
@@ -582,11 +584,11 @@ const handleOpen = async (row: any) => {
 const handleDelete = async (row: any) => {
   try {
     await ElMessageBox.confirm(
-        '确定要删除此代理吗？删除后无法恢复。',
-        '确认删除',
+        t('socks.deleteConfirm'),
+        t('listener.deleteTitle'),
         {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+          confirmButtonText: t('common.confirm'),
+          cancelButtonText: t('common.cancel'),
           type: 'warning',
         }
     );
@@ -601,16 +603,16 @@ const handleDelete = async (row: any) => {
 
     if (res.status === 200) {
       if (res.data.status === 200) {
-        ElMessage.success('代理已删除');
+        ElMessage.success(t('common.deleted'));
         await getSocks5List();
       } else {
-        ElMessage.error(res.data.data || '删除失败');
+        ElMessage.error(res.data.data || t('common.deleteFailed'));
       }
     }
   } catch (error) {
     if (error !== 'cancel') {
       console.error('删除代理失败:', error);
-      ElMessage.error('删除代理失败');
+      ElMessage.error(t('common.deleteFailed'));
     }
   } finally {
     row.deleting = false;
@@ -629,29 +631,29 @@ const handleCommand = (command: string, row: any) => {
 };
 
 const copyConnectionInfo = (row: any) => {
-  const text = `Socks5代理配置：
-服务器: ${currentHost.value}
-端口: ${row.Socks5port}
-用户名: ${row.UserName || '无'}
-密码: ${row.Password || '无'}`;
+  const text = `${t('socks.cfgTitle')}:
+${t('socks.cfgServer')}: ${currentHost.value}
+${t('gen.listenPort')}: ${row.Socks5port}
+${t('credentials.username')}: ${row.UserName || t('shell.none')}
+${t('socks.pwd')}: ${row.Password || t('shell.none')}`;
 
   navigator.clipboard.writeText(text).then(() => {
-    ElMessage.success('连接信息已复制到剪贴板');
+    ElMessage.success(t('common.copied'));
   }).catch(() => {
-    ElMessage.error('复制失败');
+    ElMessage.error(t('gen.copyFailed'));
   });
 };
 
 const testConnection = async (row: any) => {
-  ElMessage.info('测试连接功能开发中...');
+  ElMessage.info(t('socks.testWip'));
 };
 
 const showPassword = (row: any) => {
   ElMessageBox.alert(
-      `密码：${row.Password}`,
-      '密码详情',
+      `${t('socks.pwd')}: ${row.Password}`,
+      t('socks.pwdDetail'),
       {
-        confirmButtonText: '确定',
+        confirmButtonText: t('common.confirm'),
         callback: () => {
           copyToClipboard(row.Password);
         }
@@ -661,7 +663,7 @@ const showPassword = (row: any) => {
 
 const copyToClipboard = (text: string) => {
   navigator.clipboard.writeText(text).then(() => {
-    ElMessage.success('密码已复制到剪贴板');
+    ElMessage.success(t('common.copied'));
   });
 };
 
