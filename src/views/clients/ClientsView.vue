@@ -3,7 +3,7 @@
     <!-- 更多操作对话框 -->
     <el-dialog
         v-model="dialogVisible"
-        title="客户端操作"
+        :title="t('clients.actionTitle')"
         width="380px"
         class="action-dialog"
         :close-on-click-modal="false"
@@ -15,7 +15,7 @@
             class="action-button"
         >
           <el-icon><Document /></el-icon>
-          添加备注
+          {{ t('clients.addNote') }}
         </el-button>
         <el-button
             type="success"
@@ -23,7 +23,7 @@
             class="action-button"
         >
           <el-icon><Brush /></el-icon>
-          标记颜色
+          {{ t('clients.markColor') }}
         </el-button>
         <el-button
             type="warning"
@@ -31,7 +31,7 @@
             class="action-button"
         >
           <el-icon><Timer /></el-icon>
-          设置休眠
+          {{ t('clients.setSleep') }}
         </el-button>
         <el-button
             type="danger"
@@ -39,54 +39,54 @@
             class="action-button"
         >
           <el-icon><SwitchButton /></el-icon>
-          退出客户端
+          {{ t('clients.exitClient') }}
         </el-button>
       </div>
     </el-dialog>
 
     <el-dialog
         v-model="forwardDialogVisible"
-        title="正向连接"
+        :title="t('clients.forwardTitle')"
         width="500px"
         :close-on-click-modal="false"
         class="forward-dialog"
     >
       <el-form :model="forwardForm" label-width="100px">
-        <el-form-item label="连接方式">
+        <el-form-item :label="t('clients.connMethod')">
           <el-radio-group v-model="forwardForm.connectionType">
             <el-radio label="websocket">WebSocket</el-radio>
             <el-radio label="tcp">TCP</el-radio>
           </el-radio-group>
         </el-form-item>
 
-        <el-form-item label="连接地址">
+        <el-form-item :label="t('clients.connAddr')">
           <el-input
               v-model="forwardForm.address"
               placeholder="192.168.1.2:8000"
               clearable
           />
-          <div class="form-tip">格式: IP:端口</div>
+          <div class="form-tip">{{ t('clients.ipPortTip') }}</div>
         </el-form-item>
 
-        <el-form-item label="Socks5代理地址">
+        <el-form-item :label="t('clients.socks5Addr')">
           <el-input
               v-model="forwardForm.proxyAddress"
               placeholder="127.0.0.1:1080"
               clearable
           />
-          <div class="form-tip">可选填，支持 socks5/http 代理</div>
+          <div class="form-tip">{{ t('clients.socks5Tip') }}</div>
         </el-form-item>
       </el-form>
 
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="forwardDialogVisible = false">取消</el-button>
+          <el-button @click="forwardDialogVisible = false">{{ t('common.cancel') }}</el-button>
           <el-button
               type="primary"
               @click="handleConnect"
               :loading="connecting"
           >
-            连接
+            {{ t('clients.connect') }}
           </el-button>
         </div>
       </template>
@@ -95,14 +95,14 @@
     <!-- 颜色选择对话框 -->
     <el-dialog
         v-model="colorDialogVisible"
-        title="选择标记颜色"
+        :title="t('clients.pickColorTitle')"
         width="420px"
         @close="handleClose"
         :close-on-click-modal="false"
         class="color-dialog"
     >
       <div class="color-picker-container">
-        <p class="color-picker-hint">请选择标记颜色：</p>
+        <p class="color-picker-hint">{{ t('clients.pickColorHint') }}</p>
         <div class="color-options">
           <div
               v-for="(color, index) in colors"
@@ -121,14 +121,14 @@
       </div>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="cancelSelection" class="footer-button">取消</el-button>
+          <el-button @click="cancelSelection" class="footer-button">{{ t('common.cancel') }}</el-button>
           <el-button
               type="primary"
               @click="confirmSelection"
               :disabled="!selectedColor"
               class="footer-button"
           >
-            确定
+            {{ t('common.confirm') }}
           </el-button>
         </div>
       </template>
@@ -139,7 +139,7 @@
       <el-card shadow="never" class="table-card">
         <template #header>
           <div class="table-header">
-            <h3 class="table-title">客户端管理</h3>
+            <h3 class="table-title">{{ t('clients.title') }}</h3>
             <div class="table-header-actions">
               <!-- 添加正向连接按钮 -->
               <el-button
@@ -149,10 +149,10 @@
                   class="forward-connect-btn"
               >
                 <el-icon><Connection /></el-icon>
-                正向连接
+                {{ t('clients.forwardTitle') }}
               </el-button>
               <el-tag type="info" class="refresh-tag">
-                自动刷新: 5秒
+                {{ t('clients.autoRefresh') }}
               </el-tag>
               <el-button
                   type="danger"
@@ -160,7 +160,7 @@
                   size="small"
               >
                 <el-icon><SwitchButton /></el-icon>
-                一键退出
+                {{ t('clients.exitAll') }}
               </el-button>
               <el-button
                   type="success"
@@ -168,7 +168,7 @@
                   size="small"
               >
                 <el-icon><Refresh /></el-icon>
-                手动刷新
+                {{ t('clients.manualRefresh') }}
               </el-button>
             </div>
           </div>
@@ -237,7 +237,7 @@
           <template #Note="{ row }">
             <div class="note-cell">
               <el-tooltip
-                  :content="row.Note || '暂无备注'"
+                  :content="row.Note || t('clients.noNote')"
                   placement="top"
                   v-if="row.Note"
               >
@@ -265,7 +265,7 @@
                   size="small"
                   class="status-tag"
               >
-                {{ row.Online === '1' ? '在线' : '离线' }}
+                {{ row.Online === '1' ? t('clients.online') : t('clients.offline') }}
               </el-tag>
             </div>
           </template>
@@ -279,7 +279,7 @@
                   class="action-btn"
               >
                 <el-icon><View /></el-icon>
-                查看
+                {{ t('clients.view') }}
               </el-button>
               <el-button
                   type="info"
@@ -288,7 +288,7 @@
                   class="action-btn"
               >
                 <el-icon><More /></el-icon>
-                更多
+                {{ t('clients.more') }}
               </el-button>
             </div>
           </template>
@@ -299,6 +299,9 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 import {
   Document,
   Connection,
@@ -365,7 +368,7 @@ const confirmSelection = async () => {
   if (selectedColor.value) {
     const res = await ClientAPI.select_color({ uid: uid, color: selectedColor.value })
     if (res.data.status === 200) {
-      ElMessage.success("标记颜色成功")
+      ElMessage.success(t("clients.colorOk"))
     }
   }
   colorDialogVisible.value = false;
@@ -449,10 +452,10 @@ onMounted(async() => {
   });
 });
 
-const Clients_tableColumn :Table.Column[]= [
+const Clients_tableColumn = computed<Table.Column[]>(() => [
   // {prop: 'uid', label: 'uid', showOverflowTooltip: true},
   {prop: 'FirstStart', label: 'FirstStart', showOverflowTooltip: true, Color: 'Color',width:"100"},
-  {prop: 'ExternalIP', label: '外网IP', showOverflowTooltip: true, Color: 'Color',width:"150"},
+  {prop: 'ExternalIP', label: t('clients.externalIP'), showOverflowTooltip: true, Color: 'Color',width:"150"},
   // {prop: 'InternalIP', label: '内网IP', showOverflowTooltip: true, Color: 'Color',width:"100"},
   {prop: 'Username', label: 'User', showOverflowTooltip: true,width:"100", Color: 'Color'},
   {prop: 'Computer', label: 'Computer', showOverflowTooltip: true,width:"170", Color: 'Color'},
@@ -471,32 +474,32 @@ const Clients_tableColumn :Table.Column[]= [
   },
   {
     width: '180',
-    label: '操作',
+    label: t('common.actions'),
     buttons: [],
     slot: 'action', Color: 'Color'
   }
-]
+])
 const handleMoreOptions = (val:any) =>{
   dialogVisible.value = true;
   uid = val.Uid;
 }
 const handleAddNote = async(uid :string) =>{
   const { value } = await ElMessageBox.prompt(
-      '输入Note',
+      t('clients.notePrompt'),
       'Note',
       {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: t('common.confirm'),
+        cancelButtonText: t('common.cancel'),
         inputPlaceholder: 'Note',
       }
   )
   if (!value) {
-    ElMessage.warning('Note不能为空')
+    ElMessage.warning(t('clients.noteEmpty'))
     return
   }
   const res = await ClientAPI.add_uid_note({uid:uid,note:value})
   if (res.data.status === 200){
-    ElMessage.success("Note成功")
+    ElMessage.success(t("clients.noteOk"))
   }
   dialogVisible.value = false
 
@@ -505,18 +508,18 @@ const handleEditSleep = async(uid :string) =>{
   const { value } = await ElMessageBox.prompt(
       'Sleep',
       {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+        confirmButtonText: t('common.confirm'),
+        cancelButtonText: t('common.cancel'),
         inputPlaceholder: 'Sleep',
       }
   )
   if (!value) {
-    ElMessage.warning('Sleep不能为空')
+    ElMessage.warning(t('clients.sleepEmpty'))
     return
   }
   const res = await ClientAPI.edit_sleep({uid:uid,sleep:value})
   if (res.data.status === 200){
-    ElMessage.success("修改Sleep成功")
+    ElMessage.success(t("clients.sleepOk"))
   }
   dialogVisible.value = false
 
@@ -525,15 +528,15 @@ const handleMarkColor = async(uid :string) =>{
   colorDialogVisible.value = true;
 }
 const handleExit = (uid :string) =>{
-  ElMessageBox.confirm(`是否退出客户端?`, '退出确认', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
+  ElMessageBox.confirm(t('clients.exitConfirm'), t('clients.exitTitle'), {
+    confirmButtonText: t('common.confirm'),
+    cancelButtonText: t('common.cancel'),
     type: 'warning',
   })
       .then(async () => {
         const res = await ClientAPI.do_exit({uid:uid})
         if (res.data.status === 200){
-          ElMessage.success("退出成功")
+          ElMessage.success(t("clients.exitOk"))
         }
         dialogVisible.value = false
       })
@@ -542,13 +545,13 @@ const handleExit = (uid :string) =>{
 const handleBatchExit = async () => {
   try {
     await ElMessageBox.confirm(
-        '确定要一键退出所有客户端吗？',
-        '一键退出确认',
-        { confirmButtonText: '确定', cancelButtonText: '取消', type: 'warning' }
+        t('clients.exitAllConfirm'),
+        t('clients.exitAllTitle'),
+        { confirmButtonText: t('common.confirm'), cancelButtonText: t('common.cancel'), type: 'warning' }
     )
     const res = await ClientAPI.batch_exit()
     if (res.data.status === 200) {
-      ElMessage.success(`已退出 ${res.data.count} 个客户端`)
+      ElMessage.success(t('clients.exitAllOk', { n: res.data.count }))
       tableData.value = []
       const cfg = state.options.paginationConfig
       if (cfg && cfg.total !== undefined) {
@@ -557,7 +560,7 @@ const handleBatchExit = async () => {
     }
   } catch (error) {
     if (error !== 'cancel') {
-      ElMessage.error('操作失败')
+      ElMessage.error(t('common.operationFailed'))
     }
   }
 }
@@ -625,14 +628,14 @@ const handleAddForwardConnection = () => {
 // 处理连接请求
 const handleConnect = async () => {
   if (!forwardForm.address.trim()) {
-    ElMessage.warning('请输入连接地址')
+    ElMessage.warning(t('clients.addrRequired'))
     return
   }
 
   // 验证地址格式
   const addressRegex = /^[\w.-]+:\d+$/
   if (!addressRegex.test(forwardForm.address)) {
-    ElMessage.warning('连接地址格式不正确，应为 IP:端口')
+    ElMessage.warning(t('clients.addrInvalid'))
     return
   }
 
@@ -648,17 +651,17 @@ const handleConnect = async () => {
     })
 
     if (res.data.status === 200) {
-      ElMessage.success('连接请求发送成功')
+      ElMessage.success(t('clients.connectSent'))
       forwardDialogVisible.value = false
 
       // 可以在这里刷新客户端列表或执行其他操作
       getList()
     } else {
-      ElMessage.error(res.data.message || '连接失败')
+      ElMessage.error(res.data.message || t('clients.connectFailed'))
     }
   } catch (error) {
-    console.error('连接失败:', error)
-    ElMessage.error('连接请求发送失败')
+    console.error('connect failed:', error)
+    ElMessage.error(t('clients.connectSendFailed'))
   } finally {
     connecting.value = false
   }
