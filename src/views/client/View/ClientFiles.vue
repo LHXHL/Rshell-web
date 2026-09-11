@@ -4,7 +4,7 @@
     <div class="toolbar">
       <el-input
           v-model="searchKeyword"
-          placeholder="搜索文件或文件夹..."
+          :placeholder="t('files.searchPh')"
           clearable
           @clear="clearSearch"
           class="search-input"
@@ -15,11 +15,11 @@
       </el-input>
 
       <el-button-group>
-        <el-button type="primary" :icon="Refresh" @click="refreshCurrentFolder">刷新</el-button>
-        <el-button type="success" :icon="Upload" @click="triggerUpload">上传文件</el-button>
-        <el-button type="warning" :icon="FolderAdd" @click="handleMkDir(currentFolder?.path || './')">新建文件夹</el-button>
-        <el-button :icon="HomeFilled" @click="goToRoot">根目录</el-button>
-        <el-button :icon="Platform" @click="handleDrives">驱动器</el-button>
+        <el-button type="primary" :icon="Refresh" @click="refreshCurrentFolder">{{ t('common.refresh') }}</el-button>
+        <el-button type="success" :icon="Upload" @click="triggerUpload">{{ t('files.upload') }}</el-button>
+        <el-button type="warning" :icon="FolderAdd" @click="handleMkDir(currentFolder?.path || './')">{{ t('files.newFolder') }}</el-button>
+        <el-button :icon="HomeFilled" @click="goToRoot">{{ t('files.rootDir') }}</el-button>
+        <el-button :icon="Platform" @click="handleDrives">{{ t('files.drives') }}</el-button>
       </el-button-group>
     </div>
 
@@ -29,7 +29,7 @@
       <div class="file-tree-panel">
         <div class="panel-header">
           <el-icon><FolderOpened /></el-icon>
-          <span>文件树</span>
+          <span>{{ t('files.fileTree') }}</span>
         </div>
         <div class="tree-container">
           <el-tree
@@ -72,7 +72,7 @@
             <template #empty>
               <div class="empty-tree">
                 <el-icon><FolderOpened /></el-icon>
-                <p>空文件夹</p>
+                <p>{{ t('files.emptyFolder') }}</p>
               </div>
             </template>
           </el-tree>
@@ -98,7 +98,7 @@
               v-model="currentPathInput"
               @keyup.enter="navigateToPath(currentPathInput)"
               @blur="updatePathInput"
-              placeholder="输入路径或按Enter跳转"
+              :placeholder="t('files.pathPh')"
               class="path-input"
           >
             <template #append>
@@ -113,8 +113,8 @@
             <div class="header-info">
               <h3>{{ currentFolder.name }}</h3>
               <span class="file-count">
-                共 {{ currentFolderContent.length }} 个项目
-                <span v-if="selectedItems.length > 0"> (已选择 {{ selectedItems.length }} 个)</span>
+                {{ t('files.totalItems', { n: currentFolderContent.length }) }}
+                <span v-if="selectedItems.length > 0"> ({{ t('files.selected', { n: selectedItems.length }) }})</span>
               </span>
             </div>
 
@@ -127,20 +127,20 @@
                   :disabled="batchDeleting"
               >
                 <el-icon><Delete /></el-icon>
-                批量删除
+                {{ t('files.batchDelete') }}
               </el-button>
 
               <el-dropdown @command="handleSortCommand">
                 <el-button size="small">
                   <el-icon><Sort /></el-icon>
-                  排序方式
+                  {{ t('files.sortBy') }}
                 </el-button>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item command="name">按名称</el-dropdown-item>
-                    <el-dropdown-item command="size">按大小</el-dropdown-item>
-                    <el-dropdown-item command="time">按修改时间</el-dropdown-item>
-                    <el-dropdown-item command="type">按类型</el-dropdown-item>
+                    <el-dropdown-item command="name">{{ t('files.sortName') }}</el-dropdown-item>
+                    <el-dropdown-item command="size">{{ t('files.sortSize') }}</el-dropdown-item>
+                    <el-dropdown-item command="time">{{ t('files.sortTime') }}</el-dropdown-item>
+                    <el-dropdown-item command="type">{{ t('files.sortType') }}</el-dropdown-item>
                   </el-dropdown-menu>
                 </template>
               </el-dropdown>
@@ -154,11 +154,11 @@
               @selection-change="handleSelectionChange"
               @row-dblclick="handleRowDblClick"
               v-loading="contentLoading"
-              empty-text="该文件夹为空"
+              :empty-text="t('files.emptyFolder')"
           >
             <el-table-column type="selection" width="55" />
 
-            <el-table-column prop="name" label="名称" min-width="200">
+            <el-table-column prop="name" :label="t('files.colName')" min-width="200">
               <template #default="{ row }">
                 <div class="file-item" @click="handleFileClick(row)">
                   <el-icon class="file-icon" :class="row.type">
@@ -171,28 +171,28 @@
               </template>
             </el-table-column>
 
-            <el-table-column prop="type" label="类型" width="100">
+            <el-table-column prop="type" :label="t('files.colType')" width="100">
               <template #default="{ row }">
                 <el-tag :type="row.type === 'D' ? 'warning' : 'info'" size="small">
-                  {{ row.type === 'D' ? '文件夹' : getFileType(row.name) }}
+                  {{ row.type === 'D' ? t('files.folder') : getFileType(row.name) }}
                 </el-tag>
               </template>
             </el-table-column>
 
-            <el-table-column prop="size" label="大小" width="120" sortable>
+            <el-table-column prop="size" :label="t('files.colSize')" width="120" sortable>
               <template #default="{ row }">
                 <span v-if="row.type === 'F'">{{ row.size }}</span>
                 <span v-else>-</span>
               </template>
             </el-table-column>
 
-            <el-table-column prop="modifiedTime" label="修改时间" width="180" sortable>
+            <el-table-column prop="modifiedTime" :label="t('files.colModified')" width="180" sortable>
               <template #default="{ row }">
                 {{ formatDateTime(row.modifiedTime) }}
               </template>
             </el-table-column>
 
-            <el-table-column label="操作" width="180" fixed="right">
+            <el-table-column :label="t('common.actions')" width="180" fixed="right">
               <template #default="{ row }">
                 <div class="action-buttons">
                   <el-button
@@ -224,13 +224,13 @@
 <!--                          <el-icon><Edit /></el-icon> 重命名-->
 <!--                        </el-dropdown-item>-->
                         <el-dropdown-item command="copy">
-                          <el-icon><CopyDocument /></el-icon> 复制路径
+                          <el-icon><CopyDocument /></el-icon> {{ t('files.copyPath') }}
                         </el-dropdown-item>
                         <el-dropdown-item command="info">
-                          <el-icon><InfoFilled /></el-icon> 详细信息
+                          <el-icon><InfoFilled /></el-icon> {{ t('files.fileInfo') }}
                         </el-dropdown-item>
                         <el-dropdown-item command="delete" divided>
-                          <el-icon><Delete /></el-icon> 删除
+                          <el-icon><Delete /></el-icon> {{ t('common.delete') }}
                         </el-dropdown-item>
                       </el-dropdown-menu>
                     </template>
@@ -252,9 +252,9 @@
                   @click="handleDownload(selectedFile)"
                   :loading="downloadingFile === selectedFile.path"
               >
-                下载
+                {{ t('files.download') }}
               </el-button>
-              <el-button size="small" @click="closePreview">关闭</el-button>
+              <el-button size="small" @click="closePreview">{{ t('common.close') }}</el-button>
             </div>
           </div>
           <div class="preview-content">
@@ -281,6 +281,8 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 import { ref, computed, onMounted, onBeforeUnmount, watch, nextTick } from 'vue'
 import { useRoute } from 'vue-router'
 import { useGlobalFileTreeStore } from "@/stores/fileTree"
@@ -358,7 +360,7 @@ const breadcrumbItems = computed(() => {
 
   // 添加根目录
   items.push({
-    name: '根目录',
+    name: t('files.rootDir'),
     path: '/'
   })
 
@@ -453,25 +455,25 @@ const formatDateTime = (dateString) => {
 const getFileType = (filename) => {
   const ext = filename.split('.').pop().toLowerCase()
   const extensions = {
-    txt: '文本文件',
-    pdf: 'PDF文档',
-    doc: 'Word文档',
-    docx: 'Word文档',
-    xls: 'Excel表格',
-    xlsx: 'Excel表格',
-    ppt: 'PPT演示',
-    pptx: 'PPT演示',
-    jpg: 'JPEG图片',
-    jpeg: 'JPEG图片',
-    png: 'PNG图片',
-    gif: 'GIF图片',
-    mp4: 'MP4视频',
-    avi: 'AVI视频',
-    mp3: 'MP3音频',
-    zip: '压缩文件',
-    rar: '压缩文件'
+    txt: t('files.ftTxt'),
+    pdf: t('files.ftPdf'),
+    doc: t('files.ftDoc'),
+    doc: t('files.ftDoc'),
+    xls: t('files.ftXls'),
+    xls: t('files.ftXls'),
+    ppt: t('files.ftPpt'),
+    ppt: t('files.ftPpt'),
+    jpg: t('files.ftImg'),
+    jpg: t('files.ftImg'),
+    png: t('files.ftImg'),
+    gif: t('files.ftImg'),
+    mp4: t('files.ftVideo'),
+    avi: t('files.ftVideo'),
+    mp3: t('files.ftAudio'),
+    zip: t('files.ftArchive'),
+    rar: t('files.ftArchive')
   }
-  return extensions[ext] || '文件'
+  return extensions[ext] || t('files.file')
 }
 
 const fetchFileTree = async (dirPath) => {
@@ -485,8 +487,8 @@ const fetchFileTree = async (dirPath) => {
   } catch (error) {
     console.error('Error fetching file tree:', error)
     ElNotification.error({
-      title: '加载失败',
-      message: '无法获取文件树数据'
+      title: t('files.loadFailed'),
+      message: t('files.treeLoadFailed')
     })
   } finally {
     treeLoading.value = false
@@ -498,7 +500,7 @@ const handleDrives = async () => {
     const res = await ClientAPI.get_drives({ uid: uid })
     fileTree.value = res.data.data
     globalFileTree.updateEntry(uid, fileTree.value)
-    ElMessage.success('已切换到驱动器视图')
+    ElMessage.success(t('files.drivesView'))
   } catch (error) {
     console.error("Error fetching file tree:", error)
   }
@@ -528,7 +530,7 @@ const navigateToPath = async (path) => {
       }
     }
   } catch (error) {
-    ElMessage.error('路径不存在或无法访问')
+    ElMessage.error(t('files.pathInvalid'))
   } finally {
     contentLoading.value = false
   }
@@ -602,8 +604,8 @@ const fetchFileContent = async (file) => {
     selectedFileContent.value = res.data.content
   } catch (error) {
     console.error("Error fetching file content:", error)
-    selectedFileContent.value = "无法加载文件内容"
-    ElMessage.error('文件读取失败')
+    selectedFileContent.value = t('files.contentFailed')
+    ElMessage.error(t('files.readFailed'))
   } finally {
     contentLoading.value = false
   }
@@ -630,12 +632,12 @@ const handleFileChange = async (file) => {
       const info = res.data.data || {}
       const sizeStr = info.size ? formatFileSize(info.size) : ''
       const chunksStr = info.chunks ? `(${info.chunks} chunks)` : ''
-      ElMessage.success(`${file.name} 已加入上传队列 ${chunksStr} ${sizeStr}，请查看 Shell 标签页查看上传进度`)
+      ElMessage.success(t('files.uploadQueued', { name: file.name, chunks: chunksStr, size: sizeStr }))
       // 延迟刷新，等客户端处理完后再更新文件树
       setTimeout(() => refreshCurrentFolder(), 2000)
     }
   } catch (error) {
-    ElMessage.error('上传失败')
+    ElMessage.error(t('files.uploadFailed'))
   }
 }
 
@@ -651,21 +653,21 @@ const triggerUpload = () => {
 
 const handleMkDir = async (path) => {
   if (!path) {
-    ElMessage.warning('请先选择文件夹位置')
+    ElMessage.warning(t('files.pickFolderFirst'))
     return
   }
 
   try {
     const { value: folderName } = await ElMessageBox.prompt(
-        '请输入新文件夹的名称',
-        '新建文件夹',
+        t('files.newFolderNamePh'),
+        t('files.newFolder'),
         {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          inputPlaceholder: '文件夹名称',
+          confirmButtonText: t('common.confirm'),
+          cancelButtonText: t('common.cancel'),
+          inputPlaceholder: t('files.folderNamePh'),
           inputValidator: (value) => {
-            if (!value) return '文件夹名称不能为空'
-            if (/[<>:"/\\|?*]/.test(value)) return '文件夹名称包含非法字符'
+            if (!value) return t('files.folderNameEmpty')
+            if (/[<>:"/\\|?*]/.test(value)) return t('files.folderNameInvalid')
             return true
           }
         }
@@ -674,12 +676,12 @@ const handleMkDir = async (path) => {
     if (!folderName) return
 
     await ClientAPI.make_dir({ uid: uid, dirPath: `${path}/${folderName}` })
-    ElMessage.success('创建成功')
+    ElMessage.success(t('files.createOk'))
     await refreshCurrentFolder()
 
   } catch (error) {
     if (error !== 'cancel') {
-      ElMessage.error('创建失败')
+      ElMessage.error(t('files.createFailed'))
     }
   }
 }
@@ -687,22 +689,22 @@ const handleMkDir = async (path) => {
 const handleDelete = async (row) => {
   try {
     await ElMessageBox.confirm(
-        `确定删除 ${row.type === 'F' ? '文件' : '文件夹'} "${row.name}" 吗？`,
-        '删除确认',
+        t('files.deleteConfirm', { kind: row.type === 'F' ? t('files.file') : t('files.folder'), name: row.name }),
+        t('listener.deleteTitle'),
         {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+          confirmButtonText: t('common.confirm'),
+          cancelButtonText: t('common.cancel'),
           type: 'warning'
         }
     )
 
     await ClientAPI.delete_file({ uid: uid, filePath: row.path })
-    ElMessage.success('删除成功')
+    ElMessage.success(t('common.deleted'))
     await refreshCurrentFolder()
 
   } catch (error) {
     if (error !== 'cancel') {
-      ElMessage.error('删除失败')
+      ElMessage.error(t('common.deleteFailed'))
     }
   }
 }
@@ -713,10 +715,10 @@ const batchDelete = async () => {
   try {
     batchDeleting.value = true
 
-    const confirmMessage = `确定删除选中的 ${selectedItems.value.length} 个项目吗？`
-    await ElMessageBox.confirm(confirmMessage, '批量删除确认', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
+    const confirmMessage = t('files.batchDeleteConfirm', { n: selectedItems.value.length })
+    await ElMessageBox.confirm(confirmMessage, t('files.batchDeleteTitle'), {
+      confirmButtonText: t('common.confirm'),
+      cancelButtonText: t('common.cancel'),
       type: 'warning'
     })
 
@@ -725,13 +727,13 @@ const batchDelete = async () => {
       await ClientAPI.delete_file({ uid: uid, filePath: item.path })
     }
 
-    ElMessage.success(`成功删除 ${selectedItems.value.length} 个项目`)
+    ElMessage.success(t('files.batchDeleteOk', { n: selectedItems.value.length }))
     selectedItems.value = []
     await refreshCurrentFolder()
 
   } catch (error) {
     if (error !== 'cancel') {
-      ElMessage.error('删除失败')
+      ElMessage.error(t('common.deleteFailed'))
     }
   } finally {
     batchDeleting.value = false
@@ -743,11 +745,11 @@ const handleDownload = async (row) => {
 
   try {
     await ElMessageBox.confirm(
-        `确定下载文件 "${row.name}" 吗？`,
-        '下载确认',
+        t('files.downloadConfirm', { name: row.name }),
+        t('files.downloadTitle'),
         {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+          confirmButtonText: t('common.confirm'),
+          cancelButtonText: t('common.cancel'),
           type: 'info'
         }
     )
@@ -755,14 +757,14 @@ const handleDownload = async (row) => {
     const res = await ClientAPI.download_file({ uid: uid, filePath: row.path })
 
     if (res.data.status === 200) {
-      ElMessage.success(`文件 "${row.name}" 开始后台下载`)
+      ElMessage.success(t('files.downloadStarted', { name: row.name }))
     } else {
-      ElMessage.error('下载失败')
+      ElMessage.error(t('files.downloadFailed'))
     }
 
   } catch (error) {
     if (error !== 'cancel') {
-      ElMessage.error('下载失败')
+      ElMessage.error(t('files.downloadFailed'))
     }
   } finally {
     downloadingFile.value = null
@@ -789,15 +791,15 @@ const handleFileCommand = (command, row) => {
 const renameFile = async (row) => {
   try {
     const { value: newName } = await ElMessageBox.prompt(
-        '请输入新的名称',
-        `重命名 "${row.name}"`,
+        t('files.renamePh'),
+        t('files.renameTitle', { name: row.name }),
         {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+          confirmButtonText: t('common.confirm'),
+          cancelButtonText: t('common.cancel'),
           inputValue: row.name,
           inputValidator: (value) => {
-            if (!value) return '名称不能为空'
-            if (value === row.name) return '名称未改变'
+            if (!value) return t('files.nameEmpty')
+            if (value === row.name) return t('files.nameUnchanged')
             return true
           }
         }
@@ -805,12 +807,12 @@ const renameFile = async (row) => {
 
     // 这里需要调用重命名接口
     // await ClientAPI.rename_file({ uid, oldPath: row.path, newName })
-    ElMessage.success('重命名成功')
+    ElMessage.success(t('files.renameOk'))
     await refreshCurrentFolder()
 
   } catch (error) {
     if (error !== 'cancel') {
-      ElMessage.error('重命名失败')
+      ElMessage.error(t('files.renameFailed'))
     }
   }
 }
@@ -818,27 +820,27 @@ const renameFile = async (row) => {
 const copyToClipboard = (text) => {
   navigator.clipboard.writeText(text)
       .then(() => {
-        ElMessage.success('已复制到剪贴板')
+        ElMessage.success(t('common.copied'))
       })
       .catch(() => {
-        ElMessage.error('复制失败')
+        ElMessage.error(t('gen.copyFailed'))
       })
 }
 
 const showFileInfo = (row) => {
   const info = `
     <div style="text-align: left;">
-      <p><strong>名称：</strong>${row.name}</p>
-      <p><strong>类型：</strong>${row.type === 'D' ? '文件夹' : '文件'}</p>
-      <p><strong>路径：</strong>${row.path}</p>
-      <p><strong>大小：</strong>${row.type === 'F' ? row.size : '-'}</p>
-      <p><strong>修改时间：</strong>${row.modifiedTime}</p>
+      <p><strong>${t('files.colName')}:</strong>${row.name}</p>
+      <p><strong>${t('files.colType')}:</strong>${row.type === 'D' ? t('files.folder') : t('files.file')}</p>
+      <p><strong>${t('files.path')}:</strong>${row.path}</p>
+      <p><strong>${t('files.colSize')}:</strong>${row.type === 'F' ? row.size : '-'}</p>
+      <p><strong>${t('files.colModified')}:</strong>${row.modifiedTime}</p>
     </div>
   `
 
-  ElMessageBox.alert(info, '文件信息', {
+  ElMessageBox.alert(info, t('files.fileInfo'), {
     dangerouslyUseHTMLString: true,
-    confirmButtonText: '确定'
+    confirmButtonText: t('common.confirm')
   })
 }
 
