@@ -1,4 +1,126 @@
 export default {
+  notes: {
+    title: 'Notes',
+    chars: 'Chars: ',
+    lines: 'Lines: ',
+    lastSaved: 'Last saved: ',
+    saveTip: 'Save (Ctrl+S)',
+    reset: 'Reset',
+    export: 'Export',
+    txtFormat: 'TXT',
+    mdFormat: 'Markdown',
+    htmlFormat: 'HTML',
+    templates: 'Templates',
+    tplPentest: 'Pentest Template',
+    tplVuln: 'Vulnerability Report Template',
+    tplReport: 'Test Report Template',
+    tplCustom: 'Custom Template',
+    content: 'Note Content',
+    autoSave: 'Auto save',
+    manualSave: 'Manual save',
+    fullscreenEdit: 'Fullscreen editing',
+    phFullscreen: 'Type your notes here...',
+    phContent: 'Type note content here...',
+    saveExit: 'Save & Exit',
+    mdBold: '**bold text**',
+    mdItalic: '*italic text*',
+    mdCode: '`code snippet`',
+    mdH1: '# Heading',
+    mdH2: '## Heading',
+    mdH3: '### Heading',
+    mdLi: '- List item',
+    mdOl: '1. Ordered item',
+    mdQuote: '> Quote',
+    mdImg: '![image](url)',
+    mdLink: '[link](https://)',
+    mdSample: 'text',
+    preview: 'Preview',
+    unsaved: 'Unsaved',
+    saved: 'Saved',
+    cursorPos: 'Row {row}, Col {col}',
+    hidePreview: 'Hide preview',
+    hideTools: 'Hide toolbar',
+    showTools: 'Show toolbar',
+    history: 'History',
+    restoreVersion: 'Restore this version',
+    clearHistory: 'Clear history',
+    tplName: 'Template Name',
+    tplNamePh: 'Enter a template name',
+    tplContent: 'Template Content',
+    tplContentPh: 'Enter template content',
+    saveTpl: 'Save template',
+    initLoad: 'Initial load',
+    loadFailed: 'Failed to load notes',
+    noChange: 'No changes to save',
+    savedMsg: 'Note saved',
+    resetConfirm: 'Reset the note? Unsaved changes will be lost.',
+    resetTitle: 'Reset Confirmation',
+    resetOk: 'Reset',
+    exported: 'Exported as {fmt}',
+    tplConfirm: 'Applying a template replaces the current content. Continue?',
+    tplConfirmTitle: 'Apply Template',
+    tplApplied: 'Template applied',
+    tplSaved: 'Template saved',
+    versionRestored: 'Version restored',
+    historyCleared: 'History cleared',
+    autoSaved: 'Auto saved',
+    tplPentestContent: `# Pentest Notes
+
+## Target Information
+- Target name:
+- IP address:
+- Ports:
+
+## Reconnaissance
+- Open ports:
+- Service versions:
+- Directory scan:
+
+## Vulnerabilities Found
+
+## Exploitation
+
+## Privilege Escalation
+
+## Cleanup
+
+## Recommendations`,
+    tplVulnContent: `# Vulnerability Report
+
+## Vulnerability Information
+- Name:
+- Risk level:
+- CVSS score:
+
+## Description
+
+## Impact
+
+## Reproduction Steps
+
+## Remediation
+
+## References`,
+    tplReportContent: `# Pentest Report
+
+## Executive Summary
+
+## Scope
+
+## Methodology
+
+## Findings
+### High Risk
+### Medium Risk
+### Low Risk
+
+## Remediation
+
+## Appendix
+- Tools used
+- Test dates
+- Testers`
+  },
   common: {
     loading: 'Loading, please wait...',
     refresh: 'Refresh',

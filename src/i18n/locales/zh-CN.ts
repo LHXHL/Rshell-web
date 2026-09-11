@@ -1,4 +1,126 @@
 export default {
+  notes: {
+    title: '笔记管理',
+    chars: '字数：',
+    lines: '行数：',
+    lastSaved: '上次保存：',
+    saveTip: '保存 (Ctrl+S)',
+    reset: '重置',
+    export: '导出',
+    txtFormat: 'TXT格式',
+    mdFormat: 'Markdown格式',
+    htmlFormat: 'HTML格式',
+    templates: '模板',
+    tplPentest: '渗透测试模板',
+    tplVuln: '漏洞报告模板',
+    tplReport: '测试报告模板',
+    tplCustom: '自定义模板',
+    content: '笔记内容',
+    autoSave: '自动保存',
+    manualSave: '手动保存',
+    fullscreenEdit: '全屏编辑',
+    phFullscreen: '在这里输入笔记...',
+    phContent: '在这里输入笔记内容...',
+    saveExit: '保存并退出',
+    mdBold: '**粗体文字**',
+    mdItalic: '*斜体文字*',
+    mdCode: '`代码片段`',
+    mdH1: '# 标题',
+    mdH2: '## 标题',
+    mdH3: '### 标题',
+    mdLi: '- 列表项',
+    mdOl: '1. 有序项',
+    mdQuote: '> 引用内容',
+    mdImg: '![图片](url)',
+    mdLink: '[链接](https://)',
+    mdSample: '文字',
+    preview: '预览',
+    unsaved: '未保存',
+    saved: '已保存',
+    cursorPos: '第 {row} 行, 第 {col} 列',
+    hidePreview: '隐藏预览',
+    hideTools: '隐藏工具栏',
+    showTools: '显示工具栏',
+    history: '历史记录',
+    restoreVersion: '恢复此版本',
+    clearHistory: '清空历史记录',
+    tplName: '模板名称',
+    tplNamePh: '请输入模板名称',
+    tplContent: '模板内容',
+    tplContentPh: '请输入模板内容',
+    saveTpl: '保存模板',
+    initLoad: '初始加载',
+    loadFailed: '加载笔记失败',
+    noChange: '内容未修改，无需保存',
+    savedMsg: '笔记已保存',
+    resetConfirm: '确定要重置笔记吗？未保存的修改将丢失。',
+    resetTitle: '确认重置',
+    resetOk: '已重置',
+    exported: '已导出为{fmt}格式',
+    tplConfirm: '使用模板将替换当前内容，确定要继续吗？',
+    tplConfirmTitle: '确认使用模板',
+    tplApplied: '模板已应用',
+    tplSaved: '模板已保存',
+    versionRestored: '已恢复历史版本',
+    historyCleared: '历史记录已清空',
+    autoSaved: '已自动保存',
+    tplPentestContent: `# 渗透测试笔记
+
+## 目标信息
+- 目标名称：
+- IP地址：
+- 端口信息：
+
+## 信息收集
+- 开放端口：
+- 服务版本：
+- 目录扫描：
+
+## 漏洞发现
+
+## 利用过程
+
+## 权限提升
+
+## 痕迹清理
+
+## 总结建议`,
+    tplVulnContent: `# 漏洞报告
+
+## 漏洞信息
+- 漏洞名称：
+- 风险等级：
+- CVSS评分：
+
+## 漏洞描述
+
+## 影响范围
+
+## 复现步骤
+
+## 修复建议
+
+## 参考链接`,
+    tplReportContent: `# 渗透测试报告
+
+## 执行摘要
+
+## 测试范围
+
+## 测试方法
+
+## 发现漏洞
+### 高风险
+### 中风险
+### 低风险
+
+## 修复建议
+
+## 附录
+- 测试工具
+- 测试时间
+- 测试人员`
+  },
   common: {
     loading: '加载中，请稍后...',
     refresh: '刷新',

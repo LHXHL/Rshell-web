@@ -6,26 +6,26 @@
         <div class="toolbar-left">
           <h2 class="toolbar-title">
             <i class="el-icon-notebook-2"></i>
-            笔记管理
+            {{ t('notes.title') }}
           </h2>
           <div class="toolbar-info">
             <span class="char-count">
               <i class="el-icon-document"></i>
-              字数：{{ charCount }}
+              {{ t('notes.chars') }}{{ charCount }}
             </span>
             <span class="line-count">
               <i class="el-icon-s-order"></i>
-              行数：{{ lineCount }}
+              {{ t('notes.lines') }}{{ lineCount }}
             </span>
             <span class="last-saved" v-if="lastSavedTime">
               <i class="el-icon-time"></i>
-              上次保存：{{ lastSavedTime }}
+              {{ t('notes.lastSaved') }}{{ lastSavedTime }}
             </span>
           </div>
         </div>
         <div class="toolbar-right">
           <el-button-group class="action-buttons">
-            <el-tooltip content="保存 (Ctrl+S)" placement="top">
+            <el-tooltip :content="t('notes.saveTip')" placement="top">
               <el-button
                   type="primary"
                   @click="saveNote"
@@ -33,37 +33,37 @@
                   :disabled="!isDirty"
               >
                 <i class="el-icon-check"></i>
-                保存
+                {{ t('common.save') }}
               </el-button>
             </el-tooltip>
-            <el-tooltip content="重置" placement="top">
+            <el-tooltip :content="t('notes.reset')" placement="top">
               <el-button
                   @click="resetNote"
                   :disabled="!isDirty"
               >
                 <i class="el-icon-refresh"></i>
-                重置
+                {{ t('notes.reset') }}
               </el-button>
             </el-tooltip>
             <el-dropdown @command="handleExport">
               <el-button>
                 <i class="el-icon-download"></i>
-                导出
+                {{ t('notes.export') }}
                 <i class="el-icon-arrow-down el-icon--right"></i>
               </el-button>
               <template #dropdown>
                 <el-dropdown-menu>
                   <el-dropdown-item command="txt">
                     <i class="el-icon-document"></i>
-                    TXT格式
+                    {{ t('notes.txtFormat') }}
                   </el-dropdown-item>
                   <el-dropdown-item command="md">
                     <i class="el-icon-edit"></i>
-                    Markdown格式
+                    {{ t('notes.mdFormat') }}
                   </el-dropdown-item>
                   <el-dropdown-item command="html">
                     <i class="el-icon-link"></i>
-                    HTML格式
+                    {{ t('notes.htmlFormat') }}
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </template>
@@ -73,26 +73,26 @@
           <el-dropdown trigger="click" @command="handleTemplate">
             <el-button type="info">
               <i class="el-icon-collection-tag"></i>
-              模板
+              {{ t('notes.templates') }}
               <i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
             <template #dropdown>
               <el-dropdown-menu>
                 <el-dropdown-item command="pentest">
                   <i class="el-icon-s-flag"></i>
-                  渗透测试模板
+                  {{ t('notes.tplPentest') }}
                 </el-dropdown-item>
                 <el-dropdown-item command="vuln">
                   <i class="el-icon-warning"></i>
-                  漏洞报告模板
+                  {{ t('notes.tplVuln') }}
                 </el-dropdown-item>
                 <el-dropdown-item command="report">
                   <i class="el-icon-finished"></i>
-                  测试报告模板
+                  {{ t('notes.tplReport') }}
                 </el-dropdown-item>
                 <el-dropdown-item command="custom" divided>
                   <i class="el-icon-setting"></i>
-                  自定义模板
+                  {{ t('notes.tplCustom') }}
                 </el-dropdown-item>
               </el-dropdown-menu>
             </template>
@@ -107,18 +107,18 @@
         <div class="editor-header">
           <span class="editor-title">
             <i class="el-icon-edit"></i>
-            笔记内容
+            {{ t('notes.content') }}
           </span>
           <div class="editor-tools">
-            <el-tooltip content="自动保存" placement="top">
+            <el-tooltip :content="t('notes.autoSave')" placement="top">
               <el-switch
                   v-model="autoSave"
-                  active-text="自动保存"
-                  inactive-text="手动保存"
+                  :active-text="t('notes.autoSave')"
+                  :inactive-text="t('notes.manualSave')"
                   size="small"
               />
             </el-tooltip>
-            <el-tooltip content="全屏编辑" placement="top">
+            <el-tooltip :content="t('notes.fullscreenEdit')" placement="top">
               <el-button
                   type="text"
                   size="small"
@@ -139,17 +139,17 @@
             v-model="noteContent"
             type="textarea"
             :autosize="{ minRows: 20 }"
-            placeholder="在这里输入笔记..."
+            :placeholder="t('notes.phFullscreen')"
             class="fullscreen-textarea"
             @input="handleInput"
             @keydown="handleKeydown"
         />
         <div class="fullscreen-tools">
           <el-button type="primary" @click="saveNote" :loading="loading">
-            保存并退出
+            {{ t('notes.saveExit') }}
           </el-button>
           <el-button @click="isFullscreen = false">
-            退出全屏
+            {{ t('shell.exitFullscreen') }}
           </el-button>
         </div>
       </div>
@@ -162,7 +162,7 @@
               v-model="noteContent"
               type="textarea"
               :autosize="{ minRows: 25, maxRows: 25 }"
-              placeholder="在这里输入笔记内容..."
+              :placeholder="t('notes.phContent')"
               class="note-textarea"
               @input="handleInput"
               @keydown="handleKeydown"
@@ -172,13 +172,13 @@
           <div class="quick-tools" v-if="showQuickTools">
             <el-space>
               <el-button-group size="small">
-                <el-button @click="insertText('**粗体文字**')">
+                <el-button @click="insertText(t('notes.mdBold'))">
                   <strong>B</strong>
                 </el-button>
-                <el-button @click="insertText('*斜体文字*')">
+                <el-button @click="insertText(t('notes.mdItalic'))">
                   <em>I</em>
                 </el-button>
-                <el-button @click="insertText('`代码片段`')">
+                <el-button @click="insertText(t('notes.mdCode'))">
                   <code>`</code>
                 </el-button>
               </el-button-group>
@@ -186,13 +186,13 @@
               <el-divider direction="vertical" />
 
               <el-button-group size="small">
-                <el-button @click="insertText('# 标题')">
+                <el-button @click="insertText(t('notes.mdH1'))">
                   H1
                 </el-button>
-                <el-button @click="insertText('## 标题')">
+                <el-button @click="insertText(t('notes.mdH2'))">
                   H2
                 </el-button>
-                <el-button @click="insertText('### 标题')">
+                <el-button @click="insertText(t('notes.mdH3'))">
                   H3
                 </el-button>
               </el-button-group>
@@ -200,13 +200,13 @@
               <el-divider direction="vertical" />
 
               <el-button-group size="small">
-                <el-button @click="insertText('- 列表项')">
+                <el-button @click="insertText(t('notes.mdLi'))">
                   <span class="custom-icon">•</span>
                 </el-button>
-                <el-button @click="insertText('1. 有序项')">
+                <el-button @click="insertText(t('notes.mdOl'))">
                   <span class="custom-icon">1.</span>
                 </el-button>
-                <el-button @click="insertText('> 引用内容')">
+                <el-button @click="insertText(t('notes.mdQuote'))">
                   <span class="custom-icon">></span>
                 </el-button>
               </el-button-group>
@@ -217,10 +217,10 @@
                 <el-button @click="insertText('---')">
                   <span class="custom-icon">—</span>
                 </el-button>
-                <el-button @click="insertText('[链接](https://)')">
+                <el-button @click="insertText(t('notes.mdLink'))">
                   <span class="custom-icon">🔗</span>
                 </el-button>
-                <el-button @click="insertText('![图片](url)')">
+                <el-button @click="insertText(t('notes.mdImg'))">
                   <span class="custom-icon">🖼️</span>
                 </el-button>
               </el-button-group>
@@ -231,7 +231,7 @@
         <!-- 预览区域 -->
         <div v-if="showPreview" class="preview-area">
           <div class="preview-header">
-            <span>预览</span>
+            <span>{{ t('notes.preview') }}</span>
             <el-button type="text" size="small" @click="showPreview = false">
               <i class="el-icon-close"></i>
             </el-button>
@@ -251,7 +251,7 @@
             class="dirty-tag"
         >
           <i class="el-icon-warning"></i>
-          未保存
+          {{ t('notes.unsaved') }}
         </el-tag>
         <el-tag
             v-else
@@ -260,11 +260,11 @@
             class="saved-tag"
         >
           <i class="el-icon-success"></i>
-          已保存
+          {{ t('notes.saved') }}
         </el-tag>
 
         <span class="cursor-position">
-          第 {{ cursorRow }} 行, 第 {{ cursorCol }} 列
+          {{ t('notes.cursorPos', { row: cursorRow, col: cursorCol }) }}
         </span>
       </div>
       <div class="status-right">
@@ -274,7 +274,7 @@
             @click="showPreview = !showPreview"
         >
           <i class="el-icon-view"></i>
-          {{ showPreview ? '隐藏预览' : '预览' }}
+          {{ showPreview ? t('notes.hidePreview') : t('notes.preview') }}
         </el-button>
         <el-button
             type="text"
@@ -282,7 +282,7 @@
             @click="showQuickTools = !showQuickTools"
         >
           <i class="el-icon-menu"></i>
-          {{ showQuickTools ? '隐藏工具栏' : '显示工具栏' }}
+          {{ showQuickTools ? t('notes.hideTools') : t('notes.showTools') }}
         </el-button>
         <el-button
             type="text"
@@ -290,7 +290,7 @@
             @click="showHistory"
         >
           <i class="el-icon-time"></i>
-          历史记录
+          {{ t('notes.history') }}
         </el-button>
       </div>
     </div>
@@ -298,7 +298,7 @@
     <!-- 历史记录对话框 -->
     <el-dialog
         v-model="historyVisible"
-        title="笔记历史记录"
+        :title="t('notes.history')"
         width="800px"
     >
       <el-timeline>
@@ -319,7 +319,7 @@
                     @click="restoreHistory(item.content)"
                 >
                   <i class="el-icon-refresh-left"></i>
-                  恢复此版本
+                  {{ t('notes.restoreVersion') }}
                 </el-button>
               </div>
             </template>
@@ -330,39 +330,41 @@
         </el-timeline-item>
       </el-timeline>
       <template #footer>
-        <el-button @click="historyVisible = false">关闭</el-button>
-        <el-button type="primary" @click="clearHistory">清空历史记录</el-button>
+        <el-button @click="historyVisible = false">{{ t('common.close') }}</el-button>
+        <el-button type="primary" @click="clearHistory">{{ t('notes.clearHistory') }}</el-button>
       </template>
     </el-dialog>
 
     <!-- 自定义模板对话框 -->
     <el-dialog
         v-model="templateVisible"
-        title="自定义模板"
+        :title="t('notes.tplCustom')"
         width="600px"
     >
       <el-form :model="templateForm" label-width="100px">
-        <el-form-item label="模板名称">
-          <el-input v-model="templateForm.name" placeholder="请输入模板名称" />
+        <el-form-item :label="t('notes.tplName')">
+          <el-input v-model="templateForm.name" :placeholder="t('notes.tplNamePh')" />
         </el-form-item>
-        <el-form-item label="模板内容">
+        <el-form-item :label="t('notes.tplContent')">
           <el-input
               v-model="templateForm.content"
               type="textarea"
               :rows="10"
-              placeholder="请输入模板内容"
+              :placeholder="t('notes.tplContentPh')"
           />
         </el-form-item>
       </el-form>
       <template #footer>
-        <el-button @click="templateVisible = false">取消</el-button>
-        <el-button type="primary" @click="saveTemplate">保存模板</el-button>
+        <el-button @click="templateVisible = false">{{ t('common.cancel') }}</el-button>
+        <el-button type="primary" @click="saveTemplate">{{ t('notes.saveTpl') }}</el-button>
       </template>
     </el-dialog>
   </div>
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import ClientAPI from '@/api/clients'
@@ -435,21 +437,21 @@ const fetchNote = async () => {
     if (response?.data?.data != null) {
       noteContent.value = response.data.data
       originalContent.value = response.data.data
-      addToHistory('初始加载')
+      addToHistory(t('notes.initLoad'))
     } else {
       noteContent.value = ''
       originalContent.value = ''
     }
   } catch (error) {
     console.log(error)
-    ElMessage.error('加载笔记失败')
+    ElMessage.error(t('notes.loadFailed'))
   }
 }
 
 // 保存笔记
 const saveNote = async () => {
   if (!isDirty.value) {
-    ElMessage.info('内容未修改，无需保存')
+    ElMessage.info(t('notes.noChange'))
     return
   }
 
@@ -459,14 +461,14 @@ const saveNote = async () => {
     if (res.data.status === 200) {
       originalContent.value = noteContent.value
       lastSavedTime.value = dayjs().format('HH:mm:ss')
-      addToHistory('手动保存')
-      ElMessage.success('笔记已保存')
+      addToHistory(t('notes.manualSave'))
+      ElMessage.success(t('notes.savedMsg'))
     } else {
-      ElMessage.error('保存失败')
+      ElMessage.error(t('common.saveFailed'))
     }
   } catch (error) {
     console.log(error)
-    ElMessage.error('保存笔记失败')
+    ElMessage.error(t('common.saveFailed'))
   } finally {
     loading.value = false
   }
@@ -476,16 +478,16 @@ const saveNote = async () => {
 const resetNote = async () => {
   try {
     await ElMessageBox.confirm(
-        '确定要重置笔记吗？未保存的修改将丢失。',
-        '确认重置',
+        t('notes.resetConfirm'),
+        t('notes.resetTitle'),
         {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+          confirmButtonText: t('common.confirm'),
+          cancelButtonText: t('common.cancel'),
           type: 'warning'
         }
     )
     noteContent.value = originalContent.value
-    ElMessage.success('已重置')
+    ElMessage.success(t('notes.resetOk'))
   } catch (error) {
     // 用户取消操作
   }
@@ -543,7 +545,7 @@ const insertText = (text) => {
       if (selectedText) {
         // 如果有选中的文本，替换它
         noteContent.value = noteContent.value.substring(0, start) +
-            text.replace('文字', selectedText) +
+            text.replace(t('notes.mdSample'), selectedText) +
             noteContent.value.substring(end)
       } else {
         // 如果没有选中文本，插入文本
@@ -591,7 +593,7 @@ const handleExport = async (format) => {
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>笔记导出</title>
+    <title>Notes Export</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 40px; }
         h1 { color: #333; }
@@ -619,73 +621,15 @@ const handleExport = async (format) => {
   document.body.removeChild(link)
   URL.revokeObjectURL(url)
 
-  ElMessage.success(`已导出为${format.toUpperCase()}格式`)
+  ElMessage.success(t('notes.exported', { fmt: format.toUpperCase() }))
 }
 
 // 处理模板
 const handleTemplate = async (command) => {
   const templates = {
-    pentest: `# 渗透测试笔记
-
-## 目标信息
-- 目标名称：
-- IP地址：
-- 端口信息：
-
-## 信息收集
-- 开放端口：
-- 服务版本：
-- 目录扫描：
-
-## 漏洞发现
-
-## 利用过程
-
-## 权限提升
-
-## 痕迹清理
-
-## 总结建议`,
-
-    vuln: `# 漏洞报告
-
-## 漏洞信息
-- 漏洞名称：
-- 风险等级：
-- CVSS评分：
-
-## 漏洞描述
-
-## 影响范围
-
-## 复现步骤
-1.
-2.
-3.
-
-## 修复建议
-
-## 参考链接`,
-
-    report: `# 渗透测试报告
-
-## 执行摘要
-
-## 测试范围
-
-## 测试方法
-
-## 发现漏洞
-### 高风险
-### 中风险
-### 低风险
-
-## 修复建议
-
-## 附录
-- 测试工具
-- 测试时间
-- 测试人员`
+    pentest: t('notes.tplPentestContent'),
+    vuln: t('notes.tplVulnContent'),
+    report: t('notes.tplReportContent')
   }
 
   if (command === 'custom') {
@@ -693,16 +637,16 @@ const handleTemplate = async (command) => {
   } else if (templates[command]) {
     try {
       await ElMessageBox.confirm(
-          '使用模板将替换当前内容，确定要继续吗？',
-          '确认使用模板',
+          t('notes.tplConfirm'),
+          t('notes.tplConfirmTitle'),
           {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
+            confirmButtonText: t('common.confirm'),
+            cancelButtonText: t('common.cancel'),
             type: 'warning'
           }
       )
       noteContent.value = templates[command]
-      ElMessage.success('模板已应用')
+      ElMessage.success(t('notes.tplApplied'))
     } catch (error) {
       // 用户取消操作
     }
@@ -712,11 +656,11 @@ const handleTemplate = async (command) => {
 // 保存模板
 const saveTemplate = () => {
   if (!templateForm.value.name) {
-    ElMessage.error('请输入模板名称')
+    ElMessage.error(t('notes.tplNamePh'))
     return
   }
   if (!templateForm.value.content) {
-    ElMessage.error('请输入模板内容')
+    ElMessage.error(t('notes.tplContentPh'))
     return
   }
 
@@ -724,7 +668,7 @@ const saveTemplate = () => {
   localStorage.setItem(`note_template_${templateForm.value.name}`, templateForm.value.content)
   templateVisible.value = false
   templateForm.value = { name: '', content: '' }
-  ElMessage.success('模板已保存')
+  ElMessage.success(t('notes.tplSaved'))
 }
 
 // 历史记录功能
@@ -748,13 +692,13 @@ const showHistory = () => {
 
 const restoreHistory = (content) => {
   noteContent.value = content
-  ElMessage.success('已恢复历史版本')
+  ElMessage.success(t('notes.versionRestored'))
   historyVisible.value = false
 }
 
 const clearHistory = () => {
   historyList.value = []
-  ElMessage.success('历史记录已清空')
+  ElMessage.success(t('notes.historyCleared'))
 }
 
 // 防抖自动保存
@@ -765,7 +709,7 @@ const debounceAutoSave = () => {
   }
   autoSaveTimer = setTimeout(async () => {
     await saveNote()
-    ElMessage.success('已自动保存')
+    ElMessage.success(t('notes.autoSaved'))
   }, 2000) // 2秒后自动保存
 }
 
