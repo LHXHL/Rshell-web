@@ -10,15 +10,15 @@
               class="back-button"
           >
             <el-icon><Back /></el-icon>
-            返回列表
+            {{ t('cside.backTitle') }}
           </el-button>
         </div>
-        <h1 class="client-title">客户端管理</h1>
+        <h1 class="client-title">{{ t('clients.title') }}</h1>
       </div>
       <div class="client-info">
         <el-tag :type="currentStatus === '1' ? 'success' : 'danger'" size="default" class="info-tag">
           <el-icon><CircleCheck /></el-icon>
-          {{ currentStatus === '1' ? '在线' : '离线' }}
+          {{ currentStatus === '1' ? t('clients.online') : t('clients.offline') }}
         </el-tag>
         <el-tag type="info" size="default" class="info-tag">
           <el-icon><User /></el-icon>
@@ -70,6 +70,8 @@
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useSidebarStore } from '@/stores/sidebar'
@@ -135,52 +137,52 @@ const menuItems = [
   {
     icon: Terminal,
     index: '/client/shell',
-    title: "交互式终端"
+    title: t('cside.termTitle')
   },
   {
     icon: File,
     index: '/client/files',
-    title: "文件管理"
+    title: t('cside.fileTitle')
   },
   {
     icon: Process,
     index: '/client/pid',
-    title: "进程管理"
+    title: t('cside.pidTitle')
   },
   {
     icon: Network,
     index: '/client/socks5',
-    title: "网络代理"
+    title: t('cside.socksTitle')
   },
   {
     icon: Download,
     index: '/client/downloads',
-    title: "下载管理"
+    title: t('cside.dlTitle')
   },
   {
     icon: Document,
     index: '/client/notes',
-    title: "备注信息"
+    title: t('cside.noteTitle')
   },
   {
     icon: Picture,
     index: '/client/screenshots',
-    title: "屏幕截图"
+    title: t('cside.screenTitle')
   },
   {
     icon: Key,
     index: '/client/credentials',
-    title: "凭据管理"
+    title: t('credentials.title')
   },
   {
     icon: Search,
     index: '/client/sensitive-search',
-    title: "敏感搜索"
+    title: t('cside.sensTitle')
   },
   {
     icon: Key,
     index: '/client/browser-dump',
-    title: "浏览器密码"
+    title: t('cside.browserTitle')
   },
 ]
 

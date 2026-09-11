@@ -29,6 +29,25 @@ export default {
     deleteFailed: '删除失败',
     operationFailed: '操作失败'
   },
+  cside: {
+    termTitle: '交互式终端',
+    termDesc: '执行命令和交互式操作',
+    fileTitle: '文件管理',
+    fileDesc: '浏览和操作文件系统',
+    pidTitle: '进程管理',
+    pidDesc: '查看和管理系统进程',
+    socksTitle: '网络代理',
+    socksDesc: 'Socks5代理隧道',
+    dlTitle: '下载管理',
+    dlDesc: '文件传输和下载',
+    noteTitle: '备注信息',
+    noteDesc: '客户端备注和标签',
+    backTitle: '返回列表',
+    backDesc: '返回客户端列表',
+    screenTitle: '屏幕截图',
+    sensTitle: '敏感搜索',
+    browserTitle: '浏览器密码'
+  },
   clients: {
     title: '客户端管理',
     actionTitle: '客户端操作',

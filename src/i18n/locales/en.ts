@@ -29,6 +29,25 @@ export default {
     deleteFailed: 'Delete failed',
     operationFailed: 'Operation failed'
   },
+  cside: {
+    termTitle: 'Interactive Terminal',
+    termDesc: 'Execute commands interactively',
+    fileTitle: 'File Manager',
+    fileDesc: 'Browse and operate the file system',
+    pidTitle: 'Process Manager',
+    pidDesc: 'View and manage system processes',
+    socksTitle: 'Network Proxy',
+    socksDesc: 'SOCKS5 proxy tunnel',
+    dlTitle: 'Downloads',
+    dlDesc: 'File transfer and downloads',
+    noteTitle: 'Notes',
+    noteDesc: 'Client notes and tags',
+    backTitle: 'Back to List',
+    backDesc: 'Return to the client list',
+    screenTitle: 'Screenshots',
+    sensTitle: 'Sensitive Search',
+    browserTitle: 'Browser Credentials'
+  },
   clients: {
     title: 'Client Management',
     actionTitle: 'Client Actions',

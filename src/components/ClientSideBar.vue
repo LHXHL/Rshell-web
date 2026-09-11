@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 import { computed, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useSidebarStore } from "@/stores/sidebar"
@@ -35,57 +37,57 @@ const router = useRouter()
 const route = useRoute()
 
 // 菜单项配置
-const menuItems = [
+const menuItems = computed(() => [
   {
     icon: Terminal,
     index: '/client/shell',
-    title: "交互式终端",
-    description: "执行命令和交互式操作",
+    title: t('cside.termTitle'),
+    description: t('cside.termDesc'),
     color: "#409eff"
   },
   {
     icon: File,
     index: '/client/files',
-    title: "文件管理",
-    description: "浏览和操作文件系统",
+    title: t('cside.fileTitle'),
+    description: t('cside.fileDesc'),
     color: "#67c23a"
   },
   {
     icon: Process,
     index: '/client/pid',
-    title: "进程管理",
-    description: "查看和管理系统进程",
+    title: t('cside.pidTitle'),
+    description: t('cside.pidDesc'),
     color: "#e6a23c"
   },
   {
     icon: Network,
     index: '/client/socks5',
-    title: "网络代理",
-    description: "Socks5代理隧道",
+    title: t('cside.socksTitle'),
+    description: t('cside.socksDesc'),
     color: "#f56c6c"
   },
   {
     icon: Download,
     index: '/client/downloads',
-    title: "下载管理",
-    description: "文件传输和下载",
+    title: t('cside.dlTitle'),
+    description: t('cside.dlDesc'),
     color: "#ffffff"
   },
   {
     icon: Document,
     index: '/client/notes',
-    title: "备注信息",
-    description: "客户端备注和标签",
+    title: t('cside.noteTitle'),
+    description: t('cside.noteDesc'),
     color: "#11d1d1"
   },
   {
     icon: Back,
     index: '/Clients',
-    title: "返回列表",
-    description: "返回客户端列表",
+    title: t('cside.backTitle'),
+    description: t('cside.backDesc'),
     color: "#909399"
   }
-]
+])
 
 // 当前活跃的菜单项
 const activeMenu = computed(() => route.path)
@@ -154,7 +156,7 @@ const getClientColor = () => {
               :class="props.status === '1' ? 'status-online' : 'status-offline'"
           ></div>
           <span class="status-text">
-            {{ props.status === '1' ? '在线' : '离线' }}
+            {{ props.status === '1' ? t('clients.online') : t('clients.offline') }}
           </span>
         </div>
       </div>
